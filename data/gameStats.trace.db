@@ -1,0 +1,33 @@
+2022-09-24 18:17:35 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE gameStates(id SERIAL PRIMARY KEY, Emission int,Economic int,Happiness int[*]"; expected "ARRAY, INVISIBLE, VISIBLE, NOT NULL, NULL, AS, DEFAULT, GENERATED, ON UPDATE, NOT NULL, NULL, AUTO_INCREMENT, DEFAULT ON NULL, NULL_TO_DEFAULT, SEQUENCE, SELECTIVITY, COMMENT, CONSTRAINT, COMMENT, PRIMARY KEY, UNIQUE, NOT NULL, NULL, CHECK, REFERENCES, AUTO_INCREMENT, ,, )"; SQL statement:
+CREATE TABLE gameStates(id SERIAL PRIMARY KEY, Emission int,Economic int,Happiness int [42001-214]
+2022-09-24 18:18:54 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE gameStates(id SERIAL PRIMARY KEY, Emission INT,Economic INT,Happiness INT[*]"; expected "ARRAY, INVISIBLE, VISIBLE, NOT NULL, NULL, AS, DEFAULT, GENERATED, ON UPDATE, NOT NULL, NULL, AUTO_INCREMENT, DEFAULT ON NULL, NULL_TO_DEFAULT, SEQUENCE, SELECTIVITY, COMMENT, CONSTRAINT, COMMENT, PRIMARY KEY, UNIQUE, NOT NULL, NULL, CHECK, REFERENCES, AUTO_INCREMENT, ,, )"; SQL statement:
+CREATE TABLE gameStates(id SERIAL PRIMARY KEY, Emission INT,Economic INT,Happiness INT [42001-214]
+2022-09-24 18:19:28 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE gameStates(id SERIAL PRIMARY KEY, Emission INT NOT NULL,Economic INT NOT NULL,Happiness INT NOT NULL[*]"; expected "AS, DEFAULT, GENERATED, ON UPDATE, AUTO_INCREMENT, DEFAULT ON NULL, NULL_TO_DEFAULT, SEQUENCE, SELECTIVITY, COMMENT, CONSTRAINT, COMMENT, PRIMARY KEY, UNIQUE, NOT NULL, NULL, CHECK, REFERENCES, AUTO_INCREMENT, ,, )"; SQL statement:
+CREATE TABLE gameStates(id SERIAL PRIMARY KEY, Emission INT NOT NULL,Economic INT NOT NULL,Happiness INT NOT NULL [42001-214]
+2022-09-24 18:21:50 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE gameStates(id SERIAL PRIMARY KEY, Emission SERIAL NOT NULL,Economic SERIAL NOT NULL,Happiness SERIAL NOT NULL[*]"; expected "DEFAULT ON NULL, NULL_TO_DEFAULT, SEQUENCE, SELECTIVITY, COMMENT, CONSTRAINT, COMMENT, PRIMARY KEY, UNIQUE, NOT NULL, NULL, CHECK, REFERENCES, ,, )"; SQL statement:
+CREATE TABLE gameStates(id SERIAL PRIMARY KEY, Emission SERIAL NOT NULL,Economic SERIAL NOT NULL,Happiness SERIAL NOT NULL [42001-214]
+2022-09-24 18:21:54 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE gameStates(id SERIAL PRIMARY KEY, Emission SERIAL NOT NULL,Economic SERIAL NOT NULL,Happiness SERIAL NOT NULL[*]"; expected "DEFAULT ON NULL, NULL_TO_DEFAULT, SEQUENCE, SELECTIVITY, COMMENT, CONSTRAINT, COMMENT, PRIMARY KEY, UNIQUE, NOT NULL, NULL, CHECK, REFERENCES, ,, )"; SQL statement:
+CREATE TABLE gameStates(id SERIAL PRIMARY KEY, Emission SERIAL NOT NULL,Economic SERIAL NOT NULL,Happiness SERIAL NOT NULL [42001-214]
+2022-09-24 18:22:49 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE gameStates(id SERIAL PRIMARY KEY, title VARCHAR(255)[*]"; expected "ARRAY, INVISIBLE, VISIBLE, NOT NULL, NULL, AS, DEFAULT, GENERATED, ON UPDATE, NOT NULL, NULL, AUTO_INCREMENT, DEFAULT ON NULL, NULL_TO_DEFAULT, SEQUENCE, SELECTIVITY, COMMENT, CONSTRAINT, COMMENT, PRIMARY KEY, UNIQUE, NOT NULL, NULL, CHECK, REFERENCES, AUTO_INCREMENT, ,, )"; SQL statement:
+CREATE TABLE gameStates(id SERIAL PRIMARY KEY, title VARCHAR(255) [42001-214]
+2022-09-24 18:24:03 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE GameStats(id SERIAL PRIMARY KEY, title VARCHAR(255)[*]"; expected "ARRAY, INVISIBLE, VISIBLE, NOT NULL, NULL, AS, DEFAULT, GENERATED, ON UPDATE, NOT NULL, NULL, AUTO_INCREMENT, DEFAULT ON NULL, NULL_TO_DEFAULT, SEQUENCE, SELECTIVITY, COMMENT, CONSTRAINT, COMMENT, PRIMARY KEY, UNIQUE, NOT NULL, NULL, CHECK, REFERENCES, AUTO_INCREMENT, ,, )"; SQL statement:
+CREATE TABLE GameStats(id SERIAL PRIMARY KEY, title VARCHAR(255) [42001-214]
+2022-09-25 09:22:07 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "update GameStats set ([*]?) values(?)"; expected "identifier"; SQL statement:
+update GameStats set (?) values(?) [42001-214]
+2022-09-25 09:22:09 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "update GameStats set ([*]?) values(?)"; expected "identifier"; SQL statement:
+update GameStats set (?) values(?) [42001-214]
+2022-09-25 09:23:54 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "update GameStats set ([*]?) values(?)"; expected "identifier"; SQL statement:
+update GameStats set (?) values(?) [42001-214]
+2022-09-25 09:23:55 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "update GameStats set ([*]?) values(?)"; expected "identifier"; SQL statement:
+update GameStats set (?) values(?) [42001-214]

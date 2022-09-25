@@ -16,7 +16,9 @@ public class GameStats {
     @GeneratedValue @Id
     private Long id;
 
-    private List<Stats> gameStats = null;
+    private List<Stats> gameStats;
 
-
+    public GameStats(Long id){
+        this.id = id;
+    }
 }

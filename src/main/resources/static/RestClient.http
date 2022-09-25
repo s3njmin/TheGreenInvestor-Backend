@@ -1,0 +1,23 @@
+GET http://localhost:8080/gameStats
+###
+DELETE http://localhost:8080/gameStats/1
+###
+GET http://localhost:8080/gameStats/4
+
+###
+POST http://localhost:8080/gameStats
+Content-Type: application/json
+
+{
+   
+}
+
+###
+
+PUT http://localhost:8080/gameStats/2
+Content-Type: application/json
+
+{
+    
+}
+
