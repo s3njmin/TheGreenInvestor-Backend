@@ -2,6 +2,8 @@ package G2T6.G2T6.G2T6.questions;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,8 +36,16 @@ public class QuestionController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/books")
+    @PostMapping("/questions")
     public Question addQuestion(@RequestBody Question question){
         return questionService.addQuestion(question);
+    }
+
+    @PutMapping("/questions/{id}")
+    public Question updateQuestion(@PathVariable Long id, @Valid @RequestBody Question newQuestionInfo){
+        Question book = questionService.updateQuestion(id, newQuestionInfo);
+        if(book == null) throw new QuestionNotFoundException(id);
+        
+        return book;
     }
 }
