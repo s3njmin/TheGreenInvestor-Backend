@@ -48,5 +48,12 @@ public class OptionController {
         return option;
     }
 
-    
+    @DeleteMapping("/options/{id}")
+    public void deleteOption(@PathVariable Long id){
+        try{
+            optionService.deleteOption(id);
+        } catch(EmptyResultDataAccessException e) {
+            throw new OptionNotFoundException(id);
+        }
+    }
 }
