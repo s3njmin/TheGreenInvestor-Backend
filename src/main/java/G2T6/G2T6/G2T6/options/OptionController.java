@@ -34,4 +34,10 @@ public class OptionController {
         if(question == null) throw new OptionNotFoundException(id);
         return optionService.getOption(id);
     }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/options")
+    public Option addOption(@RequestBody Option option){
+        return optionService.addOption(option);
+    }
 }
