@@ -45,7 +45,15 @@ public class QuestionController {
     public Question updateQuestion(@PathVariable Long id, @Valid @RequestBody Question newQuestionInfo){
         Question book = questionService.updateQuestion(id, newQuestionInfo);
         if(book == null) throw new QuestionNotFoundException(id);
-        
         return book;
+    }
+
+    @DeleteMapping("/questions/{id}")
+    public void deleteQuestion(@PathVariable Long id){
+        try{
+            questionService.deleteQuestion(id);
+        } catch(EmptyResultDataAccessException e) {
+            throw new QuestionNotFoundException(id);
+        }
     }
 }
