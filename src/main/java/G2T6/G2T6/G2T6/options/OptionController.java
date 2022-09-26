@@ -29,9 +29,9 @@ public class OptionController {
 
     @GetMapping("/options/{id}")
     public Option getOption(@PathVariable Long id) {
-        Option question = optionService.getOption(id);
+        Option option = optionService.getOption(id);
 
-        if(question == null) throw new OptionNotFoundException(id);
+        if(option == null) throw new OptionNotFoundException(id);
         return optionService.getOption(id);
     }
 
@@ -40,4 +40,13 @@ public class OptionController {
     public Option addOption(@RequestBody Option option){
         return optionService.addOption(option);
     }
+
+    @PutMapping("/options/{id}")
+    public Option updateOption(@PathVariable Long id, @Valid @RequestBody Option newOptionInfo){
+        Option option = optionService.updateOption(id, newOptionInfo);
+        if(option == null) throw new OptionNotFoundException(id);
+        return option;
+    }
+
+    
 }

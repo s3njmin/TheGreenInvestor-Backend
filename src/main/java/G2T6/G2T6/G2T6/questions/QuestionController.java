@@ -43,9 +43,9 @@ public class QuestionController {
 
     @PutMapping("/questions/{id}")
     public Question updateQuestion(@PathVariable Long id, @Valid @RequestBody Question newQuestionInfo){
-        Question book = questionService.updateQuestion(id, newQuestionInfo);
-        if(book == null) throw new QuestionNotFoundException(id);
-        return book;
+        Question question = questionService.updateQuestion(id, newQuestionInfo);
+        if(question == null) throw new QuestionNotFoundException(id);
+        return question;
     }
 
     @DeleteMapping("/questions/{id}")
