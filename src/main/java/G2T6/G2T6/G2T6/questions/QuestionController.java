@@ -33,5 +33,9 @@ public class QuestionController {
         return questionService.getQuestion(id);
     }
 
-    
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/books")
+    public Question addQuestion(@RequestBody Question question){
+        return questionService.addQuestion(question);
+    }
 }
