@@ -24,6 +24,23 @@ public class TheGreenInvestorApplication {
 		template.execute("insert into GameStats (id, emission, economic, happiness) values (2, 1, 9, 13)");
 		template.execute("insert into GameStats (id, emission, economic, happiness) values (3, 4, 94, 54)");
 
+		//template.execute("CREATE TABLE ROLES(id int, name varchar(255))");
+		template.execute("insert into ROLES (id, name) values (1, 'ROLE_USER')");
+		template.execute("insert into ROLES (id, name) values (2, 'ROLE_MODERATOR')");
+		template.execute("insert into ROLES (id, name) values (3, 'ROLE_ADMIN')");
+		template.execute("insert into ROLES (id, name) values (4, 'ROLE_SUPER_ADMIN')");
+		template.execute("insert into ROLES (id, name) values (5, 'ROLE_SUPER_USER')");
+		template.execute("insert into ROLES (id, name) values (6, 'ROLE_SUPER_MODERATOR')");
+
+		//template.execute("CREATE TABLE USERS(id int, email varchar(255), password varchar(255), username varchar(255))");
+		
+		//template.execute("CREATE TABLE USER_ROLES(id int, user_id int, role_id int)");
+
+		//template.execute("CREATE TABLE HIBERNATE_SEQUENCE (sequence_name varchar(255), next_val int)");
+
+		//template.execute("CREATE TABLE REFRESH_TOKEN (id int, expiry_date timestamp, token varchar(255), user_id int)");
+
+
 		//RestTemplateClient client = ctx.getBean(RestTemplateClient.class);
 
 //
