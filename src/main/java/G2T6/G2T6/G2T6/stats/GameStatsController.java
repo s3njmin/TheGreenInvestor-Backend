@@ -1,5 +1,6 @@
 package G2T6.G2T6.G2T6.stats;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import java.util.*;
 public class GameStatsController {
     private GameStatsService gameStatsService;
 
+    @Autowired
     public GameStatsController(GameStatsService gs){
         this.gameStatsService = gs;
     }

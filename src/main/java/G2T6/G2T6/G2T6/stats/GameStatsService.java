@@ -7,5 +7,5 @@ public interface GameStatsService {
     GameStats getGameStats(Long id);
     GameStats addGameStats(GameStats book);
     GameStats updateGameStats(Long id, GameStats book);
-    int deleteGameStats(Long id);
+    void deleteGameStats(Long id);
 }
