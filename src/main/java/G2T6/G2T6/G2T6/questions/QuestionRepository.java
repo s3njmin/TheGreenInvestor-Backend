@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface QuestionRepository extends JpaRepository <Question, Long> {
     // // derived query to find books by title
-    List<Question> findByTitle(String title);
+    List<Question> findByQuestion(String title);
 }

@@ -21,3 +21,28 @@ Content-Type: application/json
     
 }
 
+#Question Tests
+
+###
+GET http://localhost:8080/questions
+###
+DELETE http://localhost:8080/questions/1
+###
+GET http://localhost:8080/questions/4
+
+###
+POST http://localhost:8080/questions
+Content-Type: application/json
+
+{
+   "question":"Why are you gae"
+}
+
+###
+
+PUT http://localhost:8080/questions/2
+Content-Type: application/json
+
+{
+    
+}
