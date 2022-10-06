@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 //import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -96,11 +97,20 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     http.cors().and().csrf().disable()
         .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-        .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-        .antMatchers("/api/test/**").permitAll()
-        .antMatchers("/api/**").permitAll()
-        .antMatchers("/**").permitAll()
-        .antMatchers(h2ConsolePath + "/**").permitAll()
+        .authorizeRequests()
+          .antMatchers("/api/auth/**").permitAll()
+
+          // authentication for question & option API calls
+          .antMatchers(HttpMethod.GET, "/api/questions/**").permitAll()
+          .antMatchers(HttpMethod.POST,"/api/questions", "/api/questions/*/options").hasRole("ADMIN")
+          .antMatchers(HttpMethod.PUT,"/api/questions/*", "/api/questions/*/options/*").hasRole("ADMIN")
+          .antMatchers(HttpMethod.DELETE,"/api/questions/*", "/api/questions/*/options/*").hasRole("ADMIN")
+          
+          .antMatchers("/api/test/**").permitAll()
+          // .antMatchers("/api/**").permitAll()
+          // .antMatchers("/**").permitAll()
+          .antMatchers(h2ConsolePath + "/**").permitAll()
+
         .anyRequest().authenticated();
     
  // fix H2 database console: Refused to display ' in a frame because it set 'X-Frame-Options' to 'deny'
