@@ -43,7 +43,9 @@ public class QuestionController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/questions")
     public Question addQuestion(@RequestBody Question question){
-        return questionService.addQuestion(question);
+        Question savedQuestion = questionService.addQuestion(question);
+        if (savedQuestion ==  null) throw new QuestionExistsException(question.getQuestion());
+        return savedQuestion;
     }
 
     @PutMapping("/questions/{id}")

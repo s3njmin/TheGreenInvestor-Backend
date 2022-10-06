@@ -35,7 +35,7 @@ POST http://localhost:8080/questions
 Content-Type: application/json
 
 {
-   "question":"Why are you gae"
+   "question":"Why no work?!?"
 }
 
 ###

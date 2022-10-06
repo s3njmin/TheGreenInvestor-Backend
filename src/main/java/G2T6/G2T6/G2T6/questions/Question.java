@@ -5,6 +5,7 @@ import java.util.List;
 import G2T6.G2T6.G2T6.options.Option;
 import javax.persistence.*;
 import lombok.*;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -17,6 +18,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @EqualsAndHashCode
 public class Question {
     private @Id @GeneratedValue (strategy = GenerationType.IDENTITY) Long id;
+    
+    @NotNull(message = "Question should not be null")
     private String question;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
