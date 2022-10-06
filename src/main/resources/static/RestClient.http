@@ -1,24 +1,28 @@
-GET http://localhost:8080/gameStats
+GET http://localhost:8080/api/gameStats
 ###
-DELETE http://localhost:8080/gameStats/1
+DELETE http://localhost:8080/api/gameStats/1
 ###
-GET http://localhost:8080/gameStats/4
+GET http://localhost:8080/api/gameStats/2
 
 ###
-POST http://localhost:8080/gameStats
+POST http://localhost:8080/api/gameStats
 Content-Type: application/json
 
 {
-   
+   "incomeVal": 10,
+   "moraleVal": 10,
+   "emissionVal": 10
 }
 
 ###
 
-PUT http://localhost:8080/gameStats/2
+PUT http://localhost:8080/api/gameStats/2
 Content-Type: application/json
 
 {
-    
+    "incomeVal": 10,
+    "moraleVal": 10,
+    "emissionVal": 100
 }
 
 #Question Tests
