@@ -30,7 +30,7 @@ public class OptionServiceImpl implements OptionService {
  
     @Override
     public Option addOption(Option option) {
-        List<Option> sameTitles = options.findByTitle(option.getTitle());
+        List<Option> sameTitles = options.findByOption(option.getOption());
         if(sameTitles.size() == 0)
             return options.save(option);
         else
@@ -39,7 +39,7 @@ public class OptionServiceImpl implements OptionService {
     
     @Override
     public Option updateOption(Long id, Option newOptionInfo){
-        return options.findById(id).map(option -> {option.setTitle(newOptionInfo.getTitle());
+        return options.findById(id).map(option -> {option.setOption(newOptionInfo.getOption());
             return options.save(option);
         }).orElse(null);
 

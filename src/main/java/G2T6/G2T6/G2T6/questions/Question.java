@@ -22,6 +22,8 @@ public class Question {
     @NotNull(message = "Question should not be null")
     private String question;
 
+    
+
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
 

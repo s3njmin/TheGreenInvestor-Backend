@@ -50,3 +50,30 @@ Content-Type: application/json
 {
     
 }
+
+
+#Option Tests
+
+###
+GET http://localhost:8080/options
+###
+DELETE http://localhost:8080/options/1
+###
+GET http://localhost:8080/options/4
+
+###
+POST http://localhost:8080/options
+Content-Type: application/json
+
+{
+   "option":"Haiz this is tough?!?"
+}
+
+###
+
+PUT http://localhost:8080/options/2
+Content-Type: application/json
+
+{
+    
+}
