@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 // @CrossOrigin(origins = "*", maxAge = 3600)
-// @RequestMapping("/api")
+@RequestMapping("/api")
 // @RestController
 public class QuestionController {
     private QuestionService questionService;
