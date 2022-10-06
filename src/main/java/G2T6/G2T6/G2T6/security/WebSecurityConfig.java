@@ -107,7 +107,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
           .antMatchers(HttpMethod.DELETE,"/api/questions/*", "/api/questions/*/options/*").hasRole("ADMIN")
           
           .antMatchers("/api/test/**").permitAll()
-          // .antMatchers("/api/**").permitAll()
+          .antMatchers("/api/gameStats/**").permitAll()
           // .antMatchers("/**").permitAll()
           .antMatchers(h2ConsolePath + "/**").permitAll()
 
