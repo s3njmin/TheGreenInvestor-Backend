@@ -24,8 +24,9 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public Question addQuestion(Question question) {
         List<Question> sameQuestion = questions.findByQuestion(question.getQuestion());
-        if(sameQuestion.size() == 0)
+        if(sameQuestion.size() == 0) {
             return questions.save(question);
+        }
         else
             return null;
     }

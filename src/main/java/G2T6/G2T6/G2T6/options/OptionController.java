@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+@RequestMapping("/api/questions/{questionId}")
+@RestController
 public class OptionController {
     private OptionRepository options;
     private QuestionRepository questions;
@@ -26,7 +29,7 @@ public class OptionController {
         this.questions = questions;
     }
 
-    @GetMapping("/question/{questionId}/options")
+    @GetMapping("/options")
     public List<Option> getAllOptionsByQuestionId(@PathVariable (value = "questionId") Long questionId) {
         if(!questions.existsById(questionId)) {
             throw new QuestionNotFoundException(questionId);
@@ -35,7 +38,7 @@ public class OptionController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/question/{questionId}/options")
+    @PostMapping("/options")
     public Option addOption(@PathVariable (value = "questionId") Long questionId, 
             @Valid @RequestBody Option option){
         return questions.findById(questionId).map(question ->{
@@ -44,7 +47,7 @@ public class OptionController {
         }).orElseThrow(() -> new QuestionNotFoundException(questionId));
     }
 
-    @PutMapping("/question/{questionId}/options/{optionId}")
+    @PutMapping("/options/{optionId}")
     public Option updateOption(@PathVariable (value = "questionId") Long questionId, 
             @PathVariable (value = "optionId") Long optionId,
             @Valid @RequestBody Option newOption) {
@@ -58,7 +61,7 @@ public class OptionController {
         }).orElseThrow(() -> new OptionNotFoundException(optionId));
     }
 
-    @DeleteMapping("/question/{questionId}/options/{optionId}")
+    @DeleteMapping("/options/{optionId}")
     public ResponseEntity<?> deleteOption(@PathVariable (value = "questionId") Long questionId,
             @PathVariable (value = "optionId") Long optionId){
         

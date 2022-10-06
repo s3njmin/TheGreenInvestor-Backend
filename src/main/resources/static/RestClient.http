@@ -28,14 +28,14 @@ Content-Type: application/json
 #Question Tests
 
 ###
-GET http://localhost:8080/questions
+GET http://localhost:8080/api/questions
 ###
-DELETE http://localhost:8080/questions/1
+DELETE http://localhost:8080/api/questions/2
 ###
-GET http://localhost:8080/questions/4
+GET http://localhost:8080/api/questions/1
 
 ###
-POST http://localhost:8080/questions
+POST http://localhost:8080/api/questions
 Content-Type: application/json
 
 {
@@ -44,36 +44,34 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:8080/questions/2
+PUT http://localhost:8080/api/questions/1
 Content-Type: application/json
 
 {
-    
+    "question": "yay finally"
 }
 
 
 #Option Tests
 
 ###
-GET http://localhost:8080/options
+GET http://localhost:8080/api/questions/1/options
 ###
-DELETE http://localhost:8080/options/1
-###
-GET http://localhost:8080/options/4
+DELETE http://localhost:8080/api/questions/1/options/3
 
 ###
-POST http://localhost:8080/options
+POST http://localhost:8080/api/questions/1/options
 Content-Type: application/json
 
 {
-   "option":"Haiz this is tough?!?"
+   "option" : "Bob ?!?"
 }
 
 ###
 
-PUT http://localhost:8080/options/2
+PUT http://localhost:8080/api/questions/1/options/5
 Content-Type: application/json
 
 {
-    
+    "option" : "Dog ?!?"
 }
