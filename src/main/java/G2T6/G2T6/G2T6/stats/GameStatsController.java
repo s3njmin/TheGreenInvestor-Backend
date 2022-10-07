@@ -30,12 +30,14 @@ public class GameStatsController {
         return gameStateRepo.findByPlayerCurrentStateId(sessionId);
     }
 
-//    @GetMapping("/id/{sessionId}/gameStats/{id}")
-//    public GameStats getGameStats(@PathVariable Long id){
-//        GameStats gameStats = gameStatsService.getGameStats(id);
-//        if(gameStats == null)  throw new GameStatsNotFoundException(id);
-//        return gameStats;
-//    }
+    @GetMapping("/id/{sessionId}/gameStats/{id}")
+    public Optional<GameStats> getGameStats(@PathVariable (value = "sessionId") Long sessionId,
+                                            @PathVariable (value = "id") Long id){
+        if(!stateRepo.existsById(sessionId)){
+            throw new StateNotFoundException(sessionId);
+        }
+        return gameStateRepo.findByIdAndPlayerCurrentStateId(id, sessionId);
+    }
 
     @PostMapping("/id/{sessionId}/gameStats")
     public GameStats addGameStats(@PathVariable (value = "sessionId") Long sessionId, @Valid @RequestBody GameStats gameStats){
