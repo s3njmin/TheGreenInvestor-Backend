@@ -22,8 +22,6 @@ public class Question {
     @NotNull(message = "Question should not be null")
     private String question;
 
-    
-
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
 
@@ -31,5 +29,10 @@ public class Question {
 
     public Question(String qn) {
         this.question = qn;
+    }
+
+    public Question(String qn, Long id) {
+        this.question = qn;
+        this.id = id;
     }
 }
