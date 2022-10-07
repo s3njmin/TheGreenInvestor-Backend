@@ -41,7 +41,7 @@ public class OptionController {
     @PostMapping("/options")
     public Option addOption(@PathVariable (value = "questionId") Long questionId, 
             @Valid @RequestBody Option option){
-        return questions.findById(questionId).map(question ->{
+        return questions.findById(questionId).map(question -> {
             option.setQuestion(question);
             return options.save(option);
         }).orElseThrow(() -> new QuestionNotFoundException(questionId));

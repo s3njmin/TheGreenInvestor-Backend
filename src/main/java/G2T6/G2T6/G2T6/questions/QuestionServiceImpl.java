@@ -33,7 +33,11 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Question updateQuestion(Long id, Question newQuestionInfo) {
-        return questions.findById(id).map(question -> {question.setQuestion(newQuestionInfo.getQuestion());
+        return questions.findById(id).map(question -> {
+            System.out.println("id: " + id + " | " + question.getQuestion());
+            question.setQuestion(newQuestionInfo.getQuestion());
+            System.out.println("- id: " + id + " | " + question.getQuestion());
+            System.out.println("saving: " + questions.save(question));
             return questions.save(question);
         }).orElse(null);
     }
