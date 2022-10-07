@@ -3,20 +3,18 @@ package G2T6.G2T6.G2T6;
 import G2T6.G2T6.G2T6.*;
 import G2T6.G2T6.G2T6.StateMachine.PlayerCurrentState;
 import G2T6.G2T6.G2T6.StateMachine.StateRepository;
-import G2T6.G2T6.G2T6.stats.GameStats;
 import G2T6.G2T6.G2T6.stats.GameStatsRepository;
 import lombok.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.Arrays;
-import java.util.List;
 
 @SpringBootApplication
 public class TheGreenInvestorApplication {
-
+	
 	public static void main(String[] args) {
 		ApplicationContext ctx = SpringApplication.run(TheGreenInvestorApplication.class, args);
 		GameStatsRepository GameRepo = ctx.getBean(GameStatsRepository.class);
@@ -30,6 +28,13 @@ public class TheGreenInvestorApplication {
 		template.execute("insert into ROLES (id, name) values (4, 'ROLE_SUPER_ADMIN')");
 		template.execute("insert into ROLES (id, name) values (5, 'ROLE_SUPER_USER')");
 		template.execute("insert into ROLES (id, name) values (6, 'ROLE_SUPER_MODERATOR')");
+
+		// BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		// String pw = encoder.encode("password");
+		// template.execute("insert into USERS (id, username, email, password) values (1, 'johnTheAdminTest', 'johnnyAdminTest@gmail.com', '" + pw + "')");
+
+
+		// template.execute("insert into USER_ROLES (user_id, role_id) values (1, 3)");
 
 //		System.out.println("[Add GameStats]: " + repo.save(new GameStats(1l, 2, 3, 4)));
 //		System.out.println("[Add GameStats]: " + repo.save(new GameStats(2l, 0, 0, 0)));
