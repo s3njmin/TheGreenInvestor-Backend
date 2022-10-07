@@ -19,12 +19,12 @@ public class GameStatsController {
         this.gameStatsService = gs;
     }
 
-    @GetMapping("/gameStats")
+    @GetMapping("/id/{sessionId}/gameStats")
     public List<GameStats> getAllGameStats(){
         return gameStatsService.listGameStats();
     }
 
-    @GetMapping("/gameStats/{id}")
+    @GetMapping("/id/{sessionId}/gameStats/{id}")
     public GameStats getGameStats(@PathVariable Long id){
         GameStats gameStats = gameStatsService.getGameStats(id);
         if(gameStats == null)  throw new GameStatsNotFoundException(id);
@@ -32,19 +32,19 @@ public class GameStatsController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/gameStats")
+    @PostMapping("/id/{sessionId}/gameStats")
     public GameStats addGameStats(@Valid @RequestBody GameStats gameStats){
         return gameStatsService.addGameStats(gameStats);
     }
 
-    @PutMapping("/gameStats/{id}")
+    @PutMapping("/id/{sessionId}/gameStats/{id}")
     public GameStats updateGameStats(@PathVariable Long id, @Valid @RequestBody GameStats newStats){
         GameStats gameStats = gameStatsService.updateGameStats(id, newStats);
         if(gameStats == null)  throw new GameStatsNotFoundException(id);
         return gameStats;
     }
 
-    @DeleteMapping("/gameStats/{id}")
+    @DeleteMapping("/id/{sessionId}/gameStats/{id}")
     public void deleteBook(@PathVariable Long id){
         try{
             gameStatsService.deleteGameStats(id);

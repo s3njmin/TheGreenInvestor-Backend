@@ -1,8 +1,8 @@
-GET http://localhost:8080/gameStats
+GET http://localhost:8080/api/gameStats
 ###
-DELETE http://localhost:8080/gameStats/1
+DELETE http://localhost:8080/api/gameStats/1
 ###
-GET http://localhost:8080/gameStats/4
+GET http://localhost:8080/api/gameStats/4
 
 ###
 POST http://localhost:8080/gameStats

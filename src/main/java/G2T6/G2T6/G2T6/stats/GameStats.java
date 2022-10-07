@@ -1,5 +1,7 @@
 package G2T6.G2T6.G2T6.stats;
 
+import G2T6.G2T6.G2T6.StateMachine.PlayerCurrentState;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,7 +19,7 @@ import java.util.*;
 @EqualsAndHashCode
 public class GameStats {
 
-    @GeneratedValue @Id
+    @GeneratedValue(strategy = GenerationType.AUTO) @Id
     private Long id;
 
     @NotNull
@@ -29,8 +31,12 @@ public class GameStats {
     @Min(0) @Max(100) @NotNull
     private int emissionVal = 0;
 
+    @ManyToOne
+    @JoinColumn(name = "playerCurrentState_id", nullable = false)
+    private PlayerCurrentState playerCurrentState;
 
     public GameStats(Long id){
         this.id = id;
     }
+
 }

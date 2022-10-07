@@ -1,6 +1,8 @@
 package G2T6.G2T6.G2T6;
 
 import G2T6.G2T6.G2T6.*;
+import G2T6.G2T6.G2T6.StateMachine.PlayerCurrentState;
+import G2T6.G2T6.G2T6.StateMachine.StateRepository;
 import G2T6.G2T6.G2T6.stats.GameStats;
 import G2T6.G2T6.G2T6.stats.GameStatsRepository;
 import lombok.*;
@@ -17,8 +19,8 @@ public class TheGreenInvestorApplication {
 
 	public static void main(String[] args) {
 		ApplicationContext ctx = SpringApplication.run(TheGreenInvestorApplication.class, args);
-		GameStatsRepository repo = ctx.getBean(GameStatsRepository.class);
-
+		GameStatsRepository GameRepo = ctx.getBean(GameStatsRepository.class);
+		StateRepository UserRepo = ctx.getBean(StateRepository.class);
 		JdbcTemplate template = ctx.getBean(JdbcTemplate.class);
 		template.execute("DROP TABLE GameStats IF EXISTS");
 
@@ -29,8 +31,10 @@ public class TheGreenInvestorApplication {
 		template.execute("insert into ROLES (id, name) values (5, 'ROLE_SUPER_USER')");
 		template.execute("insert into ROLES (id, name) values (6, 'ROLE_SUPER_MODERATOR')");
 
-		System.out.println("[Add book]: " + repo.save(new GameStats(1l, 2, 3, 4)));
-		System.out.println("[Add book]: " + repo.save(new GameStats(2l, 0, 0, 0)));
+//		System.out.println("[Add GameStats]: " + repo.save(new GameStats(1l, 2, 3, 4)));
+//		System.out.println("[Add GameStats]: " + repo.save(new GameStats(2l, 0, 0, 0)));
+
+		//System.out.println("[Add usersession]: " + UserRepo.save(new PlayerCurrentState(1L, CONSTANTVARIABLES.DEFAULTYEAR, CONSTANTVARIABLES.DEFAULTSTATE)));
 
 		//template.execute("CREATE TABLE USERS(id int, email varchar(255), password varchar(255), username varchar(255))");
 		

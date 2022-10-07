@@ -1,5 +1,6 @@
 package G2T6.G2T6.G2T6.stats;
 
+import G2T6.G2T6.G2T6.CONSTANTVARIABLES;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,5 +43,15 @@ public class GameStatsServiceImplementation implements GameStatsService {
     @Override
     public void deleteGameStats(Long id) {
         gameStatsRepository.deleteById(id);
+    }
+
+    @Override
+    public void factoryReset(Long id) {
+        gameStatsRepository.findById(id).map(gameStat -> {
+            gameStat.setEmissionVal(CONSTANTVARIABLES.EMISSIONVALUE);
+            gameStat.setIncomeVal(CONSTANTVARIABLES.INCOMEVALUE);
+            gameStat.setMoraleVal(CONSTANTVARIABLES.MORALEVALUE);
+            return gameStatsRepository.save(gameStat);
+        });
     }
 }

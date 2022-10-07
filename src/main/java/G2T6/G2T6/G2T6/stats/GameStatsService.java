@@ -5,7 +5,8 @@ import java.util.List;
 public interface GameStatsService {
     List<GameStats> listGameStats();
     GameStats getGameStats(Long id);
-    GameStats addGameStats(GameStats book);
-    GameStats updateGameStats(Long id, GameStats book);
+    GameStats addGameStats(GameStats stats);
+    GameStats updateGameStats(Long id, GameStats stats);
     void deleteGameStats(Long id);
+    void factoryReset(Long id);
 }

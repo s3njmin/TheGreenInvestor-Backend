@@ -13,13 +13,13 @@ public class GameStatsClient {
         this.template = builder.build();
     }
 
-    public GameStats getBook(final String URI, final Long id) {
+    public GameStats getGameStats(final String URI, final Long id) {
         final GameStats gameStats = template.getForObject(URI + "/" + id, GameStats.class);
         return gameStats;
     }
 
 
-    public GameStats addBook(final String URI, final GameStats gameStats) {
+    public GameStats addGameStats(final String URI, final GameStats gameStats) {
         final GameStats returned = template.postForObject(URI, gameStats, GameStats.class);
         return returned;
     }
