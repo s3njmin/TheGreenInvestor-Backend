@@ -32,7 +32,7 @@ public class GameStats {
     private int emissionVal = 0;
 
     @ManyToOne
-    @JoinColumn(name = "playerCurrentState_id", nullable = false)
+    @JoinColumn(name = "playerCurrentState_id")
     private PlayerCurrentState playerCurrentState;
 
     public GameStats(Long id){

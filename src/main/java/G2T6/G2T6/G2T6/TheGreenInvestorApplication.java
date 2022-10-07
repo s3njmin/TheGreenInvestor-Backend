@@ -17,7 +17,6 @@ public class TheGreenInvestorApplication {
 	
 	public static void main(String[] args) {
 		ApplicationContext ctx = SpringApplication.run(TheGreenInvestorApplication.class, args);
-		GameStatsRepository GameRepo = ctx.getBean(GameStatsRepository.class);
 		StateRepository UserRepo = ctx.getBean(StateRepository.class);
 		JdbcTemplate template = ctx.getBean(JdbcTemplate.class);
 		template.execute("DROP TABLE GameStats IF EXISTS");
