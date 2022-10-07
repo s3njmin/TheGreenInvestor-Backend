@@ -16,7 +16,7 @@ import G2T6.G2T6.G2T6.repository.UserRepository;
 
 @Service
 public class RefreshTokenService {
-  @Value("${bezkoder.app.jwtRefreshExpirationMs}")
+  @Value("${G2T6.app.jwtRefreshExpirationMs}")
   private Long refreshTokenDurationMs;
 
   @Autowired
