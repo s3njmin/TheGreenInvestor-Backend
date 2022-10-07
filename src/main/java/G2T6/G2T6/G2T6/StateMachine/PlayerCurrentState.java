@@ -20,7 +20,7 @@ import java.util.List;
 @EqualsAndHashCode
 public class PlayerCurrentState {
     @GeneratedValue(strategy = GenerationType.AUTO) @Id
-    private Long sessionId;
+    private Long id;
     @Min(0) @Max(10) @NotNull
     private int yearValue;
     @Enumerated(EnumType.STRING) @NotNull
@@ -31,7 +31,7 @@ public class PlayerCurrentState {
     private List<GameStats> gameStats;
 
     public PlayerCurrentState(long id, int year, State state) {
-        this.sessionId = id;
+        this.id = id;
         this.yearValue = year;
         this.currentState = state;
     }

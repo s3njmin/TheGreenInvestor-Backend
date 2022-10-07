@@ -12,12 +12,13 @@ Content-Type: application/json
     "yearValue": 2,
     "currentState": "answeringQuestion"
 }
-
 ###
-
 PUT http://localhost:8080/api/id/2
+Content-Type: application/json
 
 {
     "yearValue": 2,
     "currentState": "justStarted"
 }
+
+###
