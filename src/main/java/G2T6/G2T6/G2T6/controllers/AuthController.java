@@ -108,9 +108,23 @@ public class AuthController {
     User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
         encoder.encode(signUpRequest.getPassword()));
 
-    Set<String> strRoles = signUpRequest.getRole();
-    if (strRoles == null)
-    user.setRole("ROLE_USER");
+    String strRole = signUpRequest.getRole();
+
+    if (strRole.equals("GUEST")) {
+
+      user.setRole("ROLE_GUEST");
+
+    } else if (strRole.equals("USER")) {
+
+      user.setRole("ROLE_USER");
+
+    } else {
+
+      user.setRole("ROLE_INVALID");
+      return ResponseEntity.ok(new MessageResponse("INVALID ROLE GIVEN"));
+
+    }
+
     userRepository.save(user);
 
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));

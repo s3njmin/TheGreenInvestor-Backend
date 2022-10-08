@@ -101,12 +101,12 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
           .antMatchers("/api/auth/**").permitAll()
 
           // authentication for question & option API calls
-          .antMatchers(HttpMethod.GET, "/api/questions/**").permitAll()
-          // .antMatchers(HttpMethod.POST,"/api/questions", "/api/questions/*/options").hasRole("ADMIN")
-          // .antMatchers(HttpMethod.PUT,"/api/questions/*", "/api/questions/*/options/*").hasRole("ADMIN")
-          // .antMatchers(HttpMethod.DELETE,"/api/questions/*", "/api/questions/*/options/*").hasRole("ADMIN")
+          .antMatchers(HttpMethod.GET, "/api/questions/**", "/api/questions/*/options").permitAll()
+          .antMatchers(HttpMethod.POST,"/api/questions", "/api/questions/*/options").hasRole("ADMIN")
+          .antMatchers(HttpMethod.PUT,"/api/questions/*", "/api/questions/*/options/*").hasRole("ADMIN")
+          .antMatchers(HttpMethod.DELETE,"/api/questions/*", "/api/questions/*/options/*").hasRole("ADMIN")
           
-          .antMatchers("/api/**").permitAll()
+          // .antMatchers("/api/**").permitAll()
 
           .antMatchers("/api/test/**").permitAll()
           .antMatchers("/api/id/**/gameStats/**").permitAll()
