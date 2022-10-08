@@ -23,7 +23,7 @@ public class Question {
     @NotNull(message = "Question should not be null")
     private String question;
 
-    private String imagePath;
+    private String imageLocation;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
