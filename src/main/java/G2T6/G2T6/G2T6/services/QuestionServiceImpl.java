@@ -4,12 +4,15 @@ import java.util.List;
 
 import G2T6.G2T6.G2T6.models.Question;
 import G2T6.G2T6.G2T6.repository.QuestionRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
     private QuestionRepository questions;
 
+    @Autowired
     public QuestionServiceImpl(QuestionRepository questions) {
         this.questions = questions;
     }

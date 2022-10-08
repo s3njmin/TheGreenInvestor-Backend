@@ -57,12 +57,12 @@ Content-Type: application/json
 #Option Tests
 
 ###
-GET http://localhost:8080/api/questions/3/options
+GET http://localhost:8080/api/questions/2/options
 ###
 DELETE http://localhost:8080/api/questions/1/options/3
 
 ###
-POST http://localhost:8080/api/questions/3/options
+POST http://localhost:8080/api/questions/2/options
 Content-Type: application/json
 
 {
