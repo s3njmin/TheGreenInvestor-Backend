@@ -21,9 +21,10 @@ POST http://localhost:8080/api/auth/signup
 Content-Type: application/json
 
 {
-    "username": "Guest93035",
-    "email": "johnNotTheAdminTest@gmail.com",
-    "password": "password123"
+    "username": "Guest9303345",
+    "email": "johnNotTheAdmindTest@gmail.com",
+    "password": "passwordd123",
+    "role": "GUEST"
 }
 ###
 
