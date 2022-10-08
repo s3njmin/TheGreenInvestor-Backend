@@ -36,7 +36,7 @@ public class TheGreenInvestorApplication {
 		//System.out.println("[Add usersession]: " + UserRepo.save(new PlayerCurrentState(1L, CONSTANTVARIABLES.DEFAULTYEAR, CONSTANTVARIABLES.DEFAULTSTATE)));
 
 		//template.execute("CREATE TABLE USERS(id int, email varchar(255), password varchar(255), username varchar(255))");
-		
+
 		//template.execute("CREATE TABLE USER_ROLES(id int, user_id int, role_id int)");
 
 		//template.execute("CREATE TABLE HIBERNATE_SEQUENCE (sequence_name varchar(255), next_val int)");

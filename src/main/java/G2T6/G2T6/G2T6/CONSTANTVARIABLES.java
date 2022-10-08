@@ -8,7 +8,7 @@ public class CONSTANTVARIABLES {
     public static final int MORALEVALUE = 0;
     public static final int INCOMEVALUE = 0;
 
-    public static final State DEFAULTSTATE = State.justStarted;
+    public static final State DEFAULTSTATE = State.start;
     public static final int DEFAULTYEAR = 0;
 
 }
