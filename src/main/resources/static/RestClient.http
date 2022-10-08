@@ -30,16 +30,18 @@ Content-Type: application/json
 ###
 GET http://localhost:8080/api/questions
 ###
-DELETE http://localhost:8080/api/questions/2
+DELETE http://localhost:8080/api/questions/5
 ###
 GET http://localhost:8080/api/questions/1
 
 ###
 POST http://localhost:8080/api/questions
 Content-Type: application/json
+
 {
-   "question" : "Company stakeholders are pressuring you to eliminate paper waste in every office. Will you:",
-   "imagePath" : "../assets/img1.jpg"
+   "id" : 3,
+   "question" : "It is 22 April, AKA Earth Day! Your company decide to celebrate in the following way:",
+   "imageLocation" : "../assets/img3.jpg"
 }
 
 ###
@@ -55,16 +57,17 @@ Content-Type: application/json
 #Option Tests
 
 ###
-GET http://localhost:8080/api/questions/1/options
+GET http://localhost:8080/api/questions/3/options
 ###
 DELETE http://localhost:8080/api/questions/1/options/3
 
 ###
-POST http://localhost:8080/api/questions/1/options
+POST http://localhost:8080/api/questions/3/options
 Content-Type: application/json
 
 {
-   "option" : "Bob ?!?"
+   "id" : 4,
+   "option" : "Do nothing"
 }
 
 ###
