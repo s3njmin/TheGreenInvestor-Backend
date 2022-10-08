@@ -14,6 +14,7 @@ import lombok.*;
 public class Option {
     private @Id @GeneratedValue Long id;
     private String option;
+    private String feedback;
     
     @ManyToOne
     @JoinColumn(name="question_id", nullable=false)
