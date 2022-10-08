@@ -18,22 +18,22 @@ public class StateServiceImplementation implements StateService {
     }
 
     @Override
-    public List<CurrentState> listPlayerCurrentState() {
+    public List<CurrentState> listCurrentState() {
         return stateRepository.findAll();
     }
 
     @Override
-    public CurrentState getPlayerCurrentState(Long id) {
+    public CurrentState getCurrentState(Long id) {
         return stateRepository.findById(id).orElse(null);
     }
 
     @Override
-    public CurrentState addPlayerCurrentState(CurrentState state) {
+    public CurrentState addCurrentState(CurrentState state) {
         return stateRepository.save(state);
     }
 
     @Override
-    public CurrentState updatePlayerCurrentState(Long id, CurrentState state) {
+    public CurrentState updateCurrentState(Long id, CurrentState state) {
         return stateRepository.findById(id).map(newState -> {
                 newState.changeState(state.getCurrentState());
                 newState.setYearValue(state.getYearValue());
@@ -42,7 +42,7 @@ public class StateServiceImplementation implements StateService {
     }
 
     @Override
-    public void deletePlayerCurrentState(Long id) {
+    public void deleteCurrentState(Long id) {
         stateRepository.deleteById(id);
     }
 

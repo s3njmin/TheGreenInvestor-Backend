@@ -19,13 +19,13 @@ public class StateController {
 
     @GetMapping("/id")
     public List<CurrentState> getAllState(){
-        return stateService.listPlayerCurrentState();
+        return stateService.listCurrentState();
     }
 
 
     @GetMapping("/id/{id}")
     public CurrentState getState(@PathVariable Long id){
-        CurrentState state = stateService.getPlayerCurrentState(id);
+        CurrentState state = stateService.getCurrentState(id);
         if(state == null)  throw new StateNotFoundException(id);
         return state;
     }
@@ -33,12 +33,12 @@ public class StateController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/id")
     public CurrentState addState(@Valid @RequestBody CurrentState state){
-        return stateService.addPlayerCurrentState(state);
+        return stateService.addCurrentState(state);
     }
 
     @PutMapping("/id/{id}")
     public CurrentState updateState(@PathVariable Long id, @Valid @RequestBody CurrentState state){
-        CurrentState currentState = stateService.updatePlayerCurrentState(id, state);
+        CurrentState currentState = stateService.updateCurrentState(id, state);
         if(currentState == null)  throw new StateNotFoundException(id);
         return currentState;
     }
@@ -46,7 +46,7 @@ public class StateController {
     @DeleteMapping("/id/{id}")
     public void deleteState(@PathVariable Long id){
         try{
-            stateService.deletePlayerCurrentState(id);
+            stateService.deleteCurrentState(id);
         }catch (EmptyResultDataAccessException e){
             throw new StateNotFoundException(id);
         }

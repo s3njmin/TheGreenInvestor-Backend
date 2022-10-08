@@ -32,7 +32,7 @@ public class TheGreenInvestorApplication {
 //		System.out.println("[Add GameStats]: " + repo.save(new GameStats(1l, 2, 3, 4)));
 //		System.out.println("[Add GameStats]: " + repo.save(new GameStats(2l, 0, 0, 0)));
 
-		//System.out.println("[Add usersession]: " + UserRepo.save(new PlayerCurrentState(1L, CONSTANTVARIABLES.DEFAULTYEAR, CONSTANTVARIABLES.DEFAULTSTATE)));
+		//System.out.println("[Add usersession]: " + UserRepo.save(new CurrentState(1L, CONSTANTVARIABLES.DEFAULTYEAR, CONSTANTVARIABLES.DEFAULTSTATE)));
 
 		//template.execute("CREATE TABLE USERS(id int, email varchar(255), password varchar(255), username varchar(255))");
 

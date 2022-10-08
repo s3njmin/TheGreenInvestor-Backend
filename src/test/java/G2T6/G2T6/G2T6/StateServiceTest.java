@@ -8,9 +8,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.*;
 
-import G2T6.G2T6.G2T6.StateMachine.PlayerCurrentState;
-import G2T6.G2T6.G2T6.StateMachine.StateRepository;
-import G2T6.G2T6.G2T6.StateMachine.StateServiceImplementation;
+import G2T6.G2T6.G2T6.StateMachine.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,11 +25,11 @@ public class StateServiceTest {
 
     // @Test
     // void addState_ReturnSavedSameState(){
-    //     PlayerCurrentState state = new PlayerCurrentState(CONSTANTVARIABLES.DEFAULTYEAR, CONSTANTVARIABLES.DEFAULTSTATE);
-    //     when(stateRepo.findByCurrentState(any(String.class))).thenReturn(new ArrayList<PlayerCurrentState>());
-    //     when(stateRepo.save(any(PlayerCurrentState.class))).thenReturn(state);
+    //     CurrentState state = new CurrentState(CONSTANTVARIABLES.DEFAULTYEAR, CONSTANTVARIABLES.DEFAULTSTATE);
+    //     when(stateRepo.findByCurrentState(any(String.class))).thenReturn(new ArrayList<CurrentState>());
+    //     when(stateRepo.save(any(CurrentState.class))).thenReturn(state);
 
-    //     PlayerCurrentState savedState = stateServiceImplementation.addPlayerCurrentState(state);
+    //     CurrentState savedState = stateServiceImplementation.addCurrentState(state);
 
     //     assertNotNull(savedState);
     //     verify(stateRepo).findById(state.getId());
@@ -39,11 +37,11 @@ public class StateServiceTest {
     // }
     @Test
     void updateState_NotFound_ReturnNull(){
-        PlayerCurrentState state = new PlayerCurrentState(CONSTANTVARIABLES.DEFAULTYEAR, CONSTANTVARIABLES.DEFAULTSTATE);
+        CurrentState state = new CurrentState(CONSTANTVARIABLES.DEFAULTYEAR, CONSTANTVARIABLES.DEFAULTSTATE);
         Long id = 10L;
         when(stateRepo.findById(id)).thenReturn(Optional.empty());
 
-        PlayerCurrentState updateState = stateServiceImplementation.updatePlayerCurrentState(id, state);
+        CurrentState updateState = stateServiceImplementation.updateCurrentState(id, state);
 
         assertNull(updateState);
         verify(stateRepo).findById(id);
