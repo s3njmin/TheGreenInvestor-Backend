@@ -27,7 +27,6 @@ public class TheGreenInvestorApplication {
 		// String pw = encoder.encode("password");
 		// template.execute("insert into USERS (id, username, email, password) values (1, 'johnTheAdminTest', 'johnnyAdminTest@gmail.com', '" + pw + "')");
 
-
 		// template.execute("insert into USER_ROLES (user_id, role_id) values (1, 3)");
 
 //		System.out.println("[Add GameStats]: " + repo.save(new GameStats(1l, 2, 3, 4)));

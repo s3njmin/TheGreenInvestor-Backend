@@ -8,16 +8,22 @@ public class JwtResponse {
 	private String refreshToken;
 	private Long id;
 	private String username;
-	private String email;
+	//private String email;
 	private List<String> roles;
+	private String message;
 
-	public JwtResponse(String accessToken, String refreshToken, Long id, String username, String email, List<String> roles) {
+	public JwtResponse(){
+		
+	}
+
+	public JwtResponse(String accessToken, String refreshToken, Long id, String username, List<String> roles, String message) {
 		this.token = accessToken;
 		this.refreshToken = refreshToken;
 		this.id = id;
 		this.username = username;
-		this.email = email;
+		//this.email = email;
 		this.roles = roles;
+		this.message = message;
 	}
 
 	public String getAccessToken() {
@@ -44,13 +50,13 @@ public class JwtResponse {
 		this.id = id;
 	}
 
-	public String getEmail() {
-		return email;
-	}
+	// public String getEmail() {
+	// 	return email;
+	// }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+	// public void setEmail(String email) {
+	// 	this.email = email;
+	// }
 
 	public String getUsername() {
 		return username;
@@ -71,4 +77,12 @@ public class JwtResponse {
   public void setRefreshToken(String refreshToken) {
     this.refreshToken = refreshToken;
   }
+
+  public String getMessage() {
+	return message;
+}
+
+public void setMessage(String message) {
+	this.message = message;
+}
 }
