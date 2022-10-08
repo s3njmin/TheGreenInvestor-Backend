@@ -18,25 +18,25 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class PlayerCurrentState {
-    @GeneratedValue(strategy = GenerationType.AUTO) @Id
+public class CurrentState {
+    @Id
     private Long id;
     @Min(0) @Max(10) @NotNull
     private int yearValue;
     @Enumerated(EnumType.STRING) @NotNull
     private State currentState;
 
-    @OneToMany(mappedBy = "playerCurrentState", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "currentState", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<GameStats> gameStats;
 
-    public PlayerCurrentState(long id, int year, State state) {
+    public CurrentState(long id, int year, State state) {
         this.id = id;
         this.yearValue = year;
         this.currentState = state;
     }
 
-    public PlayerCurrentState(int year, State state) {
+    public CurrentState(int year, State state) {
         this.yearValue = year;
         this.currentState = state;
     }

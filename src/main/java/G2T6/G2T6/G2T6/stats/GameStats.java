@@ -1,14 +1,12 @@
 package G2T6.G2T6.G2T6.stats;
 
-import G2T6.G2T6.G2T6.StateMachine.PlayerCurrentState;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import G2T6.G2T6.G2T6.StateMachine.CurrentState;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.util.*;
 
 @Entity
 @Getter
@@ -32,8 +30,8 @@ public class GameStats {
     private int emissionVal = 0;
 
     @ManyToOne
-    @JoinColumn(name = "playerCurrentState_id")
-    private PlayerCurrentState playerCurrentState;
+    @JoinColumn(name = "currentState_id")
+    private CurrentState currentState;
 
     public GameStats(Long id){
         this.id = id;

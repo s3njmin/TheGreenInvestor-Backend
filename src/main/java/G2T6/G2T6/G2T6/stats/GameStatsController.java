@@ -27,7 +27,7 @@ public class GameStatsController {
         if(!stateRepo.existsById(sessionId)){
             throw new StateNotFoundException(sessionId);
         }
-        return gameStateRepo.findByPlayerCurrentStateId(sessionId);
+        return gameStateRepo.findByCurrentStateId(sessionId);
     }
 
     @GetMapping("/id/{sessionId}/gameStats/{id}")
@@ -36,13 +36,13 @@ public class GameStatsController {
         if(!stateRepo.existsById(sessionId)){
             throw new StateNotFoundException(sessionId);
         }
-        return gameStateRepo.findByIdAndPlayerCurrentStateId(id, sessionId);
+        return gameStateRepo.findByIdAndCurrentStateId(id, sessionId);
     }
 
     @PostMapping("/id/{sessionId}/gameStats")
     public GameStats addGameStats(@PathVariable (value = "sessionId") Long sessionId, @Valid @RequestBody GameStats gameStats){
         return stateRepo.findById(sessionId).map(session ->{
-            gameStats.setPlayerCurrentState(session);
+            gameStats.setCurrentState(session);
             return gameStateRepo.save(gameStats);
         }).orElseThrow(() -> new StateNotFoundException(sessionId));
     }
@@ -56,7 +56,7 @@ public class GameStatsController {
         if(!stateRepo.existsById(sessionId)){
             throw new StateNotFoundException(sessionId);
         }
-        return gameStateRepo.findByIdAndPlayerCurrentStateId(id, sessionId).map(gameStats ->{
+        return gameStateRepo.findByIdAndCurrentStateId(id, sessionId).map(gameStats ->{
             gameStats.setIncomeVal(newStats.getIncomeVal());
             gameStats.setEmissionVal(newStats.getEmissionVal());
             gameStats.setMoraleVal(newStats.getMoraleVal());
@@ -71,7 +71,7 @@ public class GameStatsController {
         if(!stateRepo.existsById(sessionId)){
             throw new StateNotFoundException(sessionId);
         }
-        return gameStateRepo.findByIdAndPlayerCurrentStateId(id, sessionId).map(gameStats -> {
+        return gameStateRepo.findByIdAndCurrentStateId(id, sessionId).map(gameStats -> {
             gameStateRepo.delete(gameStats);
             return ResponseEntity.ok().build();
         }).orElseThrow(() -> new GameStatsNotFoundException(id));

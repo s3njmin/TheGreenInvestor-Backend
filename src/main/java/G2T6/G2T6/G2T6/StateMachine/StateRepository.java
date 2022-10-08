@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface StateRepository extends JpaRepository<PlayerCurrentState, Long> {
-    List<PlayerCurrentState> findByCurrentState(String currentState);
+public interface StateRepository extends JpaRepository<CurrentState, Long> {
+    List<CurrentState> findByCurrentState(String currentState);
 }
