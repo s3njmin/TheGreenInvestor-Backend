@@ -12,14 +12,14 @@ public class StateClient {
         this.template = builder.build();
     }
 
-    public PlayerCurrentState getState(final String URI, final Long id) {
-        final PlayerCurrentState currentState = template.getForObject(URI + "/" + id, PlayerCurrentState.class);
+    public CurrentState getState(final String URI, final Long id) {
+        final CurrentState currentState = template.getForObject(URI + "/" + id, CurrentState.class);
         return currentState;
     }
 
 
-    public PlayerCurrentState addState(final String URI, final PlayerCurrentState currentStates) {
-        final PlayerCurrentState currentState = template.postForObject(URI, currentStates, PlayerCurrentState.class);
+    public CurrentState addState(final String URI, final CurrentState currentStates) {
+        final CurrentState currentState = template.postForObject(URI, currentStates, CurrentState.class);
         return currentState;
     }
 }

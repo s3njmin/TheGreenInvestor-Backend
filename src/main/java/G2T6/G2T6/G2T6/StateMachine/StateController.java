@@ -18,27 +18,27 @@ public class StateController {
     public  StateController(StateService ss){ this.stateService = ss; }
 
     @GetMapping("/id")
-    public List<PlayerCurrentState> getAllState(){
+    public List<CurrentState> getAllState(){
         return stateService.listPlayerCurrentState();
     }
 
 
     @GetMapping("/id/{id}")
-    public PlayerCurrentState getState(@PathVariable Long id){
-        PlayerCurrentState state = stateService.getPlayerCurrentState(id);
+    public CurrentState getState(@PathVariable Long id){
+        CurrentState state = stateService.getPlayerCurrentState(id);
         if(state == null)  throw new StateNotFoundException(id);
         return state;
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/id")
-    public PlayerCurrentState addState(@Valid @RequestBody PlayerCurrentState state){
+    public CurrentState addState(@Valid @RequestBody CurrentState state){
         return stateService.addPlayerCurrentState(state);
     }
 
     @PutMapping("/id/{id}")
-    public PlayerCurrentState updateState(@PathVariable Long id, @Valid @RequestBody PlayerCurrentState state){
-        PlayerCurrentState currentState = stateService.updatePlayerCurrentState(id, state);
+    public CurrentState updateState(@PathVariable Long id, @Valid @RequestBody CurrentState state){
+        CurrentState currentState = stateService.updatePlayerCurrentState(id, state);
         if(currentState == null)  throw new StateNotFoundException(id);
         return currentState;
     }

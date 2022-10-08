@@ -18,22 +18,22 @@ public class StateServiceImplementation implements StateService {
     }
 
     @Override
-    public List<PlayerCurrentState> listPlayerCurrentState() {
+    public List<CurrentState> listPlayerCurrentState() {
         return stateRepository.findAll();
     }
 
     @Override
-    public PlayerCurrentState getPlayerCurrentState(Long id) {
+    public CurrentState getPlayerCurrentState(Long id) {
         return stateRepository.findById(id).orElse(null);
     }
 
     @Override
-    public PlayerCurrentState addPlayerCurrentState(PlayerCurrentState state) {
+    public CurrentState addPlayerCurrentState(CurrentState state) {
         return stateRepository.save(state);
     }
 
     @Override
-    public PlayerCurrentState updatePlayerCurrentState(Long id, PlayerCurrentState state) {
+    public CurrentState updatePlayerCurrentState(Long id, CurrentState state) {
         return stateRepository.findById(id).map(newState -> {
                 newState.changeState(state.getCurrentState());
                 newState.setYearValue(state.getYearValue());
