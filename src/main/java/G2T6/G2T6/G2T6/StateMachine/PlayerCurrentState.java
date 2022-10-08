@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class PlayerCurrentState {
-    @GeneratedValue(strategy = GenerationType.AUTO) @Id
+    @Id
     private Long id;
     @Min(0) @Max(10) @NotNull
     private int yearValue;
