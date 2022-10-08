@@ -1,12 +1,15 @@
-package G2T6.G2T6.G2T6.options;
+package G2T6.G2T6.G2T6.controllers;
 
 import java.util.List;
 
-import G2T6.G2T6.G2T6.questions.*;
+import G2T6.G2T6.G2T6.exception.OptionNotFoundException;
+import G2T6.G2T6.G2T6.exception.QuestionNotFoundException;
+import G2T6.G2T6.G2T6.options.Option;
+import G2T6.G2T6.G2T6.repository.OptionRepository;
 
 import javax.validation.Valid;
 
-import org.springframework.dao.EmptyResultDataAccessException;
+import G2T6.G2T6.G2T6.repository.QuestionRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

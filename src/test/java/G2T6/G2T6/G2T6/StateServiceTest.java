@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 import java.util.*;
 
 import G2T6.G2T6.G2T6.StateMachine.*;
+import G2T6.G2T6.G2T6.repository.StateRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

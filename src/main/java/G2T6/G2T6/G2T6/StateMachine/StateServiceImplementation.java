@@ -2,6 +2,7 @@ package G2T6.G2T6.G2T6.StateMachine;
 
 
 import G2T6.G2T6.G2T6.CONSTANTVARIABLES;
+import G2T6.G2T6.G2T6.repository.StateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

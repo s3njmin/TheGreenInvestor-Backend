@@ -1,8 +1,9 @@
-package G2T6.G2T6.G2T6.options;
+package G2T6.G2T6.G2T6.repository;
 
 import java.util.List;
 import java.util.Optional;
 
+import G2T6.G2T6.G2T6.options.Option;
 import G2T6.G2T6.G2T6.questions.Question;
 
 import org.springframework.data.jpa.repository.JpaRepository;

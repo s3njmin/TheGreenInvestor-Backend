@@ -1,19 +1,17 @@
 package G2T6.G2T6.G2T6;
 
 import G2T6.G2T6.G2T6.StateMachine.*;
+import G2T6.G2T6.G2T6.repository.StateRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
-import java.awt.print.Book;
 import java.net.URI;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

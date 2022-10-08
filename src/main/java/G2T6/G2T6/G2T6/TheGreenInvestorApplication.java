@@ -1,6 +1,6 @@
 package G2T6.G2T6.G2T6;
 
-import G2T6.G2T6.G2T6.StateMachine.StateRepository;
+import G2T6.G2T6.G2T6.repository.StateRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
