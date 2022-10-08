@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
 
-import G2T6.G2T6.G2T6.models.security.ERole;
-import G2T6.G2T6.G2T6.models.security.Role;
 import G2T6.G2T6.G2T6.models.security.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,35 +49,23 @@ public class AuthenticationIntegrationTest {
     @Autowired
     BCryptPasswordEncoder encoder;
 
-    @Autowired
-    RoleRepository rolesRepo;
-
-    @BeforeEach
+    @BeforeEach()
     void createUser() {
 
         // Making an admin user for test
         User newUser = new User("johnTheAdmin", "johnny@gmail.com",
-        encoder.encode("myStrongPw"));
-        Set<Role> roles = new HashSet<>();
-
-        Role adminRole = rolesRepo.findByName(ERole.ROLE_ADMIN)
-        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-        
-        roles.add(adminRole);
-        newUser.setRoles(roles);
+                encoder.encode("myStrongPw"), "ROLE_ADMIN");
         usersRepo.save(newUser);
     }
 
-    @AfterEach
+    @AfterEach()
     void tearDown() {
         // clear the database after each test
         refreshRepo.deleteAll();
         usersRepo.deleteAll();
-        rolesRepo.deleteAll();
     }
 
     @Test
-    @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "/test-data.sql")
     public void login_Success() throws Exception {
 
         URI uri = new URI(baseUrl + port + "/api/auth/signin");
@@ -108,7 +94,6 @@ public class AuthenticationIntegrationTest {
     }
 
     @Test
-    @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "/test-data.sql")
     public void login_WrongPassword_Failure() throws Exception {
 
         URI uri = new URI(baseUrl + port + "/api/auth/signin");
@@ -130,7 +115,6 @@ public class AuthenticationIntegrationTest {
     }
 
     @Test
-    @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "/test-data.sql")
     public void register_Success() throws Exception {
 
         URI uri = new URI(baseUrl + port + "/api/auth/signup");
@@ -138,7 +122,7 @@ public class AuthenticationIntegrationTest {
         signUpRequest.setUsername("johnNotTheAdmin");
         signUpRequest.setEmail("johnNotTheAdmin@gmail.com");
         signUpRequest.setPassword("myStrongPwAgain");
-        
+
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -148,9 +132,9 @@ public class AuthenticationIntegrationTest {
         ResponseEntity<MessageResponse> responseEntity = restTemplate.exchange(
                 uri,
                 HttpMethod.POST, entity, MessageResponse.class);
-        
+
         assertEquals(200, responseEntity.getStatusCodeValue());
         assertEquals("User registered successfully!", responseEntity.getBody().getMessage());
-        
+
     }
 }

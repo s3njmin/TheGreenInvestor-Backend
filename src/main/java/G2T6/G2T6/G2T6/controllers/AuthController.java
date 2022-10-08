@@ -23,9 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import G2T6.G2T6.G2T6.exceptions.TokenRefreshException;
-import G2T6.G2T6.G2T6.models.security.ERole;
 import G2T6.G2T6.G2T6.models.security.RefreshToken;
-import G2T6.G2T6.G2T6.models.security.Role;
 import G2T6.G2T6.G2T6.models.security.User;
 import G2T6.G2T6.G2T6.payload.request.LoginRequest;
 import G2T6.G2T6.G2T6.payload.request.SignupRequest;
@@ -33,7 +31,6 @@ import G2T6.G2T6.G2T6.payload.request.TokenRefreshRequest;
 import G2T6.G2T6.G2T6.payload.response.JwtResponse;
 import G2T6.G2T6.G2T6.payload.response.MessageResponse;
 import G2T6.G2T6.G2T6.payload.response.TokenRefreshResponse;
-import G2T6.G2T6.G2T6.repository.RoleRepository;
 import G2T6.G2T6.G2T6.repository.UserRepository;
 import G2T6.G2T6.G2T6.security.jwt.JwtUtils;
 import G2T6.G2T6.G2T6.security.services.RefreshTokenService;
@@ -48,9 +45,6 @@ public class AuthController {
 
   @Autowired
   UserRepository userRepository;
-
-  @Autowired
-  RoleRepository roleRepository;
 
   @Autowired
   PasswordEncoder encoder;
@@ -115,36 +109,8 @@ public class AuthController {
         encoder.encode(signUpRequest.getPassword()));
 
     Set<String> strRoles = signUpRequest.getRole();
-    Set<Role> roles = new HashSet<>();
-
-    if (strRoles == null) {
-      Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-          .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-      roles.add(userRole);
-    } else {
-      strRoles.forEach(role -> {
-        switch (role) {
-          case "admin":
-            Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(adminRole);
-
-            break;
-          case "mod":
-            Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(modRole);
-
-            break;
-          default:
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        }
-      });
-    }
-
-    user.setRoles(roles);
+    if (strRoles == null)
+    user.setRole("ROLE_USER");
     userRepository.save(user);
 
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));

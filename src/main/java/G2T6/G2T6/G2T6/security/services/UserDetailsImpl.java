@@ -1,5 +1,6 @@
 package G2T6.G2T6.G2T6.security.services;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -24,10 +25,15 @@ public class UserDetailsImpl implements UserDetails {
   @JsonIgnore
   private String password;
 
-  private Collection<? extends GrantedAuthority> authorities;
+  // private Collection<? extends GrantedAuthority> authorities;
 
+  private String authorities;
+
+  // public UserDetailsImpl(Long id, String username, String email, String
+  // password,
+  // Collection<? extends GrantedAuthority> authorities) {
   public UserDetailsImpl(Long id, String username, String email, String password,
-      Collection<? extends GrantedAuthority> authorities) {
+      String authorities) {
     this.id = id;
     this.username = username;
     this.email = email;
@@ -36,21 +42,31 @@ public class UserDetailsImpl implements UserDetails {
   }
 
   public static UserDetailsImpl build(User user) {
-    List<GrantedAuthority> authorities = user.getRoles().stream()
-        .map(role -> new SimpleGrantedAuthority(role.getName().name()))
-        .collect(Collectors.toList());
+    // List<GrantedAuthority> authorities = user.getRoles().stream()
+    // .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+    // .collect(Collectors.toList());
+
+    String authorities = user.getRole();
 
     return new UserDetailsImpl(
-        user.getId(), 
-        user.getUsername(), 
+        user.getId(),
+        user.getUsername(),
         user.getEmail(),
-        user.getPassword(), 
+        user.getPassword(),
         authorities);
   }
 
+  // @Override
+  // public Collection<? extends GrantedAuthority> getAuthorities() {
+  // return authorities;
+  // }
+  /*
+   * Return a collection of authorities granted to the user.
+   */
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return authorities;
+    return Arrays.asList(new SimpleGrantedAuthority(authorities));
   }
 
   public Long getId() {
