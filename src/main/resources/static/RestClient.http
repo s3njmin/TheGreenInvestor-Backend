@@ -37,9 +37,9 @@ GET http://localhost:8080/api/questions/1
 ###
 POST http://localhost:8080/api/questions
 Content-Type: application/json
-
 {
-   "question":"Why no work?!?"
+   "question" : "Company stakeholders are pressuring you to eliminate paper waste in every office. Will you:",
+   "imagePath" : "../assets/img1.jpg"
 }
 
 ###

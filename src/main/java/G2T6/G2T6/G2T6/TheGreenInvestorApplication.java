@@ -19,14 +19,14 @@ public class TheGreenInvestorApplication {
 		ApplicationContext ctx = SpringApplication.run(TheGreenInvestorApplication.class, args);
 		StateRepository UserRepo = ctx.getBean(StateRepository.class);
 		JdbcTemplate template = ctx.getBean(JdbcTemplate.class);
-		template.execute("DROP TABLE GameStats IF EXISTS");
+		// template.execute("DROP TABLE GameStats IF EXISTS");
 
-		template.execute("insert into ROLES (id, name) values (1, 'ROLE_USER')");
-		template.execute("insert into ROLES (id, name) values (2, 'ROLE_MODERATOR')");
-		template.execute("insert into ROLES (id, name) values (3, 'ROLE_ADMIN')");
-		template.execute("insert into ROLES (id, name) values (4, 'ROLE_SUPER_ADMIN')");
-		template.execute("insert into ROLES (id, name) values (5, 'ROLE_SUPER_USER')");
-		template.execute("insert into ROLES (id, name) values (6, 'ROLE_SUPER_MODERATOR')");
+		// template.execute("insert into ROLES (id, name) values (1, 'ROLE_USER')");
+		// template.execute("insert into ROLES (id, name) values (2, 'ROLE_MODERATOR')");
+		// template.execute("insert into ROLES (id, name) values (3, 'ROLE_ADMIN')");
+		// template.execute("insert into ROLES (id, name) values (4, 'ROLE_SUPER_ADMIN')");
+		// template.execute("insert into ROLES (id, name) values (5, 'ROLE_SUPER_USER')");
+		// template.execute("insert into ROLES (id, name) values (6, 'ROLE_SUPER_MODERATOR')");
 
 		// BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		// String pw = encoder.encode("password");
