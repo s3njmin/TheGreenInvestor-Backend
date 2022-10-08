@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.net.URI;
 import java.util.Optional;
 
+import org.apache.logging.log4j.message.Message;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
+import org.springframework.web.client.HttpClientErrorException.BadRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.*;
@@ -76,6 +78,7 @@ public class AuthenticationIntegrationTest {
         // clear the database after each test
         refreshRepo.deleteAll();
         usersRepo.deleteAll();
+        rolesRepo.deleteAll();
     }
 
     @Test
@@ -86,8 +89,6 @@ public class AuthenticationIntegrationTest {
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername("johnTheAdmin");
         loginRequest.setPassword("myStrongPw");
-        // loginRequest.setUsername("johnTheAdminTest");
-        // loginRequest.setPassword("password");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
@@ -107,5 +108,52 @@ public class AuthenticationIntegrationTest {
         // assertEquals("johnTheAdmin", response.getUsername());
         assertNotNull(responseEntity.getBody().getAccessToken());
         assertNotNull(responseEntity.getBody().getRefreshToken());
+    }
+
+    @Test
+    @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "/test-data.sql")
+    public void login_WrongPassword_Failure() throws Exception {
+
+        URI uri = new URI(baseUrl + port + "/api/auth/signin");
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("johnTheAdmin");
+        loginRequest.setPassword("wrongPassword");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+
+        HttpEntity<LoginRequest> entity = new HttpEntity<>(loginRequest, headers);
+
+        ResponseEntity<JwtResponse> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.POST, entity, JwtResponse.class);
+
+        assertEquals(401, responseEntity.getStatusCodeValue());
+        assertEquals("Error: Invalid username or password!", responseEntity.getBody().getMessage());
+    }
+
+    @Test
+    @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, scripts = "/test-data.sql")
+    public void register_Success() throws Exception {
+
+        URI uri = new URI(baseUrl + port + "/api/auth/signup");
+        SignupRequest signUpRequest = new SignupRequest();
+        signUpRequest.setUsername("johnNotTheAdmin");
+        signUpRequest.setEmail("johnNotTheAdmin@gmail.com");
+        signUpRequest.setPassword("myStrongPwAgain");
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<SignupRequest> entity = new HttpEntity<>(signUpRequest, headers);
+
+        ResponseEntity<MessageResponse> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.POST, entity, MessageResponse.class);
+        
+        assertEquals(200, responseEntity.getStatusCodeValue());
+        assertEquals("User registered successfully!", responseEntity.getBody().getMessage());
+        
     }
 }

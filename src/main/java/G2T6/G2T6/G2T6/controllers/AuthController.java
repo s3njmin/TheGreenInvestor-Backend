@@ -9,9 +9,11 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -64,22 +66,40 @@ public class AuthController {
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
-    Authentication authentication = authenticationManager
-        .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+    try {
 
-    SecurityContextHolder.getContext().setAuthentication(authentication);
+      Authentication authentication = authenticationManager
+          .authenticate(
+              new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
-    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+      SecurityContextHolder.getContext().setAuthentication(authentication);
 
-    String jwt = jwtUtils.generateJwtToken(userDetails);
+      UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-    List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
-        .collect(Collectors.toList());
+      String jwt = jwtUtils.generateJwtToken(userDetails);
 
-    RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+      List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
+          .collect(Collectors.toList());
 
-    return ResponseEntity.ok(new JwtResponse(jwt, refreshToken.getToken(), userDetails.getId(),
-        userDetails.getUsername(), userDetails.getEmail(), roles));
+      RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+
+      return ResponseEntity.ok(new JwtResponse(jwt, refreshToken.getToken(), userDetails.getId(),
+          userDetails.getUsername(), roles, "Logged In Successfully"));
+
+    } catch (BadCredentialsException e) {
+
+      JwtResponse responseBody = new JwtResponse();
+      responseBody.setMessage("Error: Invalid username or password!");
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
+
+    } catch (Exception e) {
+
+      JwtResponse responseBody = new JwtResponse();
+      responseBody.setMessage("Some other error at log in");
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
+
+    }
+
   }
 
   @PostMapping("/signup")
@@ -106,22 +126,22 @@ public class AuthController {
     } else {
       strRoles.forEach(role -> {
         switch (role) {
-        case "admin":
-          Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-          roles.add(adminRole);
+          case "admin":
+            Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(adminRole);
 
-          break;
-        case "mod":
-          Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-          roles.add(modRole);
+            break;
+          case "mod":
+            Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(modRole);
 
-          break;
-        default:
-          Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-          roles.add(userRole);
+            break;
+          default:
+            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(userRole);
         }
       });
     }
@@ -146,10 +166,11 @@ public class AuthController {
         .orElseThrow(() -> new TokenRefreshException(requestRefreshToken,
             "Refresh token is not in database!"));
   }
-  
+
   @PostMapping("/signout")
   public ResponseEntity<?> logoutUser() {
-    UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
+        .getPrincipal();
     Long userId = userDetails.getId();
     refreshTokenService.deleteByUserId(userId);
     return ResponseEntity.ok(new MessageResponse("Log out successful!"));

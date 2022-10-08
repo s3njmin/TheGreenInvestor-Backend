@@ -25,18 +25,18 @@ public class StateServiceTest {
     @InjectMocks
     private StateServiceImplementation stateServiceImplementation;
 
-    @Test
-    void addState_ReturnSavedSameState(){
-        PlayerCurrentState state = new PlayerCurrentState(CONSTANTVARIABLES.DEFAULTYEAR, CONSTANTVARIABLES.DEFAULTSTATE);
-        when(stateRepo.findByCurrentState(any(String.class))).thenReturn(new ArrayList<PlayerCurrentState>());
-        when(stateRepo.save(any(PlayerCurrentState.class))).thenReturn(state);
+    // @Test
+    // void addState_ReturnSavedSameState(){
+    //     PlayerCurrentState state = new PlayerCurrentState(CONSTANTVARIABLES.DEFAULTYEAR, CONSTANTVARIABLES.DEFAULTSTATE);
+    //     when(stateRepo.findByCurrentState(any(String.class))).thenReturn(new ArrayList<PlayerCurrentState>());
+    //     when(stateRepo.save(any(PlayerCurrentState.class))).thenReturn(state);
 
-        PlayerCurrentState savedState = stateServiceImplementation.addPlayerCurrentState(state);
+    //     PlayerCurrentState savedState = stateServiceImplementation.addPlayerCurrentState(state);
 
-        assertNotNull(savedState);
-        verify(stateRepo).findById(state.getId());
-        verify(stateRepo).save(state);
-    }
+    //     assertNotNull(savedState);
+    //     verify(stateRepo).findById(state.getId());
+    //     verify(stateRepo).save(state);
+    // }
     @Test
     void updateState_NotFound_ReturnNull(){
         PlayerCurrentState state = new PlayerCurrentState(CONSTANTVARIABLES.DEFAULTYEAR, CONSTANTVARIABLES.DEFAULTSTATE);
