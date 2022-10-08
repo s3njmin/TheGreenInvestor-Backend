@@ -2,12 +2,13 @@ package G2T6.G2T6.G2T6.questions;
 
 import java.util.List;
 
-import G2T6.G2T6.G2T6.options.Option;
 import javax.persistence.*;
 import lombok.*;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import G2T6.G2T6.G2T6.options.Option;
 
 @Entity
 @Getter
@@ -22,7 +23,7 @@ public class Question {
     @NotNull(message = "Question should not be null")
     private String question;
 
-    private String imagePath;
+    private String imageLocation;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
