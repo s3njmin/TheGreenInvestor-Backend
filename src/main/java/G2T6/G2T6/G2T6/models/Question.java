@@ -1,4 +1,4 @@
-package G2T6.G2T6.G2T6.questions;
+package G2T6.G2T6.G2T6.models;
 
 import java.util.List;
 
@@ -7,8 +7,6 @@ import lombok.*;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import G2T6.G2T6.G2T6.options.Option;
 
 @Entity
 @Getter

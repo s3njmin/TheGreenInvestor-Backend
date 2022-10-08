@@ -3,7 +3,7 @@ package G2T6.G2T6.G2T6.repository;
 import java.util.List;
 import java.util.Optional;
 
-import G2T6.G2T6.G2T6.questions.Question;
+import G2T6.G2T6.G2T6.models.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

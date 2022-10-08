@@ -1,6 +1,6 @@
-package G2T6.G2T6.G2T6.StateMachine;
+package G2T6.G2T6.G2T6.models;
 
-import G2T6.G2T6.G2T6.stats.GameStats;
+import G2T6.G2T6.G2T6.misc.State;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;

@@ -4,10 +4,10 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import G2T6.G2T6.G2T6.exception.QuestionExistsException;
-import G2T6.G2T6.G2T6.exception.QuestionNotFoundException;
-import G2T6.G2T6.G2T6.questions.Question;
-import G2T6.G2T6.G2T6.questions.QuestionService;
+import G2T6.G2T6.G2T6.exceptions.QuestionExistsException;
+import G2T6.G2T6.G2T6.exceptions.QuestionNotFoundException;
+import G2T6.G2T6.G2T6.models.Question;
+import G2T6.G2T6.G2T6.services.QuestionService;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;

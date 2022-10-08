@@ -1,8 +1,8 @@
 package G2T6.G2T6.G2T6.controllers;
 
-import G2T6.G2T6.G2T6.StateMachine.CurrentState;
-import G2T6.G2T6.G2T6.StateMachine.StateService;
-import G2T6.G2T6.G2T6.exception.StateNotFoundException;
+import G2T6.G2T6.G2T6.models.CurrentState;
+import G2T6.G2T6.G2T6.services.StateService;
+import G2T6.G2T6.G2T6.exceptions.StateNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;

@@ -1,6 +1,6 @@
 package G2T6.G2T6.G2T6.repository;
 
-import G2T6.G2T6.G2T6.stats.GameStats;
+import G2T6.G2T6.G2T6.models.GameStats;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

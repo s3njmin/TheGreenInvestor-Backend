@@ -1,7 +1,8 @@
-package G2T6.G2T6.G2T6.StateMachine;
+package G2T6.G2T6.G2T6.services;
 
 
-import G2T6.G2T6.G2T6.CONSTANTVARIABLES;
+import G2T6.G2T6.G2T6.misc.CONSTANTVARIABLES;
+import G2T6.G2T6.G2T6.models.CurrentState;
 import G2T6.G2T6.G2T6.repository.StateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

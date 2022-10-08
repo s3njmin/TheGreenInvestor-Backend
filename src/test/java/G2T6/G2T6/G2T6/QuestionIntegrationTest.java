@@ -4,6 +4,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
 
+import G2T6.G2T6.G2T6.models.security.ERole;
+import G2T6.G2T6.G2T6.models.Question;
+import G2T6.G2T6.G2T6.models.security.Role;
+import G2T6.G2T6.G2T6.models.security.User;
 import G2T6.G2T6.G2T6.repository.QuestionRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,11 +28,9 @@ import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
 import java.util.*;
 
-import G2T6.G2T6.G2T6.questions.*;
 import G2T6.G2T6.G2T6.repository.RefreshTokenRepository;
 import G2T6.G2T6.G2T6.repository.RoleRepository;
 import G2T6.G2T6.G2T6.repository.UserRepository;
-import G2T6.G2T6.G2T6.models.*;
 import G2T6.G2T6.G2T6.payload.request.*;
 import G2T6.G2T6.G2T6.payload.response.*;
 

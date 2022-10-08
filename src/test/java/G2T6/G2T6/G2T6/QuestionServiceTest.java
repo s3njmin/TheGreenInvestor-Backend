@@ -11,14 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import G2T6.G2T6.G2T6.models.Question;
 import G2T6.G2T6.G2T6.repository.QuestionRepository;
+import G2T6.G2T6.G2T6.services.QuestionServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import G2T6.G2T6.G2T6.questions.*;
 
 @ExtendWith(MockitoExtension.class) 
 class QuestionServiceTest {
@@ -27,7 +27,7 @@ class QuestionServiceTest {
 	private QuestionRepository questions;
 
 	@InjectMocks
-	private QuestionServiceImpl	questionService;
+	private QuestionServiceImpl questionService;
 
 	@Test
 	void addQuestion_NewQuestion_ReturnSavedQuestion() {

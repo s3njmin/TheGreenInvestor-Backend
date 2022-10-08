@@ -1,6 +1,5 @@
-package G2T6.G2T6.G2T6.stats;
+package G2T6.G2T6.G2T6.models;
 
-import G2T6.G2T6.G2T6.StateMachine.CurrentState;
 import lombok.*;
 
 import javax.persistence.*;

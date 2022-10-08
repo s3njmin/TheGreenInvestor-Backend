@@ -1,4 +1,4 @@
-package G2T6.G2T6.G2T6.StateMachine;
+package G2T6.G2T6.G2T6.misc;
 
 public enum State{
     start,

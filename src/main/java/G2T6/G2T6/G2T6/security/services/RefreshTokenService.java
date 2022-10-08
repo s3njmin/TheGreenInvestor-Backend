@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import G2T6.G2T6.G2T6.exception.TokenRefreshException;
-import G2T6.G2T6.G2T6.models.RefreshToken;
+import G2T6.G2T6.G2T6.exceptions.TokenRefreshException;
+import G2T6.G2T6.G2T6.models.security.RefreshToken;
 import G2T6.G2T6.G2T6.repository.RefreshTokenRepository;
 import G2T6.G2T6.G2T6.repository.UserRepository;
 

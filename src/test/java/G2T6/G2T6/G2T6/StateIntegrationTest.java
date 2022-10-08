@@ -1,6 +1,7 @@
 package G2T6.G2T6.G2T6;
 
-import G2T6.G2T6.G2T6.StateMachine.*;
+import G2T6.G2T6.G2T6.misc.CONSTANTVARIABLES;
+import G2T6.G2T6.G2T6.models.CurrentState;
 import G2T6.G2T6.G2T6.repository.StateRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

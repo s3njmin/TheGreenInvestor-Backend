@@ -1,9 +1,9 @@
 package G2T6.G2T6.G2T6.controllers;
 
-import G2T6.G2T6.G2T6.exception.GameStatsNotFoundException;
-import G2T6.G2T6.G2T6.exception.StateNotFoundException;
+import G2T6.G2T6.G2T6.exceptions.GameStatsNotFoundException;
+import G2T6.G2T6.G2T6.exceptions.StateNotFoundException;
 import G2T6.G2T6.G2T6.repository.StateRepository;
-import G2T6.G2T6.G2T6.stats.GameStats;
+import G2T6.G2T6.G2T6.models.GameStats;
 import G2T6.G2T6.G2T6.repository.GameStatsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

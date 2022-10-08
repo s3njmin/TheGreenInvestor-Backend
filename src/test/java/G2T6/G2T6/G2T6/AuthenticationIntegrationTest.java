@@ -3,9 +3,10 @@ package G2T6.G2T6.G2T6;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
-import java.util.Optional;
 
-import org.apache.logging.log4j.message.Message;
+import G2T6.G2T6.G2T6.models.security.ERole;
+import G2T6.G2T6.G2T6.models.security.Role;
+import G2T6.G2T6.G2T6.models.security.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,15 +23,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
-import org.springframework.web.client.HttpClientErrorException.BadRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.*;
 
-import G2T6.G2T6.G2T6.questions.*;
 import G2T6.G2T6.G2T6.repository.RefreshTokenRepository;
 import G2T6.G2T6.G2T6.repository.*;
-import G2T6.G2T6.G2T6.models.*;
 import G2T6.G2T6.G2T6.payload.request.*;
 import G2T6.G2T6.G2T6.payload.response.*;
 

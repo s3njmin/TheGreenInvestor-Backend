@@ -1,6 +1,6 @@
-package G2T6.G2T6.G2T6;
+package G2T6.G2T6.G2T6.misc;
 
-import G2T6.G2T6.G2T6.StateMachine.State;
+import G2T6.G2T6.G2T6.misc.State;
 
 public class CONSTANTVARIABLES {
     private CONSTANTVARIABLES(){} // prevent other copys

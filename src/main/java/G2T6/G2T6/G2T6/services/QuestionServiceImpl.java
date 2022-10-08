@@ -1,7 +1,8 @@
-package G2T6.G2T6.G2T6.questions;
+package G2T6.G2T6.G2T6.services;
 
 import java.util.List;
 
+import G2T6.G2T6.G2T6.models.Question;
 import G2T6.G2T6.G2T6.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 

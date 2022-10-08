@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
-import G2T6.G2T6.G2T6.models.RefreshToken;
-import G2T6.G2T6.G2T6.models.User;
+import G2T6.G2T6.G2T6.models.security.RefreshToken;
+import G2T6.G2T6.G2T6.models.security.User;
 
 @Repository
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {

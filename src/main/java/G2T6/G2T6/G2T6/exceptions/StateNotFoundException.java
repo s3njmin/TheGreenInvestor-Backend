@@ -1,4 +1,4 @@
-package G2T6.G2T6.G2T6.exception;
+package G2T6.G2T6.G2T6.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

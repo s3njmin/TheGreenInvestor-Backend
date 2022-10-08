@@ -1,4 +1,6 @@
-package G2T6.G2T6.G2T6.questions;
+package G2T6.G2T6.G2T6.services;
+
+import G2T6.G2T6.G2T6.models.Question;
 
 import java.util.List;
 

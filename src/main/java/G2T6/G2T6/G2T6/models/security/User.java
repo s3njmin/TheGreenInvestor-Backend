@@ -1,4 +1,4 @@
-package G2T6.G2T6.G2T6.models;
+package G2T6.G2T6.G2T6.models.security;
 
 import java.util.HashSet;
 import java.util.Set;

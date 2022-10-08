@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
-import G2T6.G2T6.G2T6.exception.TokenRefreshException;
+import G2T6.G2T6.G2T6.exceptions.TokenRefreshException;
 
 @RestControllerAdvice
 public class TokenControllerAdvice {

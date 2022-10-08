@@ -1,6 +1,5 @@
-package G2T6.G2T6.G2T6.options;
+package G2T6.G2T6.G2T6.models;
 
-import G2T6.G2T6.G2T6.questions.Question;
 import javax.persistence.*;
 import lombok.*;
 
