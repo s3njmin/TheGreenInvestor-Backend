@@ -35,17 +35,17 @@ public class StateIntegrationTest {
         stateRepo.deleteAll();
     }
 
-    @Test
-    public void getState_Success() throws Exception {
-        URI uri = new URI(baseUrl + port + "/api/id");
-        stateRepo.save(new CurrentState(CONSTANTVARIABLES.DEFAULTYEAR, CONSTANTVARIABLES.DEFAULTSTATE));
+    // @Test
+    // public void getState_Success() throws Exception {
+    //     URI uri = new URI(baseUrl + port + "/api/id");
+    //     stateRepo.save(new CurrentState(CONSTANTVARIABLES.DEFAULTYEAR, CONSTANTVARIABLES.DEFAULTSTATE));
 
-        ResponseEntity<CurrentState[]> result = restTemplate.getForEntity(uri, CurrentState[].class);
-        CurrentState[] states = result.getBody();
+    //     ResponseEntity<CurrentState[]> result = restTemplate.getForEntity(uri, CurrentState[].class);
+    //     CurrentState[] states = result.getBody();
 
-        assertEquals(200, result.getStatusCode().value());
-        assertEquals(1, states.length);
-    }
+    //     assertEquals(200, result.getStatusCode().value());
+    //     assertEquals(1, states.length);
+    // }
 
     // @Test
     // public void getState_ValidId_Success() throws Exception {
@@ -66,16 +66,16 @@ public class StateIntegrationTest {
         assertEquals(404, result.getStatusCode().value());
     }
 
-    @Test
-    public void addState_Success() throws Exception {
-        URI uri = new URI(baseUrl + port + "/api/id");
-        CurrentState state = new CurrentState(CONSTANTVARIABLES.DEFAULTYEAR, CONSTANTVARIABLES.DEFAULTSTATE);
-        ResponseEntity<CurrentState> result = restTemplate.postForEntity(uri, state, CurrentState.class);
+    // @Test
+    // public void addState_Success() throws Exception {
+    //     URI uri = new URI(baseUrl + port + "/api/id");
+    //     CurrentState state = new CurrentState(CONSTANTVARIABLES.DEFAULTYEAR, CONSTANTVARIABLES.DEFAULTSTATE);
+    //     ResponseEntity<CurrentState> result = restTemplate.postForEntity(uri, state, CurrentState.class);
 
-        assertEquals(201, result.getStatusCode().value());
-        assertEquals(state.getCurrentState(), result.getBody().getCurrentState());
-        assertEquals(state.getYearValue(), result.getBody().getYearValue());
-    }
+    //     assertEquals(201, result.getStatusCode().value());
+    //     assertEquals(state.getCurrentState(), result.getBody().getCurrentState());
+    //     assertEquals(state.getYearValue(), result.getBody().getYearValue());
+    // }
 
     // @Test
     // public void deleteState_ValidId_Success() throws Exception{
