@@ -10,6 +10,8 @@ import G2T6.G2T6.G2T6.repository.OptionRepository;
 import javax.validation.Valid;
 
 import G2T6.G2T6.G2T6.repository.QuestionRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,7 @@ public class OptionController {
     private OptionRepository options;
     private QuestionRepository questions;
 
+    @Autowired
     public OptionController(OptionRepository options, QuestionRepository questions){
         this.options = options;
         this.questions = questions;
