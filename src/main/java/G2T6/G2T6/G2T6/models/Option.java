@@ -1,5 +1,7 @@
 package G2T6.G2T6.G2T6.models;
 
+import java.io.Serializable;
+
 import javax.persistence.*;
 import lombok.*;
 
@@ -11,13 +13,15 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class Option {
-    private @Id @GeneratedValue Long id;
-    // private @Id Long id;
+
+    private @Id @GeneratedValue (strategy = GenerationType.AUTO) Long id;
+    // @EmbeddedId
+    // private CompositeId id;
+
     private String option;
     private String feedback;
-    
+
     @ManyToOne
     @JoinColumn(name="question_id", nullable=false)
-
     private Question question;
 }
