@@ -4,6 +4,9 @@ package G2T6.G2T6.G2T6.services;
 import G2T6.G2T6.G2T6.misc.CONSTANTVARIABLES;
 import G2T6.G2T6.G2T6.models.CurrentState;
 import G2T6.G2T6.G2T6.repository.StateRepository;
+import G2T6.G2T6.G2T6.repository.UserRepository;
+import ch.qos.logback.classic.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,9 @@ public class StateServiceImplementation implements StateService {
     public StateServiceImplementation(StateRepository rs){
         this.stateRepository = rs;
     }
+
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public List<CurrentState> listCurrentState() {
@@ -56,4 +62,14 @@ public class StateServiceImplementation implements StateService {
             return stateRepository.save(newState);
         });
     }
+
+    @Override
+    public CurrentState getDefaultState() {
+        //init default state
+        CurrentState newState = new CurrentState();
+        newState.changeState(CONSTANTVARIABLES.DEFAULTSTATE);
+        newState.setYearValue(CONSTANTVARIABLES.DEFAULTYEAR);
+        return newState;
+    }
+
 }

@@ -5,15 +5,20 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import G2T6.G2T6.G2T6.models.CurrentState;
+
 @Entity
-@Table(name = "users",
-       uniqueConstraints = {
-           @UniqueConstraint(columnNames = "username"),
-           @UniqueConstraint(columnNames = "email")
-       })
+@Table(name = "users", uniqueConstraints = {
+    @UniqueConstraint(columnNames = "username"),
+    @UniqueConstraint(columnNames = "email")
+})
 public class User {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
   private Long id;
 
   @NotBlank
@@ -31,6 +36,11 @@ public class User {
 
   @NotBlank
   private String role;
+
+  //Shared primary key
+  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @PrimaryKeyJoinColumn
+  private CurrentState currentState;
 
   public User() {
   }
@@ -82,9 +92,16 @@ public class User {
     return this.role;
   }
 
-
   public void setRole(String role) {
     this.role = role;
   }
-  
+
+  public CurrentState getCurrentState() {
+    return currentState;
+  }
+
+  public void setCurrentState(CurrentState currentState) {
+    this.currentState = currentState;
+  }
+
 }

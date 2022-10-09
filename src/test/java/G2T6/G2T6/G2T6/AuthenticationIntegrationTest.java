@@ -122,6 +122,7 @@ public class AuthenticationIntegrationTest {
         signUpRequest.setUsername("johnNotTheAdmin");
         signUpRequest.setEmail("johnNotTheAdmin@gmail.com");
         signUpRequest.setPassword("myStrongPwAgain");
+        signUpRequest.setRole("USER");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));

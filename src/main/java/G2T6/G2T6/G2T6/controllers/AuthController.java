@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import G2T6.G2T6.G2T6.exceptions.TokenRefreshException;
+import G2T6.G2T6.G2T6.models.CurrentState;
 import G2T6.G2T6.G2T6.models.security.RefreshToken;
 import G2T6.G2T6.G2T6.models.security.User;
 import G2T6.G2T6.G2T6.payload.request.LoginRequest;
@@ -35,6 +36,8 @@ import G2T6.G2T6.G2T6.repository.UserRepository;
 import G2T6.G2T6.G2T6.security.jwt.JwtUtils;
 import G2T6.G2T6.G2T6.security.services.RefreshTokenService;
 import G2T6.G2T6.G2T6.security.services.UserDetailsImpl;
+import G2T6.G2T6.G2T6.services.StateService;
+import G2T6.G2T6.G2T6.services.StateServiceImplementation;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -45,6 +48,9 @@ public class AuthController {
 
   @Autowired
   UserRepository userRepository;
+
+  @Autowired
+  StateServiceImplementation stateServiceImplementation;
 
   @Autowired
   PasswordEncoder encoder;
@@ -120,14 +126,21 @@ public class AuthController {
 
     } else {
 
-      user.setRole("ROLE_INVALID");
-      return ResponseEntity.ok(new MessageResponse("INVALID ROLE GIVEN"));
+      // user.setRole("ROLE_INVALID");
+      return ResponseEntity.status(401).body(new MessageResponse("INVALID ROLE GIVEN"));
 
     }
+
+    CurrentState defaultState = stateServiceImplementation.getDefaultState();
+
+    user.setCurrentState(defaultState);
+
+    defaultState.setUser(user);
 
     userRepository.save(user);
 
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    
   }
 
   @PostMapping("/refreshtoken")

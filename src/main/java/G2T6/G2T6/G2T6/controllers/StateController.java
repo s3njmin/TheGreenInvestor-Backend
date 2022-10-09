@@ -20,13 +20,13 @@ public class StateController {
     @Autowired
     public  StateController(StateService ss){ this.stateService = ss; }
 
-    @GetMapping("/id")
+    @GetMapping("/states")
     public List<CurrentState> getAllState(){
         return stateService.listCurrentState();
     }
 
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/states/{id}")
     public CurrentState getState(@PathVariable Long id){
         CurrentState state = stateService.getCurrentState(id);
         if(state == null)  throw new StateNotFoundException(id);
@@ -34,19 +34,19 @@ public class StateController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/id")
+    @PostMapping("/states")
     public CurrentState addState(@Valid @RequestBody CurrentState state){
         return stateService.addCurrentState(state);
     }
 
-    @PutMapping("/id/{id}")
+    @PutMapping("/states/{id}")
     public CurrentState updateState(@PathVariable Long id, @Valid @RequestBody CurrentState state){
         CurrentState currentState = stateService.updateCurrentState(id, state);
         if(currentState == null)  throw new StateNotFoundException(id);
         return currentState;
     }
 
-    @DeleteMapping("/id/{id}")
+    @DeleteMapping("/states/{id}")
     public void deleteState(@PathVariable Long id){
         try{
             stateService.deleteCurrentState(id);

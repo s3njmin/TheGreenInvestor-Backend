@@ -105,7 +105,13 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
           .antMatchers(HttpMethod.POST,"/api/questions", "/api/questions/*/options").hasRole("ADMIN")
           .antMatchers(HttpMethod.PUT,"/api/questions/*", "/api/questions/*/options/*").hasRole("ADMIN")
           .antMatchers(HttpMethod.DELETE,"/api/questions/*", "/api/questions/*/options/*").hasRole("ADMIN")
-          
+          //
+
+          // authentication for states
+          .antMatchers(HttpMethod.GET, "/api/states/**", "/api/states").permitAll()
+
+          //
+
           // .antMatchers("/api/**").permitAll()
 
           .antMatchers("/api/test/**").permitAll()
