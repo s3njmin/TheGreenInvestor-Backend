@@ -1,12 +1,16 @@
-###
-GET http://localhost:8080/api/questions
+### normal sign up
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+
+{
+    "username": "johnTheUser",
+    "email": "johnNotTheAdmindTest@gmail.com",
+    "password": "password6*d123",
+    "role": "USER"
+}
 ###
 
-###
-POST http://localhost:8080/api/questions
-###
-
-###
+### login
 POST http://localhost:8080/api/auth/signin
 Content-Type: application/json
 
@@ -16,16 +20,21 @@ Content-Type: application/json
 }
 ###
 
-### normal sign up
-POST http://localhost:8080/api/auth/signup
+### bearer token
+POST http://localhost:8080/api/questions
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlQWRtaW5UZXN0IiwiaWF0IjoxNjY1MTI3MTc1LCJleHAiOjE2NjUxMjcyMzV9.xPsSb2II87WCg5R6aCpOS2vIIjtj7xUIhemrv-q7eWNERJ0gOJQTbvhzagNNPTvNRy9MXgEFaBrDDTwNY8a8Sg
 
 {
-    "username": "Guest9303345",
-    "email": "johnNotTheAdmindTest@gmail.com",
-    "password": "passwordd123",
-    "role": "GUEST"
+    "question": "What is the best programming language2?"
 }
+
+### getting questions
+GET http://localhost:8080/api/questions
+###
+
+###
+POST http://localhost:8080/api/questions
 ###
 
 ### sign up with wrong email format
@@ -38,15 +47,6 @@ Content-Type: application/json
     "password": "password123"
 }
 ###
-
-###
-POST http://localhost:8080/api/questions
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlQWRtaW5UZXN0IiwiaWF0IjoxNjY1MTI3MTc1LCJleHAiOjE2NjUxMjcyMzV9.xPsSb2II87WCg5R6aCpOS2vIIjtj7xUIhemrv-q7eWNERJ0gOJQTbvhzagNNPTvNRy9MXgEFaBrDDTwNY8a8Sg
-
-{
-    "question": "What is the best programming language2?"
-}
 
 ###
 GET http://localhost:8080/api/test/admin

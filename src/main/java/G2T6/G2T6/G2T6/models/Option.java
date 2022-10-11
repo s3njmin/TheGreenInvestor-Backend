@@ -24,4 +24,10 @@ public class Option {
     @ManyToOne
     @JoinColumn(name="question_id", nullable=false)
     private Question question;
+
+    public Option(String option, String feedback, Question q) {
+        this.option = option;
+        this.feedback = feedback;
+        this.question = q;
+    }
 }

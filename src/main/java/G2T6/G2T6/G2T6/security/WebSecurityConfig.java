@@ -117,6 +117,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
           .antMatchers("/api/test/**").permitAll()
           .antMatchers("/api/id/**/gameStats/**").permitAll()
           .antMatchers("/api/id/**").permitAll()
+          .antMatchers("/favicon.ico").permitAll()
           // .antMatchers("/**").permitAll()
           .antMatchers(h2ConsolePath + "/**").permitAll()
 

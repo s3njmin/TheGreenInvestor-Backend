@@ -36,4 +36,10 @@ public class Question {
         this.question = qn;
         this.id = id;
     }
+
+    public Question(String qn, String imageLocation) {
+        this.question = qn;
+        this.imageLocation = imageLocation;
+    }
+    
 }
