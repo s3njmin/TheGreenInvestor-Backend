@@ -1,8 +1,6 @@
 package G2T6.G2T6.G2T6.controllers;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -36,7 +34,6 @@ import G2T6.G2T6.G2T6.repository.UserRepository;
 import G2T6.G2T6.G2T6.security.jwt.JwtUtils;
 import G2T6.G2T6.G2T6.security.services.RefreshTokenService;
 import G2T6.G2T6.G2T6.security.services.UserDetailsImpl;
-import G2T6.G2T6.G2T6.services.StateService;
 import G2T6.G2T6.G2T6.services.StateServiceImplementation;
 
 @CrossOrigin(origins = "*", maxAge = 3600)

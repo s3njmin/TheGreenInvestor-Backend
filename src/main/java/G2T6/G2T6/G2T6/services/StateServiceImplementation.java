@@ -5,13 +5,11 @@ import G2T6.G2T6.G2T6.misc.CONSTANTVARIABLES;
 import G2T6.G2T6.G2T6.models.CurrentState;
 import G2T6.G2T6.G2T6.repository.StateRepository;
 import G2T6.G2T6.G2T6.repository.UserRepository;
-import ch.qos.logback.classic.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 
 @Service
 public class StateServiceImplementation implements StateService {
