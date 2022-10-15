@@ -2,6 +2,7 @@
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Column "ROLE_ID" not found; SQL statement:
 insert into USERS (id, username, email, password, role_id) values (1, 'johnTheAdmin', 'johnny@gmail.com', 'password', 3) [42122-214]
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:502)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
 	at org.h2.message.DbException.get(DbException.java:223)
 	at org.h2.message.DbException.get(DbException.java:199)

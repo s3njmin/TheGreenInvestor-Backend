@@ -32,8 +32,6 @@ public class SimilarityController {
             StringSimilarityServiceImpl stringSimilarityServiceImpl = new StringSimilarityServiceImpl(
                     new LevenshteinDistanceStrategy());
 
-            System.out.println("comparing " + similarityRequest.getInput());
-
             double score = stringSimilarityServiceImpl.score(similarityRequest.getInput(),
                     similarityRequest.getTarget());
 
