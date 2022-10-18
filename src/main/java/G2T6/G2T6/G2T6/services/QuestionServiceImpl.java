@@ -13,7 +13,7 @@ public class QuestionServiceImpl implements QuestionService {
     private QuestionRepository questions;
 
     @Autowired
-    public QuestionServiceImpl(QuestionRepository questions) {
+    public QuestionServiceImpl(final QuestionRepository questions) {
         this.questions = questions;
     }
 
@@ -23,12 +23,12 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Question getQuestion(Long id) {
+    public Question getQuestion(final Long id) {
         return questions.findById(id).orElse(null);
     }
 
     @Override
-    public Question addQuestion(Question question) {
+    public Question addQuestion(final Question question) {
         List<Question> sameQuestion = questions.findByQuestion(question.getQuestion());
         if(sameQuestion.size() == 0) {
             return questions.save(question);
@@ -38,7 +38,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Question updateQuestion(Long id, Question newQuestionInfo) {
+    public Question updateQuestion(final Long id, final Question newQuestionInfo) {
         return questions.findById(id).map(question -> {
             System.out.println("id: " + id + " | " + question.getQuestion());
             question.setQuestion(newQuestionInfo.getQuestion());
@@ -49,7 +49,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public void deleteQuestion(Long id) {
+    public void deleteQuestion(final Long id) {
         questions.deleteById(id);
     }
 }

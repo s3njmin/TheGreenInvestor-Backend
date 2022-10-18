@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class QuestionController {
     private QuestionService questionService;
     @Autowired
-    public QuestionController(QuestionService qs){
+    public QuestionController(final QuestionService qs){
         this.questionService = qs;
     }
 
@@ -29,31 +29,29 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{id}")
-    public Question getQuestion(@PathVariable Long id) {
+    public Question getQuestion(@PathVariable final Long id) {
         Question question = questionService.getQuestion(id);
-
         if(question == null) throw new QuestionNotFoundException(id);
         return questionService.getQuestion(id);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/questions")
-    public Question addQuestion(@RequestBody Question question){
+    public Question addQuestion(@RequestBody final Question question){
         Question savedQuestion = questionService.addQuestion(question);
-        if (savedQuestion ==  null) throw new QuestionExistsException(question
-                .getQuestion());
+        if (savedQuestion ==  null) throw new QuestionExistsException(question.getQuestion());
         return savedQuestion;
     }
 
     @PutMapping("/questions/{id}")
-    public Question updateQuestion(@PathVariable Long id, @Valid @RequestBody Question newQuestionInfo){
+    public Question updateQuestion(@PathVariable final Long id, @Valid @RequestBody final Question newQuestionInfo){
         Question question = questionService.updateQuestion(id, newQuestionInfo);
         if(question == null) throw new QuestionNotFoundException(id);
         return question;
     }
 
     @DeleteMapping("/questions/{id}")
-    public void deleteQuestion(@PathVariable Long id){
+    public void deleteQuestion(@PathVariable final Long id){
         try{
             questionService.deleteQuestion(id);
         } catch(EmptyResultDataAccessException e) {

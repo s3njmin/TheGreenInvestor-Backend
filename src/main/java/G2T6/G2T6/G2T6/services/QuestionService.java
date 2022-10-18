@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface QuestionService {
     List<Question> listQuestions();
-    Question getQuestion(Long id);
-    Question addQuestion(Question question);
-    Question updateQuestion(Long id, Question question);
-    void deleteQuestion(Long id);
+    Question getQuestion(final Long id);
+    Question addQuestion(final Question question);
+    Question updateQuestion(final Long id, final Question question);
+    void deleteQuestion(final Long id);
 }

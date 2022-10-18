@@ -21,6 +21,7 @@ public class Question {
     @NotNull(message = "Question should not be null")
     private String question;
 
+    @NotNull(message = "Image location should not be null")
     private String imageLocation;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -28,16 +29,16 @@ public class Question {
 
     private List<Option> options;
 
-    public Question(String qn) {
+    public Question(final String qn) {
         this.question = qn;
     }
 
-    public Question(String qn, Long id) {
+    public Question(final String qn, final Long id) {
         this.question = qn;
         this.id = id;
     }
 
-    public Question(String qn, String imageLocation) {
+    public Question(final String qn, final String imageLocation) {
         this.question = qn;
         this.imageLocation = imageLocation;
     }

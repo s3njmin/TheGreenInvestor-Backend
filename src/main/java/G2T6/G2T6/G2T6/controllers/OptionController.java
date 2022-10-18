@@ -1,15 +1,14 @@
 package G2T6.G2T6.G2T6.controllers;
 
-import java.util.List;
-
 import G2T6.G2T6.G2T6.exceptions.OptionNotFoundException;
 import G2T6.G2T6.G2T6.exceptions.QuestionNotFoundException;
 import G2T6.G2T6.G2T6.models.Option;
 import G2T6.G2T6.G2T6.repository.OptionRepository;
+import G2T6.G2T6.G2T6.repository.QuestionRepository;
+
+import java.util.List;
 
 import javax.validation.Valid;
-
-import G2T6.G2T6.G2T6.repository.QuestionRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,13 +23,13 @@ public class OptionController {
     private QuestionRepository questions;
 
     @Autowired
-    public OptionController(OptionRepository options, QuestionRepository questions){
+    public OptionController(final OptionRepository options, final QuestionRepository questions){
         this.options = options;
         this.questions = questions;
     }
 
     @GetMapping("/options")
-    public List<Option> getAllOptionsByQuestionId(@PathVariable (value = "questionId") Long questionId) {
+    public List<Option> getAllOptionsByQuestionId(@PathVariable (value = "questionId") final Long questionId) {
         if(!questions.existsById(questionId)) {
             throw new QuestionNotFoundException(questionId);
         }
@@ -39,7 +38,7 @@ public class OptionController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/options")
-    public Option addOption(@PathVariable (value = "questionId") Long questionId, 
+    public Option addOption(@PathVariable (value = "questionId") final Long questionId, 
             @Valid @RequestBody Option option){
         return questions.findById(questionId).map(question -> {
             option.setQuestion(question);
@@ -48,7 +47,7 @@ public class OptionController {
     }
 
     @PutMapping("/options/{optionId}")
-    public Option updateOption(@PathVariable (value = "questionId") Long questionId, 
+    public Option updateOption(@PathVariable (value = "questionId") final Long questionId, 
             @PathVariable (value = "optionId") Long optionId,
             @Valid @RequestBody Option newOption) {
         
@@ -62,7 +61,7 @@ public class OptionController {
     }
 
     @DeleteMapping("/options/{optionId}")
-    public ResponseEntity<?> deleteOption(@PathVariable (value = "questionId") Long questionId,
+    public ResponseEntity<?> deleteOption(@PathVariable (value = "questionId") final Long questionId,
             @PathVariable (value = "optionId") Long optionId){
         
         if(!questions.existsById(questionId)) {
