@@ -2,10 +2,8 @@ package G2T6.G2T6.G2T6.controllers;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-
 
 import G2T6.G2T6.G2T6.exceptions.QuestionOrderNotFoundException;
 import G2T6.G2T6.G2T6.models.random.QuestionOrder;

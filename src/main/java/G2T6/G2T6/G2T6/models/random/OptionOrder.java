@@ -12,12 +12,12 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class QuestionOrder {
+public class OptionOrder {
     private @Id @GeneratedValue (strategy = GenerationType.IDENTITY) Long id;
     
     private ArrayList<Integer> indexArray;
 
-    public QuestionOrder(ArrayList<Integer> indexArray) {
+    public OptionOrder(ArrayList<Integer> indexArray) {
         this.indexArray = indexArray;        
     }
 }
