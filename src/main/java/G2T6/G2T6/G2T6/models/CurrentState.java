@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -38,6 +39,11 @@ public class CurrentState {
     @Enumerated(EnumType.STRING) @NotNull
     private State currentState;
 
+    @NotNull
+    private int questionSetId; // somewhere randomise and add in
+
+    private String userResponse; // gonna be something like this 1,2,4,2 use split // everytime user update
+
     @OneToMany(mappedBy = "currentState", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<GameStats> gameStats;
@@ -55,5 +61,18 @@ public class CurrentState {
 
     public void changeState(State state){
         this.currentState = state;
+    }
+
+    public List<Integer> getUserAnswers(){
+        String answers[] = userResponse.split(",");
+        List<Integer> ans = new ArrayList<>();
+        for(int i = 0; i < answers.length; i++){
+            ans.add(Integer.parseInt(answers[i]));
+        }
+        return ans;
+    }
+
+    public String addNewUserResponse(String current, Integer currentAns){
+        return current.concat(","+ currentAns);
     }
 }

@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface GameStatsRepository extends JpaRepository<GameStats, Long> {
     List<GameStats> findByCurrentStateId(Long sessionId);
     Optional<GameStats> findByIdAndCurrentStateId(Long id, Long sessionId);
+//    Optional<GameStats> getAllGameStatsOrderBySumEmissionVal(Long count);
 }
+// ID  	EMISSION_VAL  	INCOME_VAL  	MORALE_VAL  	CURRENT_STATE_ID
