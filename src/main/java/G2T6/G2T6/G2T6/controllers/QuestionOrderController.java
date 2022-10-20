@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import G2T6.G2T6.G2T6.exceptions.QuestionOrderNotFoundException;
 import G2T6.G2T6.G2T6.models.random.QuestionOrder;
@@ -27,8 +28,7 @@ public class QuestionOrderController {
     @GetMapping("/questionOrder")
     public Optional<QuestionOrder> getQuestionOrder() {
         // generate Long from 1 - 10
-        Random rand = new Random();
-        Long randomLong = rand.nextLong(10) + 1;
+        Long randomLong = ThreadLocalRandom.current().nextLong(1, 11);
 
         Optional<QuestionOrder> questionOrder = questionOrderRepository.findById(randomLong);
 
