@@ -2,6 +2,7 @@ package G2T6.G2T6.G2T6.controllers;
 
 import G2T6.G2T6.G2T6.exceptions.GameStatsNotFoundException;
 import G2T6.G2T6.G2T6.exceptions.StateNotFoundException;
+import G2T6.G2T6.G2T6.misc.State;
 import G2T6.G2T6.G2T6.repository.StateRepository;
 import G2T6.G2T6.G2T6.models.GameStats;
 import G2T6.G2T6.G2T6.repository.GameStatsRepository;
@@ -25,8 +26,31 @@ public class GameStatsController {
         this.stateRepo = stateRepo;
     }
 
+    @GetMapping("/gameStats")
+    public List<GameStats> getAllGameStats(){
+        return gameStateRepo.findAll();
+    }
+
+    @GetMapping("/gameStats/{count}")
+    public List<GameStats> getAllTopNGameStats(@PathVariable (value = "count") Long count){
+        List<GameStats> selectedStats = gameStateRepo.findAll();
+        if( count >= selectedStats.size()) return null; // change to error later
+        for(GameStats gs: selectedStats){
+            if(gs.getCurrentState().getCurrentState() != State.completed){
+                selectedStats.remove(gs);
+            }
+        }
+
+        Collections.sort(selectedStats);
+        List<GameStats> topNStats = new ArrayList<>();
+        for(int i = 0; i < count; i++){
+            topNStats.add(selectedStats.get(i));
+        }
+        return  topNStats;
+    }
+
     @GetMapping("/id/{sessionId}/gameStats")
-    public List<GameStats> getAllGameStats(@PathVariable (value = "sessionId") Long sessionId){
+    public List<GameStats> getAllSelectedUserGameStats(@PathVariable (value = "sessionId") Long sessionId){
         if(!stateRepo.existsById(sessionId)){
             throw new StateNotFoundException(sessionId);
         }
