@@ -28,38 +28,46 @@ public class OptionController {
         this.questions = questions;
     }
 
+    // Returns all Options specified by Question Id
     @GetMapping("/options")
     public List<Option> getAllOptionsByQuestionId(@PathVariable (value = "questionId") final Long questionId) {
+        // check if Question Exists
         if(!questions.existsById(questionId)) {
             throw new QuestionNotFoundException(questionId);
         }
         return options.findByQuestionId(questionId);
     }
 
+    // Add an Option to specified Question
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/options")
     public Option addOption(@PathVariable (value = "questionId") final Long questionId, 
             @Valid @RequestBody Option option){
+
         return questions.findById(questionId).map(question -> {
             option.setQuestion(question);
             return options.save(option);
         }).orElseThrow(() -> new QuestionNotFoundException(questionId));
     }
 
+    // Update an Existing Option
     @PutMapping("/options/{optionId}")
     public Option updateOption(@PathVariable (value = "questionId") final Long questionId, 
             @PathVariable (value = "optionId") Long optionId,
             @Valid @RequestBody Option newOption) {
         
+        // check if question exists
         if(!questions.existsById(questionId)) {
             throw new QuestionNotFoundException(questionId);
         }
+
         return options.findByIdAndQuestionId(optionId, questionId).map(option -> {
             option.setOption(newOption.getOption());
             return options.save(option);
         }).orElseThrow(() -> new OptionNotFoundException(optionId));
     }
 
+    //Delete an Existing Option
     @DeleteMapping("/options/{optionId}")
     public ResponseEntity<?> deleteOption(@PathVariable (value = "questionId") final Long questionId,
             @PathVariable (value = "optionId") Long optionId){
