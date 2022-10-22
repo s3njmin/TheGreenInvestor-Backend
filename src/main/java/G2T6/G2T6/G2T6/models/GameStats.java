@@ -28,7 +28,7 @@ public class GameStats implements Comparable<GameStats>{
     @Min(0) @Max(100) @NotNull
     private int emissionVal = 0;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "currentState_id")
     private CurrentState currentState;
 

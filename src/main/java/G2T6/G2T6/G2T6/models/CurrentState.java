@@ -45,7 +45,7 @@ public class CurrentState {
 
     private String userResponse; // gonna be something like this 1,2,4,2 use split // everytime user update
 
-    @OneToOne(mappedBy = "currentState", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "currentState", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private GameStats gameStats;
 

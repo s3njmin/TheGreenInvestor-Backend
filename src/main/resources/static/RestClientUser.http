@@ -1,0 +1,5 @@
+GET  http://localhost:8080/api/subscribedlist
+###
+
+PUT  http://localhost:8080/api/subscribe
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjIiLCJpYXQiOjE2NjYwMDUxODAsImV4cCI6MTY2NjAwODc4MH0.4rn_pEkkl-23oUViLwMtzGQaRa5jApCHtGJFLyd5bsD_0EB6FbbWefw27bUGJbtt-q3eWvlB1g4nLKXJleWWXA

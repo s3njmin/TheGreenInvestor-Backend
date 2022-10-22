@@ -110,16 +110,18 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
           // authentication for states
           .antMatchers(HttpMethod.GET, "/api/states/**", "/api/states").permitAll()
 
-          // .antMatchers("/api/**").permitAll()
-
           .antMatchers("/api/test/**").permitAll()
           .antMatchers("/api/id/**/gameStats/**").permitAll()
           .antMatchers("/api/id/**").permitAll()
           .antMatchers("/favicon.ico").permitAll()
           .antMatchers("/api/getSimilarity").permitAll()
-          .antMatchers("/**").permitAll()
+          .antMatchers(HttpMethod.PUT,"/api/subscribe").permitAll()
+          // .antMatchers(HttpMethod.GET,"/api/subscribe").permitAll()
 
           .antMatchers(h2ConsolePath + "/**").permitAll()
+
+          // REMOVE THIS WHEN DONE
+          .antMatchers("/**").permitAll()
 
         .anyRequest().authenticated();
     

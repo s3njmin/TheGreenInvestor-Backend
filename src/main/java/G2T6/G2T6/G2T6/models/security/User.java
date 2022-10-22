@@ -22,7 +22,6 @@ import java.util.List;
 
 public class User {
 
-  @NotNull
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
@@ -44,14 +43,17 @@ public class User {
   @NotBlank
   private String role;
 
+  @NotNull
+  private boolean isSubscribedEmail;
+
   //Shared primary key
 //  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 //  @PrimaryKeyJoinColumn
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
   @JsonIgnore
   private List<CurrentState> currentState;
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonIgnore
   private List<GameStats> gameStats;
 
@@ -63,10 +65,24 @@ public class User {
     this.email = email;
     this.password = password;
   }
+  
+  public User(String username, String email, String password, boolean isSubscribedEmail) {
+    this(username, email, password);
+    this.isSubscribedEmail = isSubscribedEmail;
+  }
 
-  public User(String username, String email, String password, String role) {
+  public User(String username, String email, String password, String role, boolean isSubscribedEmail) {
     this(username, email, password);
     this.role = role;
+    this.isSubscribedEmail = isSubscribedEmail;
+  }
+
+  public boolean isSubscribedEmail() {
+    return isSubscribedEmail;
+  }
+
+  public void setSubscribedEmail(boolean isSubscribedEmail) {
+    this.isSubscribedEmail = isSubscribedEmail;
   }
   public User(Long id, String username, String email, String password, String role) {
     this(username, email, password);

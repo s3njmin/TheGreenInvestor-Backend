@@ -54,7 +54,7 @@ public class AuthenticationIntegrationTest {
 
         // Making an admin user for test
         User newUser = new User("johnTheAdmin", "johnny@gmail.com",
-                encoder.encode("myStrongPw"), "ROLE_ADMIN");
+                encoder.encode("myStrongPw"), "ROLE_ADMIN", false);
         usersRepo.save(newUser);
     }
 

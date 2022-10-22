@@ -104,8 +104,11 @@ public class GameStatsController {
         if(!userRepo.existsById(userId)){
             throw new UserNotFoundException(userId);
         }
+        Optional<GameStats> gs = gameStateRepo.findByIdAndUserId(id, userId);
+        System.out.println(gs);
         return gameStateRepo.findByIdAndUserId(id, userId).map(gameStats -> {
-            gameStateRepo.delete(gameStats);
+            // gameStateRepo.delete(gameStats);
+            gameStateRepo.deleteById(id);
             return ResponseEntity.ok().build();
         }).orElseThrow(() -> new GameStatsNotFoundException(id));
     }

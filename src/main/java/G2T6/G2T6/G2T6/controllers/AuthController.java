@@ -110,7 +110,7 @@ public class AuthController {
 
     // Create new user's account
     User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),
-        encoder.encode(signUpRequest.getPassword()));
+        encoder.encode(signUpRequest.getPassword()), false);
 
     String strRole = signUpRequest.getRole();
 
@@ -129,11 +129,13 @@ public class AuthController {
 
     }
 
-    List<CurrentState> currentStates = new ArrayList();
+    List<CurrentState> currentStates = new ArrayList<CurrentState>();
     CurrentState defaultState = stateServiceImplementation.getDefaultState();
     currentStates.add(defaultState);
 
     user.setCurrentState(currentStates);
+
+    // user.setSubscribedEmail(false);
 
     defaultState.setUser(user);
 
