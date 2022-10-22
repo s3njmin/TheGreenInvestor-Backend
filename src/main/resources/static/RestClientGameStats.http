@@ -1,6 +1,6 @@
 GET http://localhost:8080/api/id/2/gameStats
 ###
-DELETE http://localhost:8080/api/2/gameStats
+DELETE http://localhost:8080/api/id/2/gameStats/17
 ###
 GET http://localhost:8080/api/id/2/gameStats/5
 
@@ -16,7 +16,7 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:8080/api/id/2/gameStats/3
+PUT http://localhost:8080/api/id/2/gameStats/18
 Content-Type: application/json
 
 {

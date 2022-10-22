@@ -20,16 +20,17 @@ import java.util.List;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 public class CurrentState {
 
     @Id
-    @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonIgnore
-    @OneToOne
-    @MapsId
+//    @JsonIgnore
+//    @OneToOne
+//    @MapsId
+//    @JoinColumn(name = "user_id")
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -44,10 +45,18 @@ public class CurrentState {
 
     private String userResponse; // gonna be something like this 1,2,4,2 use split // everytime user update
 
-    @OneToMany(mappedBy = "currentState", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "currentState", cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<GameStats> gameStats;
+    private GameStats gameStats;
 
+    public CurrentState(Long id, User user, int year, State state, int questionSetId, String userResponse) {
+        this.id = id;
+        this.user = user;
+        this.yearValue = year;
+        this.currentState = state;
+        this.questionSetId = questionSetId;
+        this.userResponse = userResponse;
+    }
     public CurrentState(long id, int year, State state) {
         this.id = id;
         this.yearValue = year;
@@ -64,6 +73,7 @@ public class CurrentState {
     }
 
     public List<Integer> getUserAnswers(){
+        if (userResponse.isEmpty()) return null;
         String answers[] = userResponse.split(",");
         List<Integer> ans = new ArrayList<>();
         for(int i = 0; i < answers.length; i++){

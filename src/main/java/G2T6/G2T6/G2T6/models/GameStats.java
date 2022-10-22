@@ -1,5 +1,6 @@
 package G2T6.G2T6.G2T6.models;
 
+import G2T6.G2T6.G2T6.models.security.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,7 +11,6 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Getter
 @Setter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
@@ -28,12 +28,25 @@ public class GameStats implements Comparable<GameStats>{
     @Min(0) @Max(100) @NotNull
     private int emissionVal = 0;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "currentState_id")
     private CurrentState currentState;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public GameStats(Long id){
         this.id = id;
+    }
+
+    public GameStats(Long id, int income, int morale, int emission, User user, CurrentState currentState){
+        this.id = id;
+        this.incomeVal = income;
+        this.moraleVal = morale;
+        this.emissionVal = emission;
+        this.user = user;
+        this.currentState = currentState;
     }
 
     public Long getTotal(){
@@ -45,7 +58,11 @@ public class GameStats implements Comparable<GameStats>{
         Long cV = getTotal();
         Long oV = o.getTotal();
         if(cV == oV) return 0;
-        if(cV > oV) return -1;
-        return 1;
+        if(cV > oV) return 1;
+        return -1;
+    }
+
+    public String toString(){
+        return String.format("id - %d, total - ", id, getTotal());
     }
 }

@@ -1,10 +1,9 @@
 package G2T6.G2T6.G2T6;
 
+import G2T6.G2T6.G2T6.misc.State;
 import G2T6.G2T6.G2T6.models.*;
-import G2T6.G2T6.G2T6.repository.ArticleRepository;
-import G2T6.G2T6.G2T6.repository.OptionRepository;
-import G2T6.G2T6.G2T6.repository.QuestionRepository;
-import G2T6.G2T6.G2T6.repository.StateRepository;
+import G2T6.G2T6.G2T6.models.security.User;
+import G2T6.G2T6.G2T6.repository.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +33,8 @@ public class TheGreenInvestorApplication {
 	
 	public static void main(String[] args) {
 		ApplicationContext ctx = SpringApplication.run(TheGreenInvestorApplication.class, args);
-		StateRepository UserRepo = ctx.getBean(StateRepository.class);
 		JdbcTemplate template = ctx.getBean(JdbcTemplate.class);
-
+		//   public User(String username, String email, String password, String role) {
 		QuestionRepository qRepo = ctx.getBean(QuestionRepository.class);
 		OptionRepository oRepo = ctx.getBean(OptionRepository.class);
 
@@ -89,6 +87,41 @@ public class TheGreenInvestorApplication {
 		aList.add(new Article("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. At tellus at urna condimentum mattis pellentesque. Id semper risus in hendrerit gravida. Viverra orci sagittis eu volutpat. Vehicula ipsum a arcu cursus vitae congue mauris rhoncus. In pellentesque massa placerat duis ultricies lacus sed. Pellentesque massa placerat duis ultricies lacus sed turpis tincidunt. Ac felis donec et odio pellentesque. Feugiat sed lectus vestibulum mattis ullamcorper velit sed. Consequat semper viverra nam libero justo. Tincidunt augue interdum velit euismod in pellentesque massa. Cras fermentum odio eu feugiat pretium nibh ipsum consequat nisl. Quis viverra nibh cras pulvinar mattis. Elementum pulvinar etiam non quam lacus suspendisse. Luctus venenatis lectus magna fringilla. Elementum nibh tellus molestie nunc non blandit massa. Porttitor rhoncus dolor purus non enim praesent elementum. Mauris sit amet massa vitae tortor.", "https://www.espn.com.sg/football/spanish-laliga/story/4771670/ruthless-real-madrid-show-how-far-barcelona-have-to-go-yet"));
 		aList.add(new Article("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Pellentesque elit eget gravida cum sociis natoque penatibus. Nulla facilisi cras fermentum odio. A pellentesque sit amet porttitor eget dolor morbi. Proin fermentum leo vel orci porta non pulvinar neque. Nulla facilisi morbi tempus iaculis urna id volutpat lacus laoreet. Tellus at urna condimentum mattis pellentesque. Eget lorem dolor sed viverra ipsum nunc aliquet bibendum enim. Nisl purus in mollis nunc sed. Sit amet tellus cras adipiscing enim eu turpis egestas. Mattis pellentesque id nibh tortor. Purus non enim praesent elementum facilisis. Quam pellentesque nec nam aliquam sem et. Accumsan in nisl nisi scelerisque eu. Integer quis auctor elit sed vulputate mi sit amet. Posuere ac ut consequat semper. Nisl condimentum id venenatis a condimentum vitae sapien pellentesque. Enim nec dui nunc mattis enim ut tellus.", "https://www.espn.com.sg/football/manchester-united-engman_utd/story/4772297/ten-hag-defends-subbing-ronaldo-in-man-united-draw-we-have-to-rotate"));
 		saveARepo(aRepo, aList);
+
+
+		User ck = new User(1l,"ckasdasd", "ck@gmail.com", "Password1232", "GUEST");
+		User kami = new User(3l,"kamisama", "kami@gmail.com", "Password1233", "ROLE_USER");
+		List<CurrentState> ckStates = new ArrayList<>();
+		CurrentState currentState01 = new CurrentState(1l, ck, 0, State.start, 0, "");
+		ckStates.add(currentState01);
+
+		List<GameStats> ckStats = new ArrayList<>();
+		GameStats stats01 = new GameStats(1l, 0,0,0, ck, currentState01);
+		ckStats.add(stats01);
+
+		currentState01.setGameStats(stats01);
+
+		List<CurrentState> kamiStates = new ArrayList<>();
+		CurrentState currentState02 = new CurrentState(2l, kami, 0, State.start, 0, "");
+		kamiStates.add(currentState02);
+
+		List<GameStats> kamiStats = new ArrayList<>();
+		GameStats stats02 = new GameStats(2l, 0,0,0, kami, currentState02);
+		kamiStats.add(stats02);
+
+		currentState02.setGameStats(stats02);
+
+		ck.setCurrentState(ckStates);
+		ck.setGameStats(ckStats);
+		kami.setCurrentState(kamiStates);
+		kami.setGameStats(kamiStats);
+
+		UserRepository testRepo = ctx.getBean(UserRepository.class);
+		testRepo.save(ck);
+		testRepo.save(kami);
+
+		System.out.println(ck.getCurrentState());
+		System.out.println(kami.getCurrentState());
 
 	}
 

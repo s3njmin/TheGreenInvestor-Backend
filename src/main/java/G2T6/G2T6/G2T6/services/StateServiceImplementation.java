@@ -2,6 +2,7 @@ package G2T6.G2T6.G2T6.services;
 
 
 import G2T6.G2T6.G2T6.misc.CONSTANTVARIABLES;
+import G2T6.G2T6.G2T6.misc.State;
 import G2T6.G2T6.G2T6.models.CurrentState;
 import G2T6.G2T6.G2T6.repository.StateRepository;
 import G2T6.G2T6.G2T6.repository.UserRepository;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StateServiceImplementation implements StateService {
@@ -19,9 +21,6 @@ public class StateServiceImplementation implements StateService {
     public StateServiceImplementation(StateRepository rs){
         this.stateRepository = rs;
     }
-
-    @Autowired
-    UserRepository userRepository;
 
     @Override
     public List<CurrentState> listCurrentState() {
@@ -68,6 +67,27 @@ public class StateServiceImplementation implements StateService {
         newState.changeState(CONSTANTVARIABLES.DEFAULTSTATE);
         newState.setYearValue(CONSTANTVARIABLES.DEFAULTYEAR);
         return newState;
+    }
+
+    @Override
+    public List<CurrentState> listCurrentStateByUserId(Long userid) {
+        return stateRepository.findByUserId(userid);
+    }
+
+    @Override
+    public Optional<CurrentState> getStateByIdAndUserId(Long id, Long userId) {
+        return stateRepository.findByIdAndUserId(id, userId);
+    }
+
+    @Override
+    public List<CurrentState> listCompletedState() {
+        List<CurrentState> allStats = listCurrentState();
+        for(CurrentState c: allStats){
+            if(c.getCurrentState() != State.completed){
+                allStats.remove(c);
+            }
+        }
+        return allStats;
     }
 
 }

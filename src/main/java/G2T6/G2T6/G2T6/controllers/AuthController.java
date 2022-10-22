@@ -1,5 +1,6 @@
 package G2T6.G2T6.G2T6.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -128,9 +129,11 @@ public class AuthController {
 
     }
 
+    List<CurrentState> currentStates = new ArrayList();
     CurrentState defaultState = stateServiceImplementation.getDefaultState();
+    currentStates.add(defaultState);
 
-    user.setCurrentState(defaultState);
+    user.setCurrentState(currentStates);
 
     defaultState.setUser(user);
 

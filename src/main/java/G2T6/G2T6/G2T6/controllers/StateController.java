@@ -1,6 +1,8 @@
 package G2T6.G2T6.G2T6.controllers;
 
+import G2T6.G2T6.G2T6.exceptions.UserNotFoundException;
 import G2T6.G2T6.G2T6.models.CurrentState;
+import G2T6.G2T6.G2T6.repository.UserRepository;
 import G2T6.G2T6.G2T6.services.StateService;
 import G2T6.G2T6.G2T6.exceptions.StateNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,15 +12,20 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/api")
 @RestController
 public class StateController {
+    private UserRepository userRepository;
     private StateService stateService;
 
     @Autowired
-    public  StateController(StateService ss){ this.stateService = ss; }
+    public StateController(StateService ss, UserRepository userRepository){
+        this.userRepository = userRepository;
+        this.stateService = ss;
+    }
 
     @GetMapping("/states")
     public List<CurrentState> getAllState(){
@@ -26,17 +33,29 @@ public class StateController {
     }
 
 
-    @GetMapping("/states/{id}")
-    public CurrentState getState(@PathVariable Long id){
-        CurrentState state = stateService.getCurrentState(id);
-        if(state == null)  throw new StateNotFoundException(id);
-        return state;
+    @GetMapping("/id/{userId}/states")
+    public List<CurrentState> getUserState(@PathVariable (value = "userId") Long userId){
+        if(!userRepository.existsById(userId)){
+            throw new UserNotFoundException(userId);
+        }
+        return stateService.listCurrentStateByUserId(userId);
+    }
+
+    @GetMapping("/id/{userId}/states/{id}")
+    public Optional<CurrentState> getSelectedUserState(@PathVariable (value = "userId") Long userId, @PathVariable (value = "id") Long stateId){
+        if(!userRepository.existsById(userId)){
+            throw new UserNotFoundException(userId);
+        }
+        return stateService.getStateByIdAndUserId(stateId, userId);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/states")
-    public CurrentState addState(@Valid @RequestBody CurrentState state){
-        return stateService.addCurrentState(state);
+    @PostMapping("/id/{userId}/states")
+    public CurrentState addState(@PathVariable (value = "userId") Long userId, @Valid @RequestBody CurrentState state){
+        return userRepository.findById(userId).map(user->{
+            state.setUser(user);
+            return stateService.addCurrentState(state);
+        }).orElseThrow(() -> new UserNotFoundException(userId));
     }
 
     @PutMapping("/states/{id}")

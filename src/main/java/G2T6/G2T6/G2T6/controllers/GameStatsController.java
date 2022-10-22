@@ -1,11 +1,14 @@
 package G2T6.G2T6.G2T6.controllers;
 
 import G2T6.G2T6.G2T6.exceptions.GameStatsNotFoundException;
+import G2T6.G2T6.G2T6.exceptions.NotEnoughGameStatsException;
 import G2T6.G2T6.G2T6.exceptions.StateNotFoundException;
+import G2T6.G2T6.G2T6.exceptions.UserNotFoundException;
 import G2T6.G2T6.G2T6.misc.State;
 import G2T6.G2T6.G2T6.repository.StateRepository;
 import G2T6.G2T6.G2T6.models.GameStats;
 import G2T6.G2T6.G2T6.repository.GameStatsRepository;
+import G2T6.G2T6.G2T6.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +21,12 @@ import java.util.*;
 @RestController
 public class GameStatsController {
     private GameStatsRepository gameStateRepo;
-    private StateRepository stateRepo;
+    private UserRepository userRepo;
 
     @Autowired
-    public GameStatsController(GameStatsRepository gameStateRepo, StateRepository stateRepo){
+    public GameStatsController(GameStatsRepository gameStateRepo, UserRepository userRepo){
         this.gameStateRepo = gameStateRepo;
-        this.stateRepo = stateRepo;
+        this.userRepo = userRepo;
     }
 
     @GetMapping("/gameStats")
@@ -34,12 +37,15 @@ public class GameStatsController {
     @GetMapping("/gameStats/{count}")
     public List<GameStats> getAllTopNGameStats(@PathVariable (value = "count") Long count){
         List<GameStats> selectedStats = gameStateRepo.findAll();
+        System.out.println("Correct output");
         if( count >= selectedStats.size()) return null; // change to error later
         for(GameStats gs: selectedStats){
             if(gs.getCurrentState().getCurrentState() != State.completed){
                 selectedStats.remove(gs);
             }
         }
+
+        if( count >= selectedStats.size()) throw new NotEnoughGameStatsException(count); // change to error later
 
         Collections.sort(selectedStats);
         List<GameStats> topNStats = new ArrayList<>();
@@ -49,41 +55,41 @@ public class GameStatsController {
         return  topNStats;
     }
 
-    @GetMapping("/id/{sessionId}/gameStats")
-    public List<GameStats> getAllSelectedUserGameStats(@PathVariable (value = "sessionId") Long sessionId){
-        if(!stateRepo.existsById(sessionId)){
-            throw new StateNotFoundException(sessionId);
+    @GetMapping("/id/{userId}/gameStats")
+    public List<GameStats> getAllSelectedUserGameStats(@PathVariable (value = "userId") Long userId){
+        if(!userRepo.existsById(userId)){
+            throw new UserNotFoundException(userId);
         }
-        return gameStateRepo.findByCurrentStateId(sessionId);
+        return gameStateRepo.findByUserId(userId);
     }
 
-    @GetMapping("/id/{sessionId}/gameStats/{id}")
-    public Optional<GameStats> getGameStats(@PathVariable (value = "sessionId") Long sessionId,
+    @GetMapping("/id/{userId}/gameStats/{id}")
+    public Optional<GameStats> getGameStats(@PathVariable (value = "userId") Long userId,
                                             @PathVariable (value = "id") Long id){
-        if(!stateRepo.existsById(sessionId)){
-            throw new StateNotFoundException(sessionId);
+        if(!userRepo.existsById(userId)){
+            throw new UserNotFoundException(userId);
         }
-        return gameStateRepo.findByIdAndCurrentStateId(id, sessionId);
+        return gameStateRepo.findByIdAndUserId(id, userId);
     }
 
-    @PostMapping("/id/{sessionId}/gameStats")
-    public GameStats addGameStats(@PathVariable (value = "sessionId") Long sessionId, @Valid @RequestBody GameStats gameStats){
-        return stateRepo.findById(sessionId).map(session ->{
-            gameStats.setCurrentState(session);
+    @PostMapping("/id/{userId}/gameStats")
+    public GameStats addGameStats(@PathVariable (value = "userId") Long userId, @Valid @RequestBody GameStats gameStats){
+        return userRepo.findById(userId).map(user ->{
+            gameStats.setUser(user);
             return gameStateRepo.save(gameStats);
-        }).orElseThrow(() -> new StateNotFoundException(sessionId));
+        }).orElseThrow(() -> new UserNotFoundException(userId));
     }
 
-    @PutMapping("/id/{sessionId}/gameStats/{id}")
+    @PutMapping("/id/{userId}/gameStats/{id}")
     public GameStats updateGameStats(
-            @PathVariable (value = "sessionId") Long sessionId,
+            @PathVariable (value = "userId") Long userId,
             @PathVariable (value = "id") Long id,
             @Valid @RequestBody GameStats newStats){
 
-        if(!stateRepo.existsById(sessionId)){
-            throw new StateNotFoundException(sessionId);
+        if(!userRepo.existsById(userId)){
+            throw new UserNotFoundException(userId);
         }
-        return gameStateRepo.findByIdAndCurrentStateId(id, sessionId).map(gameStats ->{
+        return gameStateRepo.findByIdAndUserId(id, userId).map(gameStats ->{
             gameStats.setIncomeVal(newStats.getIncomeVal());
             gameStats.setEmissionVal(newStats.getEmissionVal());
             gameStats.setMoraleVal(newStats.getMoraleVal());
@@ -91,14 +97,14 @@ public class GameStatsController {
         }).orElseThrow(() -> new GameStatsNotFoundException(id));
     }
 
-    @DeleteMapping("/id/{sessionId}/gameStats/{id}")
-    public ResponseEntity<?> deleteBook(@PathVariable (value = "sessionId") Long sessionId,
+    @DeleteMapping("/id/{userId}/gameStats/{id}")
+    public ResponseEntity<?> deleteBook(@PathVariable (value = "userId") Long userId,
                                         @PathVariable (value = "id") Long id){
 
-        if(!stateRepo.existsById(sessionId)){
-            throw new StateNotFoundException(sessionId);
+        if(!userRepo.existsById(userId)){
+            throw new UserNotFoundException(userId);
         }
-        return gameStateRepo.findByIdAndCurrentStateId(id, sessionId).map(gameStats -> {
+        return gameStateRepo.findByIdAndUserId(id, userId).map(gameStats -> {
             gameStateRepo.delete(gameStats);
             return ResponseEntity.ok().build();
         }).orElseThrow(() -> new GameStatsNotFoundException(id));
