@@ -11,4 +11,6 @@ public class CONSTANTVARIABLES {
     public static final State DEFAULTSTATE = State.start;
     public static final int DEFAULTYEAR = 0;
 
+    public static final boolean OPEN_ENDED = true;
+    public static final boolean NOT_OPEN_ENDED = false;
 }

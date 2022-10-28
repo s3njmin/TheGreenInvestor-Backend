@@ -29,6 +29,10 @@ public class Question {
 
     private List<Option> options;
 
+    //whether question is open-ended
+    @NotNull(message = "Question type should not be null")
+    private boolean isOpenEnded;
+
     public Question(final String qn) {
         this.question = qn;
     }
@@ -41,6 +45,12 @@ public class Question {
     public Question(final String qn, final String imageLocation) {
         this.question = qn;
         this.imageLocation = imageLocation;
+    }
+
+    public Question(final String qn, final String imageLocation, final boolean isOpenEnded) {
+        this.question = qn;
+        this.imageLocation = imageLocation;
+        this.isOpenEnded = isOpenEnded;
     }
     
 }
