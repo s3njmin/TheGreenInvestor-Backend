@@ -5,7 +5,7 @@ GET http://localhost:8080/api/questions/1/options
 DELETE http://localhost:8080/api/questions/1/options/3
 
 ###
-POST http://localhost:8080/api/questions/1/options
+PUT http://localhost:8080/api/questions/1/options
 Content-Type: application/json
 
 {
