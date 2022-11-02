@@ -11,6 +11,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -43,7 +44,7 @@ public class CurrentState {
     @NotNull
     private int questionSetId; // somewhere randomise and add in
 
-    private String userResponse; // gonna be something like this 1,2,4,2 use split // everytime user update
+    private String userResponse = ""; // gonna be something like this 1,2,4,2 use split // everytime user update
 
     @OneToOne(mappedBy = "currentState", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
@@ -72,17 +73,25 @@ public class CurrentState {
         this.currentState = state;
     }
 
-    public List<Integer> getUserAnswers(){
+    public List<String> getUserAnswers(){
         if (userResponse.isEmpty()) return null;
-        String answers[] = userResponse.split(",");
-        List<Integer> ans = new ArrayList<>();
-        for(int i = 0; i < answers.length; i++){
-            ans.add(Integer.parseInt(answers[i]));
-        }
-        return ans;
+        List<String> answers = Arrays.stream(userResponse.split(",")).toList();
+        return answers;
     }
 
-    public String addNewUserResponse(String current, Integer currentAns){
-        return current.concat(","+ currentAns);
+    public String addNewUserResponse(Integer currentAns){
+        if(!userResponse.isEmpty()) {
+            userResponse += ",";
+        }
+        userResponse += currentAns;
+        return userResponse;
+    }
+
+    public String addNewUserResponse(String currentAns){
+        if(!userResponse.isEmpty()) {
+            userResponse += ",";
+        }
+        userResponse += currentAns;
+        return userResponse;
     }
 }

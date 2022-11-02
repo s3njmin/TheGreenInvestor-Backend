@@ -10,6 +10,7 @@ import G2T6.G2T6.G2T6.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -82,12 +83,13 @@ public class StateServiceImplementation implements StateService {
     @Override
     public List<CurrentState> listCompletedState() {
         List<CurrentState> allStats = listCurrentState();
+        List<CurrentState> completedState = new ArrayList<>();
         for(CurrentState c: allStats){
-            if(c.getCurrentState() != State.completed){
-                allStats.remove(c);
+            if(c.getCurrentState() == State.completed){
+                completedState.add(c);
             }
         }
-        return allStats;
+        return completedState;
     }
 
 }
