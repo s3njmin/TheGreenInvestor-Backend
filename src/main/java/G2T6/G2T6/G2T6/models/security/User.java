@@ -84,10 +84,16 @@ public class User {
   public void setSubscribedEmail(boolean isSubscribedEmail) {
     this.isSubscribedEmail = isSubscribedEmail;
   }
+
   public User(Long id, String username, String email, String password, String role) {
     this(username, email, password);
     this.role = role;
     this.id = id;
+  }
+
+  public User(String username, String email, String password, String role) {
+    this(username, email, password);
+    this.role = role;
   }
 
   public Long getId() {

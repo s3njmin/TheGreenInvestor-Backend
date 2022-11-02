@@ -44,7 +44,7 @@ public class TheGreenInvestorApplication {
 
 		// Questions
 		qList.add(new Question(
-				"Company stakeholders are pressuring you to eliminate paper waste in every office. Will you:",
+				"q1-key",
 				"../assets/img1.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
 		qList.add(new Question("The company has earned a record profit for the year. You decide to use the money for:",
 				"../assets/img2.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
