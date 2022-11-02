@@ -27,12 +27,21 @@ public class StateController {
         this.stateService = ss;
     }
 
+    /**
+     * get all states
+     * @return all states in the database
+     */
     @GetMapping("/states")
     public List<CurrentState> getAllState(){
         return stateService.listCurrentState();
     }
 
 
+    /**
+     * get selected user states
+     * @param userId a long value
+     * @return all stats of selected user
+     */
     @GetMapping("/id/{userId}/states")
     public List<CurrentState> getUserState(@PathVariable (value = "userId") Long userId){
         if(!userRepository.existsById(userId)){
@@ -41,6 +50,12 @@ public class StateController {
         return stateService.listCurrentStateByUserId(userId);
     }
 
+    /**
+     * get selected user and selected state id states
+     * @param userId a long value
+     * @param stateId a long value
+     * @return selected user and selected state id states
+     */
     @GetMapping("/id/{userId}/states/{id}")
     public Optional<CurrentState> getSelectedUserState(@PathVariable (value = "userId") Long userId, @PathVariable (value = "id") Long stateId){
         if(!userRepository.existsById(userId)){
@@ -49,6 +64,12 @@ public class StateController {
         return stateService.getStateByIdAndUserId(stateId, userId);
     }
 
+    /**
+     * add a state to a selected user
+     * @param userId a Long value
+     * @param state a CurrentState object
+     * @return the newly added state
+     */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/id/{userId}/states")
     public CurrentState addState(@PathVariable (value = "userId") Long userId, @Valid @RequestBody CurrentState state){
@@ -58,6 +79,12 @@ public class StateController {
         }).orElseThrow(() -> new UserNotFoundException(userId));
     }
 
+    /**
+     * update selected state id's state
+     * @param id a Long value
+     * @param state a CurrentState object
+     * @return updated state
+     */
     @PutMapping("/states/{id}")
     public CurrentState updateState(@PathVariable Long id, @Valid @RequestBody CurrentState state){
         CurrentState currentState = stateService.updateCurrentState(id, state);
@@ -65,6 +92,10 @@ public class StateController {
         return currentState;
     }
 
+    /**
+     * delete the selected state
+     * @param id a Long value
+     */
     @DeleteMapping("/states/{id}")
     public void deleteState(@PathVariable Long id){
         try{

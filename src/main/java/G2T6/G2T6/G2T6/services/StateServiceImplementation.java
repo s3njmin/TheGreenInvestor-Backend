@@ -23,21 +23,41 @@ public class StateServiceImplementation implements StateService {
         this.stateRepository = rs;
     }
 
+    /**
+     * get all state
+     * @return get all state
+     */
     @Override
     public List<CurrentState> listCurrentState() {
         return stateRepository.findAll();
     }
 
+    /**
+     * get selected state
+     * @param id a Long value
+     * @return selected states
+     */
     @Override
     public CurrentState getCurrentState(Long id) {
         return stateRepository.findById(id).orElse(null);
     }
 
+    /**
+     * add new state
+     * @param state A CurrentState object
+     * @return the newly added state
+     */
     @Override
     public CurrentState addCurrentState(CurrentState state) {
         return stateRepository.save(state);
     }
 
+    /**
+     * update current state value
+     * @param id a Long value
+     * @param state A CurrentState object
+     * @return updated currentState
+     */
     @Override
     public CurrentState updateCurrentState(Long id, CurrentState state) {
         return stateRepository.findById(id).map(newState -> {
@@ -47,11 +67,19 @@ public class StateServiceImplementation implements StateService {
         }).orElse(null);
     }
 
+    /**
+     * delete selected state
+     * @param id a Long value
+     */
     @Override
     public void deleteCurrentState(Long id) {
         stateRepository.deleteById(id);
     }
 
+    /**
+     * Reset all state value
+     * @param id a Long value
+     */
     @Override
     public void factoryReset(Long id) {
         stateRepository.findById(id).map(newState -> {
@@ -61,6 +89,10 @@ public class StateServiceImplementation implements StateService {
         });
     }
 
+    /**
+     * Get a default state
+     * @return a default valued state
+     */
     @Override
     public CurrentState getDefaultState() {
         //init default state
@@ -70,16 +102,31 @@ public class StateServiceImplementation implements StateService {
         return newState;
     }
 
+    /**
+     * find all state belong to selected user
+     * @param userid a Long value
+     * @return all state belonging to selectec user
+     */
     @Override
     public List<CurrentState> listCurrentStateByUserId(Long userid) {
         return stateRepository.findByUserId(userid);
     }
 
+    /**
+     * get selected user and selected state id's state
+     * @param id
+     * @param userId
+     * @return state that belong to this user and have this id
+     */
     @Override
     public Optional<CurrentState> getStateByIdAndUserId(Long id, Long userId) {
         return stateRepository.findByIdAndUserId(id, userId);
     }
 
+    /**
+     * get all state that have the the complete state
+     * @return all completed states
+     */
     @Override
     public List<CurrentState> listCompletedState() {
         List<CurrentState> allStats = listCurrentState();

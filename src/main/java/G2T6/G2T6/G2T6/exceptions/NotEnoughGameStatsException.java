@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class NotEnoughGameStatsException extends RuntimeException{
     private static final long serialVersionUID = 1L;
 
-    public NotEnoughGameStatsException(Long id) {
+    public NotEnoughGameStatsException(int id) {
         super("Could not enough game stats to display " + id + " stats");
     }
 

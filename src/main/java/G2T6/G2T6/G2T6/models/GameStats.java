@@ -16,18 +16,23 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode
 public class GameStats implements Comparable<GameStats>{
 
+    // game stats's id and primary key of the game stats database table
     @GeneratedValue(strategy = GenerationType.AUTO) @Id
     private Long id;
 
+    // income value of game stats
     @NotNull
     private int incomeVal = 0;
 
+    // morale value of game stats
     @Min(0) @Max(100) @NotNull
     private int moraleVal = 0;
 
+    // emission value of game stats
     @Min(0) @Max(100) @NotNull
     private int emissionVal = 0;
 
+    // current state for this game stats
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "currentState_id")
     private CurrentState currentState;
@@ -49,10 +54,19 @@ public class GameStats implements Comparable<GameStats>{
         this.currentState = currentState;
     }
 
+    /**
+     * sum of all game stats
+     * @return to sum of income + morale + emission
+     */
     public Long getTotal(){
         return (long)(incomeVal + moraleVal + emissionVal);
     }
 
+    /**
+     * comparing game stats
+     * @param o a GameStats object
+     * @return order of the comparison
+     */
     @Override
     public int compareTo(GameStats o) {
         Long cV = getTotal();
