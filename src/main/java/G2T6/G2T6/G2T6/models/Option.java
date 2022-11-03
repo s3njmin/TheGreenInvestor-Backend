@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -21,9 +22,11 @@ public class Option {
     private @Id @GeneratedValue (strategy = GenerationType.AUTO) Long id;
 
     @NotNull(message = "Option Text should not be null")
+    @Length(max=300)
     private String option;
 
     // @NotNull(message = "Feedback should not be null")
+    @Length(max=300)
     private String feedback;
 
     // impact on GameStats
