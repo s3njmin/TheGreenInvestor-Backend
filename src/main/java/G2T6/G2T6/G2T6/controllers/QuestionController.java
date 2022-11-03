@@ -1,11 +1,15 @@
 package G2T6.G2T6.G2T6.controllers;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import javax.validation.Valid;
 
 import G2T6.G2T6.G2T6.exceptions.QuestionExistsException;
 import G2T6.G2T6.G2T6.exceptions.QuestionNotFoundException;
+import G2T6.G2T6.G2T6.models.Option;
 import G2T6.G2T6.G2T6.models.Question;
 import G2T6.G2T6.G2T6.services.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +28,39 @@ public class QuestionController {
         this.questionService = qs;
     }
 
+    // return all questions & options
+    @GetMapping("/questionsAndOptions")
+    public List<Question> getQuestionAndOptions() {
+        // create list of 10 randomly ordered numbers
+        ArrayList<Integer> questionIndexes = new ArrayList<>();
+        Collections.addAll(questionIndexes, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+        Collections.shuffle(questionIndexes);
+        
+        List<Question> questions = questionService.listQuestions();
+        List<Question> randomizedQuestions = new ArrayList<>();
+
+        for (int idx : questionIndexes) {
+            Question question = questions.get(idx);
+            List<Option> options = question.getOptions();
+            
+            // if NOT open ended question, randomly remove 2 options
+            if (!question.isOpenEnded()) {
+                Random random = new Random();
+                options.remove(random.nextInt(6));
+                options.remove(random.nextInt(5));
+            }
+
+            // set list of options after removing 2 options randomly
+            question.setOptions(options);
+
+            // add question to randomized questions
+            randomizedQuestions.add(question);
+        }
+
+        return randomizedQuestions;
+    }
+
+    // return all questions & options
     @GetMapping("/questions")
     public List<Question> getQuestion() {
         return questionService.listQuestions();

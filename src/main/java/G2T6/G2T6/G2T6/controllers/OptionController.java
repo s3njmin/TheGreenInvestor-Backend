@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
-@RequestMapping("/api/questions/{questionId}")
+@RequestMapping("/api/questions")
 @RestController
 public class OptionController {
     private OptionRepository options;
@@ -29,7 +29,7 @@ public class OptionController {
     }
 
     // Returns all Options specified by Question Id
-    @GetMapping("/options")
+    @GetMapping("/{questionId}/options")
     public List<Option> getAllOptionsByQuestionId(@PathVariable (value = "questionId") final Long questionId) {
         // check if Question Exists
         if(!questions.existsById(questionId)) {
@@ -40,7 +40,7 @@ public class OptionController {
 
     // Add an Option to specified Question
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/options")
+    @PostMapping("/{questionId}/options")
     public Option addOption(@PathVariable (value = "questionId") final Long questionId, 
             @Valid @RequestBody Option option){
 
@@ -51,7 +51,7 @@ public class OptionController {
     }
 
     // Update an Existing Option
-    @PutMapping("/options/{optionId}")
+    @PutMapping("/{questionId}/options/{optionId}")
     public Option updateOption(@PathVariable (value = "questionId") final Long questionId, 
             @PathVariable (value = "optionId") Long optionId,
             @Valid @RequestBody Option newOption) {
@@ -68,7 +68,7 @@ public class OptionController {
     }
 
     //Delete an Existing Option
-    @DeleteMapping("/options/{optionId}")
+    @DeleteMapping("/{questionId}/options/{optionId}")
     public ResponseEntity<?> deleteOption(@PathVariable (value = "questionId") final Long questionId,
             @PathVariable (value = "optionId") Long optionId){
         

@@ -40,10 +40,10 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public Question updateQuestion(final Long id, final Question newQuestionInfo) {
         return questions.findById(id).map(question -> {
-            System.out.println("id: " + id + " | " + question.getQuestion());
+            // System.out.println("id: " + id + " | " + question.getQuestion());
             question.setQuestion(newQuestionInfo.getQuestion());
-            System.out.println("- id: " + id + " | " + question.getQuestion());
-            System.out.println("saving: " + questions.save(question));
+            // System.out.println("- id: " + id + " | " + question.getQuestion());
+            // System.out.println("saving: " + questions.save(question));
             return questions.save(question);
         }).orElse(null);
     }
