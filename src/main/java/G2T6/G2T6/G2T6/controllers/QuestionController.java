@@ -26,7 +26,7 @@ public class QuestionController {
         this.questionService = qs;
     }
 
-    // return all questions & options
+    // return all questions & options (called from frontend & start of game)
     @GetMapping("/questionsAndOptions")
     public List<Question> getQuestionAndOptions() {
         
@@ -62,7 +62,7 @@ public class QuestionController {
         return questions;
     }
 
-    // return all questions & options
+    // return all questions
     @GetMapping("/questions")
     public List<Question> getQuestion() {
         return questionService.listQuestions();
