@@ -3,6 +3,8 @@ package G2T6.G2T6.G2T6.models;
 import java.util.List;
 
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.URL;
+
 import javax.persistence.*;
 import lombok.*;
 import javax.validation.constraints.NotNull;
@@ -15,40 +17,36 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class Question {
+    
+    // Question Id is Primary Key of Question Table
     private @Id @GeneratedValue (strategy = GenerationType.IDENTITY) Long id;
     
+    // Question Body
     @NotNull(message = "Question should not be null")
     @Length(max=300)
     private String question;
 
+    // Link to Image hosted on AWS
     @NotNull(message = "Image location should not be null")
-    private String imageLocation;
+    @URL(protocol = "https")
+    private String imageLink;
 
+    // List of options, one question to many options
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Option> options;
 
-    //whether question is open-ended
+    // whether question is open-ended
     @NotNull(message = "Question type should not be null")
     private boolean isOpenEnded;
 
-    public Question(final String qn) {
-        this.question = qn;
-    }
+    // public Question(final String qn) {
+    //     this.question = qn;
+    // }
 
-    public Question(final String qn, final Long id) {
+    // constructor - pass in question, imageLink, isOpenEnded
+    public Question(final String qn, final String imageLink, final boolean isOpenEnded) {
         this.question = qn;
-        this.id = id;
-    }
-
-    public Question(final String qn, final String imageLocation) {
-        this.question = qn;
-        this.imageLocation = imageLocation;
-    }
-
-    public Question(final String qn, final String imageLocation, final boolean isOpenEnded) {
-        this.question = qn;
-        this.imageLocation = imageLocation;
+        this.imageLink = imageLink;
         this.isOpenEnded = isOpenEnded;
     }
-    
 }
