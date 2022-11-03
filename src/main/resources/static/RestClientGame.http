@@ -20,23 +20,24 @@ Content-Type: application/json
 }
 ###
 
+### get info about this user
 GET http://localhost:8080/api/gameInfo
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjIiLCJpYXQiOjE2Njc1MDU0NjgsImV4cCI6MTY2NzUwOTA2OH0.fCWv0g7QTaDMLD1ZCMqAVhHCxbti6oZPOZKDllEg9Pyti4NX7Ax21-t2rmGYB2FhUYpo0vq-tbuceYwvJ9uhpw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjIiLCJpYXQiOjE2Njc1MDU4NjIsImV4cCI6MTY2NzUwOTQ2Mn0.4Ys65b5tX0y27n9BXg5D8Qdb0qqEb11xaKV1yzPxzeSkUKoXtczXFMEePrHV3nSQGcse4Ygdb0l1xB8ouKv54g
 
 
-###
+### mcq answer
 GET http://localhost:8080/api/submitAnswer
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjIiLCJpYXQiOjE2Njc1MDU0NjgsImV4cCI6MTY2NzUwOTA2OH0.fCWv0g7QTaDMLD1ZCMqAVhHCxbti6oZPOZKDllEg9Pyti4NX7Ax21-t2rmGYB2FhUYpo0vq-tbuceYwvJ9uhpw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjIiLCJpYXQiOjE2Njc1MDU4NjIsImV4cCI6MTY2NzUwOTQ2Mn0.4Ys65b5tX0y27n9BXg5D8Qdb0qqEb11xaKV1yzPxzeSkUKoXtczXFMEePrHV3nSQGcse4Ygdb0l1xB8ouKv54g
 
 {
     "answer": "2"
 }
 
-###
+### open ended answer
 GET http://localhost:8080/api/submitAnswer
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjIiLCJpYXQiOjE2Njc1MDU0NjgsImV4cCI6MTY2NzUwOTA2OH0.fCWv0g7QTaDMLD1ZCMqAVhHCxbti6oZPOZKDllEg9Pyti4NX7Ax21-t2rmGYB2FhUYpo0vq-tbuceYwvJ9uhpw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjIiLCJpYXQiOjE2Njc1MDU4NjIsImV4cCI6MTY2NzUwOTQ2Mn0.4Ys65b5tX0y27n9BXg5D8Qdb0qqEb11xaKV1yzPxzeSkUKoXtczXFMEePrHV3nSQGcse4Ygdb0l1xB8ouKv54g
 
 {
     "answer": "Electricity,Carbon,Water"

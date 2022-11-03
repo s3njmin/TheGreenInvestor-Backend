@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import G2T6.G2T6.G2T6.exceptions.OptionNotFoundException;
 import G2T6.G2T6.G2T6.exceptions.QuestionNotFoundException;
 import G2T6.G2T6.G2T6.models.CurrentState;
 import G2T6.G2T6.G2T6.models.GameStats;
