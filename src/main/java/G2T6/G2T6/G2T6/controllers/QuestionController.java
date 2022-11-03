@@ -1,5 +1,7 @@
 package G2T6.G2T6.G2T6.controllers;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -24,6 +26,25 @@ public class QuestionController {
         this.questionService = qs;
     }
 
+    // return all questions & options
+    @GetMapping("/questionsAndOptions")
+    public List<Question> getQuestionAndOptions() {
+        // create list of 10 randomly ordered numbers
+        ArrayList<Integer> questionIndexes = new ArrayList<>();
+        Collections.addAll(questionIndexes, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+        Collections.shuffle(questionIndexes);
+        
+        List<Question> questions = questionService.listQuestions();
+        List<Question> randomizedQuestions = new ArrayList<>();
+
+        for (int idx : questionIndexes) {
+            randomizedQuestions.add(questions.get(idx));
+        }
+
+        return randomizedQuestions;
+    }
+
+    // return all questions & options
     @GetMapping("/questions")
     public List<Question> getQuestion() {
         return questionService.listQuestions();

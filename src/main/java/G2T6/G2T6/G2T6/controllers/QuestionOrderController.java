@@ -45,7 +45,7 @@ public class QuestionOrderController {
        
         // create list of 10 randomly ordered numbers
         ArrayList<Integer> indexArray = new ArrayList<>();
-        Collections.addAll(indexArray, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        Collections.addAll(indexArray, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10); // since ids are 1 - 10
         Collections.shuffle(indexArray);
 
         // check if order exists in questionOrderRepository

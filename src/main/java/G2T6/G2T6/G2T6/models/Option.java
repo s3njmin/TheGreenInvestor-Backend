@@ -5,6 +5,8 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.*;
 
 @Entity
@@ -25,15 +27,16 @@ public class Option {
     private String feedback;
 
     // impact on GameStats
-    // @NotNull
-    // private int incomeImpact;
-    // @Min(0) @Max(100) @NotNull
-    // private int moraleImpact;
-    // @Min(0) @Max(100) @NotNull
-    // private int emissionImpact;
+    @NotNull
+    private int incomeImpact;
+    @Min(0) @Max(100) @NotNull
+    private int moraleImpact;
+    @Min(0) @Max(100) @NotNull
+    private int emissionImpact;
 
     @ManyToOne
     @JoinColumn(name="question_id", nullable=false)
+    @JsonIgnore
     private Question question;
 
     public Option(final String option, final String feedback, final Question qn) {
@@ -42,13 +45,11 @@ public class Option {
         this.question = qn;
     }
 
-    // public Option(final String option, final String feedback, final Question qn, final int incomeImpact, final int moraleImpact ,final int emissionImpact) {
-    //     this.option = option;
-    //     this.feedback = feedback;
-    //     this.question = qn;
+    public Option(final String option, final String feedback, final Question qn, final int incomeImpact, final int moraleImpact ,final int emissionImpact) {
+        this(option, feedback, qn);
 
-    //     this.incomeImpact = incomeImpact;
-    //     this.moraleImpact = moraleImpact;
-    //     this.emissionImpact = emissionImpact;
-    // }
+        this.incomeImpact = incomeImpact;
+        this.moraleImpact = moraleImpact;
+        this.emissionImpact = emissionImpact;
+    }
 }

@@ -3,7 +3,6 @@ package G2T6.G2T6.G2T6.controllers;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import G2T6.G2T6.G2T6.exceptions.OptionOrderNotFoundException;
@@ -43,7 +42,7 @@ public class OptionOrderController {
     @PostMapping("/optionOrder")
     public OptionOrder addOptionOrder(){
        
-        // create list of 10 randomly ordered numbers
+        // create list of 6 randomly ordered numbers
         ArrayList<Integer> indexArray = new ArrayList<>();
         Collections.addAll(indexArray, 1, 2, 3, 4, 5, 6);
         Collections.shuffle(indexArray);

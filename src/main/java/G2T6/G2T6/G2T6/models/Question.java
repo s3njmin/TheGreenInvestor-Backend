@@ -6,8 +6,6 @@ import javax.persistence.*;
 import lombok.*;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 @Getter
 @Setter
@@ -25,8 +23,6 @@ public class Question {
     private String imageLocation;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-
     private List<Option> options;
 
     //whether question is open-ended
