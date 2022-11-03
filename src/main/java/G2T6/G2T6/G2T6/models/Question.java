@@ -2,6 +2,7 @@ package G2T6.G2T6.G2T6.models;
 
 import java.util.List;
 
+import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import lombok.*;
 import javax.validation.constraints.NotNull;
@@ -17,6 +18,7 @@ public class Question {
     private @Id @GeneratedValue (strategy = GenerationType.IDENTITY) Long id;
     
     @NotNull(message = "Question should not be null")
+    @Length(max=300)
     private String question;
 
     @NotNull(message = "Image location should not be null")
