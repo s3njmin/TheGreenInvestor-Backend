@@ -11,19 +11,23 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
 @NoArgsConstructor
-public abstract class Order {
+@EqualsAndHashCode
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING)
+public abstract class Orders {
     // id is the primary key of question order in questionOrderRepository
-    private @Id @GeneratedValue (strategy = GenerationType.IDENTITY) Long id;
+    private @Id @GeneratedValue (strategy = GenerationType.TABLE) Long id;
 
     // indexArray stores array of indexes
     private ArrayList<Integer> indexArray;
 
-    // generates an array containing 1 to (size)
+    // generates an array containing 0 to (size - 1)
     public ArrayList<Integer> generateArray(int size) {
         // generate arraylist
         ArrayList<Integer> generatedArray = new ArrayList<>();
-        for (int i = 1; i < size; i++) {
+        for (int i = 0; i < size; i++) {
             generatedArray.add(i);
         }
 

@@ -4,11 +4,18 @@ import java.util.*;
 
 import javax.validation.Valid;
 
+import G2T6.G2T6.G2T6.exceptions.OptionOrderIdInvalidException;
 import G2T6.G2T6.G2T6.exceptions.QuestionExistsException;
 import G2T6.G2T6.G2T6.exceptions.QuestionNotFoundException;
+import G2T6.G2T6.G2T6.exceptions.QuestionOrderIdInvalidException;
 import G2T6.G2T6.G2T6.models.Option;
 import G2T6.G2T6.G2T6.models.Question;
+import G2T6.G2T6.G2T6.models.orders.OptionOrder;
+import G2T6.G2T6.G2T6.models.orders.QuestionOrder;
+import G2T6.G2T6.G2T6.repository.OptionOrderRepository;
+import G2T6.G2T6.G2T6.repository.QuestionOrderRepository;
 import G2T6.G2T6.G2T6.services.QuestionService;
+import lombok.AllArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -20,46 +27,82 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class QuestionController {
     private QuestionService questionService;
+    private QuestionOrderRepository questionOrders;
+    private OptionOrderRepository optionOrders;
     
     @Autowired
-    public QuestionController(final QuestionService qs){
-        this.questionService = qs;
+    public QuestionController(final QuestionService questionService, QuestionOrderRepository questionOrders, OptionOrderRepository optionOrders){
+        this.questionService = questionService;
+        this.questionOrders = questionOrders;
+        this.optionOrders = optionOrders;
     }
 
     // return all questions & options (called from frontend & start of game)
     @GetMapping("/questionsAndOptions")
     public List<Question> getQuestionAndOptions() {
         
+        // pick a questionOrder from 1 to 10 (we store 10 permutations of question orders)
+        Random random = new Random();
+        long questionOrderIdx = random.nextLong(10) + 1;
+
+        // if questionOrder is found by ID, store in list of QuestionOrder
+        ArrayList<QuestionOrder> questionOrderList = new ArrayList<>();
+        questionOrders.findById(questionOrderIdx).ifPresent(questionOrderList::add);
+
+        System.out.println("------------------------"+questionOrderList.toString());
+
+        List<Integer> questionOrder;
+
+        // if one questionOrder is found, get index array
+        if (questionOrderList.size() == 1) {
+            questionOrder = questionOrderList.get(0).getIndexArray();
+        } else {
+            throw new QuestionOrderIdInvalidException(questionOrderIdx);
+        }
+
         // get the list of questions
         List<Question> questions = questionService.listQuestions();
+        ArrayList<Question> randomizedQuestions = new ArrayList<>();
 
-        // remove 2 out of first 10 questions (non-open ended)
-        Random random = new Random();
-        questions.remove(random.nextInt(10));
-        questions.remove(random.nextInt(9));
+        for (int questionId : questionOrder) {
+            // get question corresponding to idx in questionOrder
+            Question question = questions.get(questionId);
 
-        // shuffle their orders
-        Collections.shuffle(questions);
-
-        for (Question question : questions) {
             // get list of options for each question in list
             List<Option> options = question.getOptions();
-            int numOptions = options.size();
 
-            // if NOT open ended question, randomly remove 2 options
-            if (!question.isOpenEnded() && numOptions > 4) {
-                // remove until number of options <= 4
-                while (numOptions > 4) {
-                    options.remove(random.nextInt(numOptions));
-                    numOptions--;
-                }
+            // pick an optionOrder from 1 to 10 (we store 10 permutations of option orders)
+            long optionOrderIdx = random.nextLong(10) + 1;
+
+            // if optionOrder is found by ID, store in list of OptionOrder
+            ArrayList<OptionOrder> optionOrderList = new ArrayList<>();
+            optionOrders.findById(optionOrderIdx).ifPresent(optionOrderList::add);
+
+            System.out.println("------------------------"+optionOrderList.toString());
+
+            List<Integer> optionOrder;
+
+            // if one optionOrder is found, get index array
+            if (optionOrderList.size() == 1) {
+                optionOrder = optionOrderList.get(0).getIndexArray();
+            } else {
+                throw new OptionOrderIdInvalidException(questionOrderIdx);
+            }
+
+            List<Option> randomizedOptions = new ArrayList<>();
+
+            for (int optionId : optionOrder) {
+                randomizedOptions.add(options.get(optionId));
             }
 
             // update list of options after removing 2 options randomly
             question.setOptions(options);
+
+            // add question to randomizedQuestions
+            randomizedQuestions.add(question);
         }
 
-        return questions;
+        return randomizedQuestions;
     }
 
     // return all questions

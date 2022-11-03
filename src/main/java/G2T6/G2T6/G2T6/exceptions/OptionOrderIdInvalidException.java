@@ -4,11 +4,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class OptionOrderNotFoundException extends RuntimeException{
-    
+public class OptionOrderIdInvalidException extends RuntimeException{
+
     private static final long serialVersionUID = 1L;
 
-    public OptionOrderNotFoundException(Long id) {
-        super("Could Not Find Option Order With ID of " + id);
+    public OptionOrderIdInvalidException(Long id) {
+        super("Could not find option " + id);
     }
 }

@@ -1,6 +1,6 @@
 package G2T6.G2T6.G2T6.controllers;
 
-import G2T6.G2T6.G2T6.exceptions.OptionNotFoundException;
+import G2T6.G2T6.G2T6.exceptions.OptionOrderIdInvalidException;
 import G2T6.G2T6.G2T6.exceptions.QuestionNotFoundException;
 import G2T6.G2T6.G2T6.models.Option;
 import G2T6.G2T6.G2T6.repository.OptionRepository;
@@ -64,7 +64,7 @@ public class OptionController {
         return options.findByIdAndQuestionId(optionId, questionId).map(option -> {
             option.setOption(newOption.getOption());
             return options.save(option);
-        }).orElseThrow(() -> new OptionNotFoundException(optionId));
+        }).orElseThrow(() -> new OptionOrderIdInvalidException(optionId));
     }
 
     //Delete an Existing Option
@@ -79,7 +79,7 @@ public class OptionController {
         return options.findByIdAndQuestionId(optionId, questionId).map(option -> {
             options.delete(option);
             return ResponseEntity.ok().build();
-        }).orElseThrow(() -> new OptionNotFoundException(optionId));
+        }).orElseThrow(() -> new OptionOrderIdInvalidException(optionId));
 
     }
 }
