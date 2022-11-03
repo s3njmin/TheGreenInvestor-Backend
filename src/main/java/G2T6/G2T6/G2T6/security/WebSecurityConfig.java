@@ -108,7 +108,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
           //
 
           // authentication for states
-          .antMatchers(HttpMethod.GET, "/api/states/**", "/api/states").permitAll()
+          .antMatchers("/api/states/**", "/api/states").permitAll()
 
           .antMatchers("/api/test/**").permitAll()
           .antMatchers("/api/id/**/gameStats/**").permitAll()

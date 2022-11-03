@@ -72,9 +72,7 @@ public class StateServiceImplementation implements StateService {
      * @param id a Long value
      */
     @Override
-    public void deleteCurrentState(Long id) {
-        stateRepository.deleteById(id);
-    }
+    public void deleteCurrentState(Long id) { stateRepository.deleteById(id); }
 
     /**
      * Reset all state value

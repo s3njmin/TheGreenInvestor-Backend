@@ -49,7 +49,7 @@ public class User {
   //Shared primary key
 //  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 //  @PrimaryKeyJoinColumn
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonIgnore
   private List<CurrentState> currentState;
 

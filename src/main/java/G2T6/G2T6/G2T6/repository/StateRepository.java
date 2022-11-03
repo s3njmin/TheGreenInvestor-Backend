@@ -10,7 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface StateRepository extends JpaRepository<CurrentState, Long> {
-    List<CurrentState> findByCurrentState(String currentState);
     List<CurrentState> findByUserId(Long userId);
     Optional<CurrentState> findByIdAndUserId(Long id, Long userId);
 }
