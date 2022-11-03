@@ -1,9 +1,6 @@
 package G2T6.G2T6.G2T6.controllers;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import javax.validation.Valid;
 
@@ -12,6 +9,7 @@ import G2T6.G2T6.G2T6.exceptions.QuestionNotFoundException;
 import G2T6.G2T6.G2T6.models.Option;
 import G2T6.G2T6.G2T6.models.Question;
 import G2T6.G2T6.G2T6.services.QuestionService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -31,11 +29,13 @@ public class QuestionController {
     // return all questions & options
     @GetMapping("/questionsAndOptions")
     public List<Question> getQuestionAndOptions() {
-        // create list of 10 randomly ordered numbers
+
+        // randomly ordered indexes (0 to 9)
         ArrayList<Integer> questionIndexes = new ArrayList<>();
         Collections.addAll(questionIndexes, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
         Collections.shuffle(questionIndexes);
         
+        // store 
         List<Question> questions = questionService.listQuestions();
         List<Question> randomizedQuestions = new ArrayList<>();
 

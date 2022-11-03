@@ -28,7 +28,7 @@ public class Question {
 
     // Link to Image hosted on AWS
     @NotNull(message = "Image location should not be null")
-    @URL(protocol = "https")
+    // @URL(protocol = "https")
     private String imageLink;
 
     // List of options, one question to many options
