@@ -30,12 +30,15 @@ public class Option {
     private String feedback;
 
     // impact on GameStats
-    @NotNull
+    
+    @Min(-1000) @Max(1000) @NotNull
+    private int sustainabilityImpact;
+    @Min(-100) @Max(100) @NotNull
+    private int moraleImpact;
+    @Min(-100) @Max(100) @NotNull
     private int incomeImpact;
     @Min(0) @Max(100) @NotNull
-    private int moraleImpact;
-    @Min(0) @Max(100) @NotNull
-    private int emissionImpact;
+    private int costImpact;
 
     @ManyToOne
     @JoinColumn(name="question_id", nullable=false)
@@ -48,11 +51,12 @@ public class Option {
         this.question = qn;
     }
 
-    public Option(final String option, final String feedback, final Question qn, final int incomeImpact, final int moraleImpact ,final int emissionImpact) {
+    public Option(final String option, final String feedback, final Question qn, final int sustainabilityImpact, final int moraleImpact ,final int incomeImpact, final int costImpact) {
         this(option, feedback, qn);
 
-        this.incomeImpact = incomeImpact;
+        this.sustainabilityImpact = sustainabilityImpact;
         this.moraleImpact = moraleImpact;
-        this.emissionImpact = emissionImpact;
+        this.incomeImpact = incomeImpact;
+        this.costImpact = costImpact;
     }
 }
