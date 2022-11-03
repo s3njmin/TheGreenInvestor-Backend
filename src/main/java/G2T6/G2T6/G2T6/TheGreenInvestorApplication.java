@@ -2,6 +2,8 @@ package G2T6.G2T6.G2T6;
 
 import G2T6.G2T6.G2T6.misc.*;
 import G2T6.G2T6.G2T6.models.*;
+import G2T6.G2T6.G2T6.models.orders.OptionOrder;
+import G2T6.G2T6.G2T6.models.orders.QuestionOrder;
 import G2T6.G2T6.G2T6.models.security.User;
 import G2T6.G2T6.G2T6.repository.*;
 
@@ -41,6 +43,15 @@ public class TheGreenInvestorApplication {
 		ArticleRepository aRepo = ctx.getBean(ArticleRepository.class);
 
 		List<Question> qList = new ArrayList<Question>();
+
+		// populate questionOrders
+		QuestionOrderRepository questionOrderRepository = ctx.getBean(QuestionOrderRepository.class);
+		OptionOrderRepository optionOrderRepository = ctx.getBean(OptionOrderRepository.class);
+
+		for (int i = 0; i < 10; i++) {
+			questionOrderRepository.save(new QuestionOrder());
+			optionOrderRepository.save(new OptionOrder());
+		}
 
 		// Questions
 		qList.add(new Question(
