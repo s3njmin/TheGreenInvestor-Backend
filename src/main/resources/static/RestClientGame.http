@@ -1,0 +1,43 @@
+### normal sign up
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+
+{
+    "username": "johnTheUser2",
+    "email": "johnNotTheAdmindTest2@gmail.com",
+    "password": "password6*d123",
+    "role": "USER"
+}
+###
+
+### login
+POST http://localhost:8080/api/auth/signin
+Content-Type: application/json
+
+{
+    "username": "johnTheUser2",
+    "password": "password6*d123"
+}
+###
+
+GET http://localhost:8080/api/gameInfo
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjIiLCJpYXQiOjE2Njc1MDU0NjgsImV4cCI6MTY2NzUwOTA2OH0.fCWv0g7QTaDMLD1ZCMqAVhHCxbti6oZPOZKDllEg9Pyti4NX7Ax21-t2rmGYB2FhUYpo0vq-tbuceYwvJ9uhpw
+
+
+###
+GET http://localhost:8080/api/submitAnswer
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjIiLCJpYXQiOjE2Njc1MDU0NjgsImV4cCI6MTY2NzUwOTA2OH0.fCWv0g7QTaDMLD1ZCMqAVhHCxbti6oZPOZKDllEg9Pyti4NX7Ax21-t2rmGYB2FhUYpo0vq-tbuceYwvJ9uhpw
+
+{
+    "answer": "2"
+}
+
+###
+GET http://localhost:8080/api/submitAnswer
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjIiLCJpYXQiOjE2Njc1MDU0NjgsImV4cCI6MTY2NzUwOTA2OH0.fCWv0g7QTaDMLD1ZCMqAVhHCxbti6oZPOZKDllEg9Pyti4NX7Ax21-t2rmGYB2FhUYpo0vq-tbuceYwvJ9uhpw
+
+{
+    "answer": "Electricity,Carbon,Water"
+}

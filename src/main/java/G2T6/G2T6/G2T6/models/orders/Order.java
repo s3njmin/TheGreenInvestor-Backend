@@ -7,7 +7,6 @@ import javax.validation.constraints.Size;
 
 import lombok.*;
 
-@Entity
 @Getter
 @Setter
 @ToString
@@ -23,7 +22,7 @@ public abstract class Order {
     public ArrayList<Integer> generateArray(int size) {
         // generate arraylist
         ArrayList<Integer> generatedArray = new ArrayList<>();
-        for (int i = 1; i < size; i++) {
+        for (int i = 0; i < size; i++) {
             generatedArray.add(i);
         }
 

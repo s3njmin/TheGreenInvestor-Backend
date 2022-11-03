@@ -12,5 +12,9 @@ public class StateNotFoundException extends RuntimeException{
         super("Could not find game stats " + id);
     }
 
+    public StateNotFoundException(String username) {
+        super("Could not find game stats " + username);
+    }
+
 }
 
