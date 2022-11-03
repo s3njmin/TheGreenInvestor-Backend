@@ -1,6 +1,10 @@
 
 ###
 GET http://localhost:8080/api/questions
+
+###
+GET http://localhost:8080/api/questionsAndOptions
+
 ###
 DELETE http://localhost:8080/api/questions/1/options/3
 

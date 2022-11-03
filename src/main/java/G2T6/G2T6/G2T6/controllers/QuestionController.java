@@ -29,35 +29,37 @@ public class QuestionController {
     // return all questions & options
     @GetMapping("/questionsAndOptions")
     public List<Question> getQuestionAndOptions() {
-
-        // randomly ordered indexes (0 to 9)
-        ArrayList<Integer> questionIndexes = new ArrayList<>();
-        Collections.addAll(questionIndexes, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
-        Collections.shuffle(questionIndexes);
         
-        // store 
+        // get the list of questions
         List<Question> questions = questionService.listQuestions();
-        List<Question> randomizedQuestions = new ArrayList<>();
 
-        for (int idx : questionIndexes) {
-            Question question = questions.get(idx);
+        // remove 2 out of first 10 questions (non-open ended)
+        Random random = new Random();
+        questions.remove(random.nextInt(10));
+        questions.remove(random.nextInt(9));
+
+        // shuffle their orders
+        Collections.shuffle(questions);
+
+        for (Question question : questions) {
+            // get list of options for each question in list
             List<Option> options = question.getOptions();
-            
+            int numOptions = options.size();
+
             // if NOT open ended question, randomly remove 2 options
-            if (!question.isOpenEnded()) {
-                Random random = new Random();
-                options.remove(random.nextInt(6));
-                options.remove(random.nextInt(5));
+            if (!question.isOpenEnded() && numOptions > 4) {
+                // remove until number of options <= 4
+                while (numOptions > 4) {
+                    options.remove(random.nextInt(numOptions));
+                    numOptions--;
+                }
             }
 
-            // set list of options after removing 2 options randomly
+            // update list of options after removing 2 options randomly
             question.setOptions(options);
-
-            // add question to randomized questions
-            randomizedQuestions.add(question);
         }
 
-        return randomizedQuestions;
+        return questions;
     }
 
     // return all questions & options
