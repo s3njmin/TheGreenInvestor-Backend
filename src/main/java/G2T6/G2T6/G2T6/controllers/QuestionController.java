@@ -49,8 +49,6 @@ public class QuestionController {
         ArrayList<QuestionOrder> questionOrderList = new ArrayList<>();
         questionOrders.findById(questionOrderIdx).ifPresent(questionOrderList::add);
 
-        System.out.println("------------------------"+questionOrderList.toString());
-
         List<Integer> questionOrder;
 
         // if one questionOrder is found, get index array
@@ -68,6 +66,12 @@ public class QuestionController {
             // get question corresponding to idx in questionOrder
             Question question = questions.get(questionId);
 
+            // if open ended question
+            if (question.isOpenEnded()) {
+                randomizedQuestions.add(question);
+                continue;
+            }
+
             // get list of options for each question in list
             List<Option> options = question.getOptions();
 
@@ -77,8 +81,6 @@ public class QuestionController {
             // if optionOrder is found by ID, store in list of OptionOrder
             ArrayList<OptionOrder> optionOrderList = new ArrayList<>();
             optionOrders.findById(optionOrderIdx).ifPresent(optionOrderList::add);
-
-            System.out.println("------------------------"+optionOrderList.toString());
 
             List<Integer> optionOrder;
 
@@ -96,7 +98,7 @@ public class QuestionController {
             }
 
             // update list of options after removing 2 options randomly
-            question.setOptions(options);
+            question.setOptions(randomizedOptions);
 
             // add question to randomizedQuestions
             randomizedQuestions.add(question);
