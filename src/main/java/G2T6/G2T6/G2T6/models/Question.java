@@ -49,4 +49,8 @@ public class Question {
         this.imageLink = imageLink;
         this.isOpenEnded = isOpenEnded;
     }
+
+    public Question(final String qn){
+        this.question = qn;
+    }
 }
