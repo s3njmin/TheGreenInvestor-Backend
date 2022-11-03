@@ -11,7 +11,8 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class OptionOrder extends Order {
+@AllArgsConstructor
+public class OptionOrder {
     // id is the primary key of option order in optionOrderRepository
     private @Id @GeneratedValue (strategy = GenerationType.IDENTITY) Long id;
 
@@ -24,14 +25,14 @@ public class OptionOrder extends Order {
     private QuestionOrder questionOrder;
     
     public OptionOrder() {
-        // generate array of 1 to 6
-        ArrayList<Integer> generatedArray = super.generateArray(6);  
+        // generate arraylist
+        ArrayList<Integer> generatedArray = new ArrayList<>();
+        Collections.addAll(generatedArray, 0, 1, 2, 3, 4, 5); 
         
         // set indexArray as manipulate array
         this.indexArray = manipulateArray(generatedArray);
     }
     
-    @Override
     public ArrayList<Integer> manipulateArray(ArrayList<Integer> array){
         // store input array as manipulatedArray
         ArrayList<Integer> manipulatedArray = array;
