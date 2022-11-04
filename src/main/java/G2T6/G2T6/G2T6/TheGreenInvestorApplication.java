@@ -57,28 +57,28 @@ public class TheGreenInvestorApplication {
 		// Questions
 		qList.add(new Question(
 				"Company stakeholders are pressuring you to eliminate paper waste in every office. Will you:",
-				"https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img1.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
+				"https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img1.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
 		qList.add(new Question("The company has earned a record profit for the year. You decide to use the money for:",
-				"https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img2.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
+				"https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img2.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
 		qList.add(new Question("It is 22 April, AKA Earth Day! Your company decide to celebrate in the following way:",
-				"https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img3.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
-		qList.add(new Question("Some employees are complaining that we can do better to reduce wastage at work. You decided to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img4.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
+				"https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img3.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
+		qList.add(new Question("Some employees are complaining that we can do better to reduce wastage at work. You decided to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img4.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
 
-		qList.add(new Question("An internal company sustainability report has found out that the distribution and logistics arm of the company can improve its sustainability practices. You decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img5.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
+		qList.add(new Question("An internal company sustainability report has found out that the distribution and logistics arm of the company can improve its sustainability practices. You decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img5.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
 		
-		qList.add(new Question("Company stakeholders have a set a goal to achieve a more sustainable supply chain within the next 5 years. You decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img6.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
+		qList.add(new Question("Company stakeholders have a set a goal to achieve a more sustainable supply chain within the next 5 years. You decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img6.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
 		
-		qList.add(new Question("Temperature has been rising considerably the past few months, and so has the electricity bill due to lower thermostat in the office. To combat this, you decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img7.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
+		qList.add(new Question("Temperature has been rising considerably the past few months, and so has the electricity bill due to lower thermostat in the office. To combat this, you decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img7.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
 		
 		// events
-		qList.add(new Question("The illegal logging of endagered trees in Imaginationland has gone viral. The public are pressuring companies to stop using wood from endangered species such as teak, mahagony and rosewood. As a company that uses these wood for manufacturing, you decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img8.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
-		qList.add(new Question("A worldwide pandemic has started and has impacted businesses everywhere. To ensure continued green sustainability practices within the company during trying times, you decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img9.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
-		qList.add(new Question("A new change in the government has led to a more aggressive push to achieve net zero carbon emission in the country. Facing pressure from the government, you decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img10.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
+		qList.add(new Question("The illegal logging of endagered trees in Imaginationland has gone viral. The public are pressuring companies to stop using wood from endangered species such as teak, mahagony and rosewood. As a company that uses these wood for manufacturing, you decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img8.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
+		qList.add(new Question("A worldwide pandemic has started and has impacted businesses everywhere. To ensure continued green sustainability practices within the company during trying times, you decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img9.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
+		qList.add(new Question("A new change in the government has led to a more aggressive push to achieve net zero carbon emission in the country. Facing pressure from the government, you decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img10.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
 
 
 		// open-ended
-		qList.add(new Question("Name 3 main causes of greenhouse gas emissions:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", CONSTANTVARIABLES.OPEN_ENDED));
-		qList.add(new Question("Name 3 countries that contribute the most to carbon emissions:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img12.jpg", CONSTANTVARIABLES.OPEN_ENDED));
+		qList.add(new Question("Name 3 main causes of greenhouse gas emissions:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img11.jpg", CONSTANTVARIABLES.OPEN_ENDED));
+		qList.add(new Question("Name 3 countries that contribute the most to carbon emissions:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img12.jpg", CONSTANTVARIABLES.OPEN_ENDED));
 		List<Option> oList = new ArrayList<Option>();
 
 		// Question 1's Options
