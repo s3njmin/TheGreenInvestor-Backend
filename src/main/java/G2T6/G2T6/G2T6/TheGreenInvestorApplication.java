@@ -44,14 +44,15 @@ public class TheGreenInvestorApplication {
 
 		List<Question> qList = new ArrayList<Question>();
 
+		// Dont think need this for now
 		// populate questionOrders
-		QuestionOrderRepository questionOrderRepository = ctx.getBean(QuestionOrderRepository.class);
-		OptionOrderRepository optionOrderRepository = ctx.getBean(OptionOrderRepository.class);
+		// QuestionOrderRepository questionOrderRepository = ctx.getBean(QuestionOrderRepository.class);
+		// OptionOrderRepository optionOrderRepository = ctx.getBean(OptionOrderRepository.class);
 
-		for (int i = 0; i < 10; i++) {
-			questionOrderRepository.save(new QuestionOrder());
-			optionOrderRepository.save(new OptionOrder());
-		}
+		// for (int i = 0; i < 10; i++) {
+		// 	questionOrderRepository.save(new QuestionOrder());
+		// 	optionOrderRepository.save(new OptionOrder());
+		// }
 
 		// Questions
 		qList.add(new Question(

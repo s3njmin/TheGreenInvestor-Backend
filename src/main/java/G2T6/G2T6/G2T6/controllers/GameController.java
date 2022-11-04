@@ -69,14 +69,19 @@ public class GameController {
                     .orElseThrow(() -> new UserNotFoundException(user.getUsername()));
 
             // get the most recent state of the user from the database by date and time
-            CurrentState currentState = stateRepository.findTopByUserOrderByDateTimeDesc(currUser)
+            // CurrentState currentState =
+            // stateRepository.findTopByUserOrderByDateTimeDesc(currUser)
+            // .orElseThrow(() -> new StateNotFoundException(currUser.getUsername()));
+
+            // get the most recent state of the user from database by state id
+            CurrentState currentState = stateRepository.findTopByUserOrderByIdDesc(currUser)
                     .orElseThrow(() -> new StateNotFoundException(currUser.getUsername()));
 
             if (currentState.getYearValue() == 10) {
                 gameService.prepareNextGame(currentState);
                 return ResponseEntity.ok(new MessageResponse("Game is over"));
             }
-                
+
             // get state of the user
             State state = currentState.getCurrentState();
 
@@ -117,7 +122,12 @@ public class GameController {
                     .orElseThrow(() -> new UserNotFoundException(user.getUsername()));
 
             // get the most recent state of the user from the database by date and time
-            CurrentState currentState = stateRepository.findTopByUserOrderByDateTimeDesc(currUser)
+            // CurrentState currentState =
+            // stateRepository.findTopByUserOrderByDateTimeDesc(currUser)
+            // .orElseThrow(() -> new StateNotFoundException(currUser.getUsername()));
+
+            // get the most recent state of the user from database by state id
+            CurrentState currentState = stateRepository.findTopByUserOrderByIdDesc(currUser)
                     .orElseThrow(() -> new StateNotFoundException(currUser.getUsername()));
 
             QuestionOrder questionOrder = currentState.getQuestionOrder();
