@@ -11,4 +11,5 @@ public interface QuestionService {
     Question addQuestion(final Question question);
     Question updateQuestion(final Long id, final Question question);
     void deleteQuestion(final Long id);
+    List<Question> initQuestions();
 }

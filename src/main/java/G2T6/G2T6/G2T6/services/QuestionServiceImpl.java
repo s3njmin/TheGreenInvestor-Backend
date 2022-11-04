@@ -2,8 +2,6 @@ package G2T6.G2T6.G2T6.services;
 
 import java.util.*;
 
-import G2T6.G2T6.G2T6.exceptions.OptionOrderIdInvalidException;
-import G2T6.G2T6.G2T6.exceptions.QuestionNotFoundException;
 import G2T6.G2T6.G2T6.models.Option;
 import G2T6.G2T6.G2T6.models.Question;
 import G2T6.G2T6.G2T6.models.orders.OptionOrder;
@@ -125,5 +123,41 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public void deleteQuestion(final Long id) {
         questionRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Question> initQuestions() {
+
+        // get the list of questions
+        List<Question> questions = listQuestions();
+
+        // remove 2 out of first 10 questions (non-open ended)
+        Random random = new Random();
+        questions.remove(random.nextInt(10));
+        questions.remove(random.nextInt(9));
+
+        // shuffle their orders
+        Collections.shuffle(questions);
+
+        for (Question question : questions) {
+            // get list of options for each question in list
+            List<Option> options = question.getOptions();
+            int numOptions = options.size();
+
+            // if NOT open ended question, randomly remove 2 options
+            if (!question.isOpenEnded() && numOptions > 4) {
+                // remove until number of options <= 4
+                while (numOptions > 4) {
+                    options.remove(random.nextInt(numOptions));
+                    numOptions--;
+                }
+            }
+
+            // update list of options after removing 2 options randomly
+            question.setOptions(options);
+        }
+
+        return questions;
+
     }
 }
