@@ -104,8 +104,8 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
           .antMatchers(HttpMethod.GET, "/api/questions/**", "/api/questions/*/options").permitAll()
           .antMatchers(HttpMethod.POST,"/api/questions", "/api/questions/*/options").permitAll()
           .antMatchers(HttpMethod.PUT,"/api/questions/*", "/api/questions/*/options/*").permitAll()
-          .antMatchers(HttpMethod.DELETE,"/api/questions/*", "/api/questions/*/options/*").hasRole("ADMIN")
-          //
+          .antMatchers(HttpMethod.DELETE,"/api/questions/*", "/api/questions/*/options/*").permitAll()
+          //           .antMatchers(HttpMethod.DELETE,"/api/questions/*", "/api/questions/*/options/*").hasRole("ADMIN")
 
           // authentication for states
           .antMatchers("/api/states/**", "/api/states").permitAll()

@@ -12,4 +12,5 @@ import org.springframework.stereotype.Repository;
 public interface OptionRepository extends JpaRepository <Option, Long> {
     List<Option> findByQuestionId(final Long questionId);
     Optional<Option> findByIdAndQuestionId(final Long id, final Long questionId);
+    void deleteById(final Long id);
 }
