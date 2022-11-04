@@ -78,8 +78,9 @@ public class GameController {
                     .orElseThrow(() -> new StateNotFoundException(currUser.getUsername()));
 
             if (currentState.getYearValue() == 10) {
+                GameResponse gameResponse = gameService.getEndGameInfo(currentState);
                 gameService.prepareNextGame(currentState);
-                return ResponseEntity.ok(new MessageResponse("Game is over"));
+                return ResponseEntity.ok(gameResponse);
             }
 
             // get state of the user

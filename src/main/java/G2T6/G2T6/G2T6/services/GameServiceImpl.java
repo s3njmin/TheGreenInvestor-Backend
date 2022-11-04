@@ -135,6 +135,26 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    public GameResponse getEndGameInfo(CurrentState currentState) {
+        // get past game stats
+        List<CurrentState> pastState = stateRepo.findByGameIdAndUserId(currentState.getGameId(),
+                currentState.getUser().getId());
+        List<GameStats> pastGameStats = new ArrayList<GameStats>();
+        // iterate through pastState if it exists
+        if (pastState != null) {
+            for (CurrentState state : pastState) {
+                pastGameStats.add(gameStatsRepo.findByCurrentState(state));
+            }
+        }
+
+        GameResponse gameResponse = new GameResponse(State.completed, null, null, false,
+                currentState.getYearValue(), pastGameStats,
+                currentState.getGameStats() == null ? 1.0 : currentState.getGameStats().getMultiplier());
+
+        return gameResponse;
+    }
+
+    @Override
     public GameStats getAnsweredStats(CurrentState currentState, int answerIdx) {
 
         QuestionOrder questionOrder = currentState.getQuestionOrder();
@@ -234,7 +254,7 @@ public class GameServiceImpl implements GameService {
         Long currGameId = currentState.getGameId();
         Long nextGameId = currGameId + 1;
 
-        //set gameId to next game
+        // set gameId to next game
         newState.setGameId(nextGameId);
         newState.setUser(currentState.getUser());
 
@@ -247,7 +267,6 @@ public class GameServiceImpl implements GameService {
 
         // save the new order
         questionOrderRepo.saveAndFlush(newOrder);
-
 
         stateRepo.saveAndFlush(newState);
     }

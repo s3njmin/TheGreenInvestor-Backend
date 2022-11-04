@@ -22,4 +22,5 @@ public interface GameService {
     //get optionsString for this question
     List<String> getOptionsList(Question question, OptionOrder optionOrderQ);
     void prepareNextGame(CurrentState currentState);
+    GameResponse getEndGameInfo(CurrentState currentState);
 }
