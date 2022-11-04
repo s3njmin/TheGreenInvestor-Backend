@@ -7,7 +7,7 @@ import G2T6.G2T6.G2T6.exceptions.QuestionOrderIdInvalidException;
 import G2T6.G2T6.G2T6.models.orders.QuestionOrder;
 import G2T6.G2T6.G2T6.repository.QuestionOrderRepository;
 
-import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class QuestionOrderServiceImplementation implements QuestionOrderService {
@@ -21,19 +21,16 @@ public class QuestionOrderServiceImplementation implements QuestionOrderService 
     @Override
     public QuestionOrder getQuestionOrder() {
         // pick a questionOrder from 1 to 10 (we store 10 permutations of question orders)
-        Random random = new Random();
-        long questionOrderIdx = random.nextLong(10) + 1;
+        long questionOrderIdx = ThreadLocalRandom.current().nextLong(10) + 1;
 
-        // if questionOrder is found by ID, store in list of QuestionOrder
-        ArrayList<QuestionOrder> questionOrderList = new ArrayList<>();
-        questionOrders.findById(questionOrderIdx).ifPresent(questionOrderList::add);
+        // get questionOrder corresponding to questionOrderIdx
+        QuestionOrder questionOrder = questionOrders.findById(questionOrderIdx).map(opOrder -> opOrder).orElse(null);
 
-        // if questionOrder at randomly generated index is not found, throw QuestionOrderIdInvalidException
-        if (questionOrderList.isEmpty()) {
+        // returns questionOrder if it is not null
+        if (questionOrder == null) {
             throw new QuestionOrderIdInvalidException(questionOrderIdx);
         }
 
-        // return randomly selected questionOrder
-        return questionOrderList.get(0);
+        return questionOrder;
     }
 }
