@@ -21,6 +21,18 @@ public class AnswerResponse2 {
     // cost impact of game stats
     private int costVal = 0;
 
+    // current cash in hand
+    private int currentCash = 0;
+
+    // current profitability/income/GPT
+    private int currentIncome = 0;
+
+    // current sustainability
+    private int currentEmission = 0;
+
+    // current morale
+    private int currentMorale = 0;
+
     // multiplier
     private double multiplier = 1.0;
 

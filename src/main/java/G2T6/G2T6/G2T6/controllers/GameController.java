@@ -68,15 +68,9 @@ public class GameController {
             // get the user object
             User currUser = userRepo.findByUsername(user.getUsername())
                     .orElseThrow(() -> new UserNotFoundException(user.getUsername()));
-                    
+
             CurrentState currentState = stateRepository.findTopByUserOrderByIdDesc(currUser)
                     .orElseThrow(() -> new StateNotFoundException(currUser.getUsername()));
-
-            if (currentState.getYearValue() == 10) {
-                GameResponse gameResponse = gameService.getEndGameInfo(currentState);
-                gameService.prepareNextGame(currentState);
-                return ResponseEntity.ok(gameResponse);
-            }
 
             // get state of the user
             State state = currentState.getCurrentState();
@@ -85,6 +79,14 @@ public class GameController {
             // user
             if (state == State.start) {
                 GameResponse gameResponse = gameService.initGame(currentState);
+                return ResponseEntity.ok(gameResponse);
+            }
+
+            if (currentState.getYearValue() == 10 || currentState.getGameStats().getCurrentCashInHand() <= 0
+                    || currentState.getGameStats().getCurrentMoraleVal() <= 0
+                    || currentState.getGameStats().getCurrentEmissionVal() <= 0) {
+                GameResponse gameResponse = gameService.getEndGameInfo(currentState);
+                gameService.prepareNextGame(currentState);
                 return ResponseEntity.ok(gameResponse);
             }
 
@@ -121,7 +123,9 @@ public class GameController {
             CurrentState currentState = stateRepository.findTopByUserOrderByIdDesc(currUser)
                     .orElseThrow(() -> new StateNotFoundException(currUser.getUsername()));
 
-            if (currentState.getYearValue() == 10) {
+            if (currentState.getYearValue() == 10 || currentState.getGameStats().getCurrentCashInHand() <= 0
+                    || currentState.getGameStats().getCurrentMoraleVal() <= 0
+                    || currentState.getGameStats().getCurrentEmissionVal() <= 0) {
                 return ResponseEntity.badRequest()
                         .body(new MessageResponse("Error: Game is over, please start a new game"));
             }
@@ -145,9 +149,17 @@ public class GameController {
                     // get gamestats of answered option
                     GameStats gameStats = gameService.getAnsweredStats(currentState, answer);
 
+                    // update current vals
+                    int currentCashInHand = gameStats.getCurrentCashInHand();
+                    int currentIncomeVal = gameStats.getCurrentIncomeVal();
+                    int currentEmissionVal = gameStats.getCurrentEmissionVal();
+                    int currentMoraleVal = gameStats.getCurrentMoraleVal();
+
                     AnswerResponse2 answerResponse = new AnswerResponse2(gameStats.getIncomeVal(),
                             gameStats.getMoraleVal(),
-                            gameStats.getEmissionVal(), gameStats.getCostVal(), gameStats.getMultiplier(), question.getOptions().get(answer).getFeedback());
+                            gameStats.getEmissionVal(), gameStats.getCostVal(), currentCashInHand, currentIncomeVal,
+                            currentEmissionVal, currentMoraleVal, gameStats.getMultiplier(),
+                            question.getOptions().get(answer).getFeedback());
 
                     // Next Question
                     gameService.nextQuestion(currentState);
@@ -162,9 +174,16 @@ public class GameController {
                     // get gamestats of answered option
                     GameStats gameStats = gameService.getAnsweredStats(currentState, answers);
 
+                    // update current vals
+                    int currentCashInHand = gameStats.getCurrentCashInHand();
+                    int currentIncomeVal = gameStats.getCurrentIncomeVal();
+                    int currentEmissionVal = gameStats.getCurrentEmissionVal();
+                    int currentMoraleVal = gameStats.getCurrentMoraleVal();
+
                     AnswerResponse2 answerResponse = new AnswerResponse2(gameStats.getIncomeVal(),
                             gameStats.getMoraleVal(),
-                            gameStats.getEmissionVal(), gameStats.getCostVal(), gameStats.getMultiplier(), "null");
+                            gameStats.getEmissionVal(), gameStats.getCostVal(), currentCashInHand, currentIncomeVal,
+                            currentEmissionVal, currentMoraleVal, gameStats.getMultiplier(), "null");
 
                     // Next Question
                     gameService.nextQuestion(currentState);

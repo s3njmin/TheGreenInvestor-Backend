@@ -51,9 +51,16 @@ public class GameServiceImpl implements GameService {
     public GameResponse initGame(CurrentState currentState) {
 
         QuestionOrder newOrder = new QuestionOrder();
+        GameStats newGameStats = new GameStats();
         currentState.setQuestionOrder(newOrder);
         // change to answering because user has started the game
         currentState.setCurrentState(State.answering);
+
+        // set up relationship for GameStats object
+        newGameStats.setCurrentState(currentState);
+        newGameStats.setUser(currentState.getUser());
+
+        currentState.setGameStats(newGameStats);
         ArrayList<CurrentState> states = new ArrayList<CurrentState>();
         states.add(currentState);
         newOrder.setCurrentStates(states);
@@ -79,24 +86,14 @@ public class GameServiceImpl implements GameService {
             if (question.isOpenEnded())
                 optionsName = null;
 
-            QuestionAndOptions questionsAndOptions = new QuestionAndOptions(questionName, question.getImageLink(), optionsName, isOpenEnded);
+            QuestionAndOptions questionsAndOptions = new QuestionAndOptions(questionName, question.getImageLink(),
+                    optionsName, isOpenEnded);
             questionAndOptions.add(questionsAndOptions);
         }
 
         int year = currentState.getYearValue();
 
-        // get past game stats
-        List<CurrentState> pastState = stateRepo.findByGameIdAndUserId(currentState.getGameId(),
-                currentState.getUser().getId());
-        List<GameStats> pastGameStats = new ArrayList<GameStats>();
-        // iterate through pastState if it exists
-        if (pastState != null) {
-            for (CurrentState state : pastState) {
-                pastGameStats.add(gameStatsRepo.findByCurrentState(state));
-            }
-        }
-
-        GameResponse gameResponse = new GameResponse(State.start, questionAndOptions, year, pastGameStats, 1.0);
+        GameResponse gameResponse = new GameResponse(State.start, questionAndOptions, year, null, 1.0);
 
         return gameResponse;
     }
@@ -121,7 +118,8 @@ public class GameServiceImpl implements GameService {
             if (question.isOpenEnded())
                 optionsName = null;
 
-            QuestionAndOptions questionsAndOptions = new QuestionAndOptions(questionName, question.getImageLink(), optionsName, isOpenEnded);
+            QuestionAndOptions questionsAndOptions = new QuestionAndOptions(questionName, question.getImageLink(),
+                    optionsName, isOpenEnded);
             questionAndOptions.add(questionsAndOptions);
         }
 
@@ -141,7 +139,6 @@ public class GameServiceImpl implements GameService {
 
         return gameResponse;
     }
-
 
     @Override
     public GameResponse getEndGameInfo(CurrentState currentState) {
@@ -181,13 +178,27 @@ public class GameServiceImpl implements GameService {
         int incomeImpact = option.getIncomeImpact();
         int costImpact = option.getCostImpact();
 
-        GameStats gameStats = new GameStats(sustainabilityImpact, moraleImpact, incomeImpact, costImpact,
-                currentState.getUser(), currentState,
-                currentState.getGameStats() == null ? 1.0 : currentState.getGameStats().getMultiplier());
+        // currentGameStats is not supposed to be null, replace over existing
+        // placeholder currentGameStats
+        GameStats currentGameStats = currentState.getGameStats();
+        int newCashInHand = currentGameStats.getCurrentCashInHand() + currentGameStats.getCurrentIncomeVal() - costImpact;
+        int newMorale = currentGameStats.getCurrentMoraleVal() + moraleImpact;
+        int newSustainability = currentGameStats.getCurrentEmissionVal() + sustainabilityImpact;
+        int newIncomeImpact = currentGameStats.getCurrentIncomeVal() + incomeImpact;
+        currentGameStats.setEmissionVal(sustainabilityImpact);
+        currentGameStats.setMoraleVal(moraleImpact);
+        currentGameStats.setIncomeVal(incomeImpact);
+        currentGameStats.setCostVal(costImpact);
+        currentGameStats.setCurrentCashInHand(newCashInHand);
+        currentGameStats.setCurrentEmissionVal(newSustainability);
+        currentGameStats.setCurrentIncomeVal(newIncomeImpact);
+        currentGameStats.setCurrentMoraleVal(newMorale);
+        currentGameStats.setMultiplier(1.0);
 
-        gameStatsRepo.saveAndFlush(gameStats);
+        gameStatsRepo.saveAndFlush(currentGameStats);
 
-        return gameStats;
+        return currentGameStats;
+
     }
 
     @Override
@@ -224,29 +235,35 @@ public class GameServiceImpl implements GameService {
             // System.out.println("average score: " + averageScore);
         }
 
+        GameStats currentGameStats = currentState.getGameStats();
 
-        GameStats gameStats = new GameStats(0, 0, 0, 0,
-                currentState.getUser(), currentState, (averageScore + 1.0));
+        // currentGameStats is not supposed to be null, replace over existing
+        // placeholder currentGameStats
+        currentGameStats.setMultiplier(averageScore + 1.0);
 
-        gameStatsRepo.saveAndFlush(gameStats);
+        gameStatsRepo.saveAndFlush(currentGameStats);
 
-        return gameStats;
+        return currentGameStats;
+
     }
 
     @Override
     public void nextQuestion(CurrentState currentState) {
 
-        // QuestionOrder newOrder = new
-        // QuestionOrder(currentState.getQuestionOrder().getIndexArray(),
-        // currentState.getQuestionOrder().getOptionOrders());
+        GameStats oldGameStats = currentState.getGameStats();
 
         int year = currentState.getYearValue(); // also can be used for question index it is currently on
         int nextYear = year + 1;
 
         CurrentState newState = new CurrentState(currentState.getGameId(), currentState.getUser(), nextYear,
                 currentState.getCurrentState(), currentState.getQuestionOrder());
-        // newOrder.setCurrentState(newState);
-        // newState.setYearValue(nextYear);
+
+        GameStats newGameStats = new GameStats(currentState.getUser(), newState, 1.0,
+                oldGameStats.getCurrentEmissionVal(), oldGameStats.getCurrentMoraleVal(),
+                oldGameStats.getCurrentIncomeVal(),
+                oldGameStats.getCurrentCashInHand());
+
+        newState.setGameStats(newGameStats);
         stateRepo.saveAndFlush(newState);
 
     }
