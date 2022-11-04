@@ -18,14 +18,8 @@ public class GameResponse {
     // latest state
     private State state;
 
-    // latest question
-    private String questionName;
-
-    // options for the latest question
-    private List<String> optionsName;
-
-    // is open ended?
-    private boolean openEnded;
+    // list of questions and options
+    private List<QuestionAndOptions> questionsAndOptions;
 
     /// current year
     private int year;

@@ -24,4 +24,7 @@ public class AnswerResponse2 {
     // multiplier
     private double multiplier = 1.0;
 
+    // feedback
+    private String feedback = "";
+
 }

@@ -16,6 +16,9 @@ public class QuestionAndOptions {
     // latest question
     private String questionName;
 
+    // image path
+    private String imagePath;
+
     // options for the latest question
     private List<String> optionsName;
 

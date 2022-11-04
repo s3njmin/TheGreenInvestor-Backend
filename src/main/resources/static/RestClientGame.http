@@ -22,27 +22,23 @@ Content-Type: application/json
 
 ### get game info about this user
 GET http://localhost:8080/api/gameInfo
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjIiLCJpYXQiOjE2Njc1NDQ4MjUsImV4cCI6MTY2NzU0ODQyNX0.uZ6PohfZpU8YU8qu0gEpE7GI4U1FvIFnq7LCL0cYpMg-8vL26zU7NsHvjnH05SvFNHkv9Yn-h4gIFBQmjMpWZw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjIiLCJpYXQiOjE2Njc1NTMyNDIsImV4cCI6MTY2NzU1Njg0Mn0.f-23MliT_50DF0TiQk5fVFl30YlBM09ibiRx_IDOxUfwVHTipn96edaD9a_5AcH69u4LrMQQlyPTqn7V1YywSQ
 ###
 
-### get game info about this user version 2
-GET http://localhost:8080/api/gameInfo2
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjIiLCJpYXQiOjE2Njc1NDQ4MjUsImV4cCI6MTY2NzU0ODQyNX0.uZ6PohfZpU8YU8qu0gEpE7GI4U1FvIFnq7LCL0cYpMg-8vL26zU7NsHvjnH05SvFNHkv9Yn-h4gIFBQmjMpWZw
-###
 
 ### submit mcq answer #index from 0,1,2,3
-GET http://localhost:8080/api/submitAnswer
+POST http://localhost:8080/api/submitAnswer
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjIiLCJpYXQiOjE2Njc1NDM4ODcsImV4cCI6MTY2NzU0NzQ4N30.ySFmjNCQ0CyLGFShjNmCa4PVoej7Go8vxJCSgCOaDEqkNWrwJeemP7qtcMx_I7qHLDeAjMT_md5mPnyPMfMm1w
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjIiLCJpYXQiOjE2Njc1NTMyNDIsImV4cCI6MTY2NzU1Njg0Mn0.f-23MliT_50DF0TiQk5fVFl30YlBM09ibiRx_IDOxUfwVHTipn96edaD9a_5AcH69u4LrMQQlyPTqn7V1YywSQ
 
 {
     "answer": "2"
 }
 
 ### submit open ended answer
-GET http://localhost:8080/api/submitAnswer
+POST http://localhost:8080/api/submitAnswer
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjIiLCJpYXQiOjE2Njc1NDQ4MjUsImV4cCI6MTY2NzU0ODQyNX0.uZ6PohfZpU8YU8qu0gEpE7GI4U1FvIFnq7LCL0cYpMg-8vL26zU7NsHvjnH05SvFNHkv9Yn-h4gIFBQmjMpWZw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjIiLCJpYXQiOjE2Njc1NTMyNDIsImV4cCI6MTY2NzU1Njg0Mn0.f-23MliT_50DF0TiQk5fVFl30YlBM09ibiRx_IDOxUfwVHTipn96edaD9a_5AcH69u4LrMQQlyPTqn7V1YywSQ
 
 {
     "answer": "Electricity,Carbon,Water"

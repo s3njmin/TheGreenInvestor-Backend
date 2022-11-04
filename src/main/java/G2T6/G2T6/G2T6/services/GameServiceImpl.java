@@ -15,7 +15,7 @@ import G2T6.G2T6.G2T6.models.Question;
 import G2T6.G2T6.G2T6.models.orders.OptionOrder;
 import G2T6.G2T6.G2T6.models.orders.QuestionOrder;
 import G2T6.G2T6.G2T6.payload.response.GameResponse;
-import G2T6.G2T6.G2T6.payload.response.GameResponse2;
+import G2T6.G2T6.G2T6.payload.response.GameResponse;
 import G2T6.G2T6.G2T6.payload.response.QuestionAndOptions;
 import G2T6.G2T6.G2T6.repository.GameStatsRepository;
 import G2T6.G2T6.G2T6.repository.OptionRepository;
@@ -58,60 +58,6 @@ public class GameServiceImpl implements GameService {
         states.add(currentState);
         newOrder.setCurrentStates(states);
 
-        // save the new order
-        questionOrderRepo.saveAndFlush(newOrder);
-
-        // right now it reproduce same option list NOTE
-        // System.out.println(newOrder.getIndexArray());
-        // for (int i = 0; i < newOrder.getOptionOrders().size(); i++) {
-        // System.out.println(newOrder.getOptionOrders().get(0).getIndexArray());
-        // }
-
-        stateRepo.saveAndFlush(currentState);
-
-        QuestionOrder questionOrder = currentState.getQuestionOrder();
-
-        Long questionNumber = (long) questionOrder.getIndexArray().get(0);
-
-        Question question = questionRepo.findById(questionNumber + 1)
-                .orElseThrow(() -> new QuestionNotFoundException(questionNumber));
-
-        String questionName = question.getQuestion();
-        List<String> optionsName = getOptionsList(question, questionOrder.getOptionOrders().get(0));
-        boolean isOpenEnded = question.isOpenEnded();
-        int year = currentState.getYearValue();
-
-        // get past game stats
-        List<CurrentState> pastState = stateRepo.findByGameIdAndUserId(currentState.getGameId(),
-                currentState.getUser().getId());
-        List<GameStats> pastGameStats = new ArrayList<GameStats>();
-        // iterate through pastState if it exists
-        if (pastState != null) {
-            for (CurrentState state : pastState) {
-                pastGameStats.add(gameStatsRepo.findByCurrentState(state));
-            }
-        }
-
-        if (question.isOpenEnded())
-            optionsName = null;
-
-        GameResponse gameResponse = new GameResponse(State.start, questionName, optionsName, isOpenEnded, year,
-                pastGameStats, 1.0);
-
-        return gameResponse;
-    }
-
-    @Override
-    public GameResponse2 initGame2(CurrentState currentState) {
-
-        QuestionOrder newOrder = new QuestionOrder();
-        currentState.setQuestionOrder(newOrder);
-        // change to answering because user has started the game
-        currentState.setCurrentState(State.answering);
-        ArrayList<CurrentState> states = new ArrayList<CurrentState>();
-        states.add(currentState);
-        newOrder.setCurrentStates(states);
-
         questionOrderRepo.saveAndFlush(newOrder);
 
         stateRepo.saveAndFlush(currentState);
@@ -133,7 +79,7 @@ public class GameServiceImpl implements GameService {
             if (question.isOpenEnded())
                 optionsName = null;
 
-            QuestionAndOptions questionsAndOptions = new QuestionAndOptions(questionName, optionsName, isOpenEnded);
+            QuestionAndOptions questionsAndOptions = new QuestionAndOptions(questionName, question.getImageLink(), optionsName, isOpenEnded);
             questionAndOptions.add(questionsAndOptions);
         }
 
@@ -150,48 +96,13 @@ public class GameServiceImpl implements GameService {
             }
         }
 
-        GameResponse2 gameResponse = new GameResponse2(State.start, questionAndOptions, year, pastGameStats, 1.0);
+        GameResponse gameResponse = new GameResponse(State.start, questionAndOptions, year, pastGameStats, 1.0);
 
         return gameResponse;
     }
 
     @Override
     public GameResponse getGameInfo(CurrentState currentState) {
-        QuestionOrder questionOrder = currentState.getQuestionOrder();
-        int year = currentState.getYearValue(); // also can be used for question index it is currently on
-
-        Long questionNumber = (long) questionOrder.getIndexArray().get(year);
-
-        Question question = questionRepo.findById(questionNumber + 1)
-                .orElseThrow(() -> new QuestionNotFoundException(questionNumber));
-
-        String questionName = question.getQuestion();
-        List<String> optionsName = getOptionsList(question, questionOrder.getOptionOrders().get(year));
-        boolean isOpenEnded = question.isOpenEnded();
-
-        // get past game stats
-        List<CurrentState> pastState = stateRepo.findByGameIdAndUserId(currentState.getGameId(),
-                currentState.getUser().getId());
-        List<GameStats> pastGameStats = new ArrayList<GameStats>();
-        // iterate through pastState if it exists
-        if (pastState != null) {
-            for (CurrentState state : pastState) {
-                pastGameStats.add(gameStatsRepo.findByCurrentState(state));
-            }
-        }
-
-        if (question.isOpenEnded())
-            optionsName = null;
-
-        GameResponse gameResponse = new GameResponse(currentState.getCurrentState(), questionName, optionsName,
-                isOpenEnded, year, pastGameStats,
-                currentState.getGameStats() == null ? 1.0 : currentState.getGameStats().getMultiplier());
-
-        return gameResponse;
-    }
-
-    @Override
-    public GameResponse2 getGameInfo2(CurrentState currentState) {
 
         QuestionOrder questionOrder = currentState.getQuestionOrder();
 
@@ -210,7 +121,7 @@ public class GameServiceImpl implements GameService {
             if (question.isOpenEnded())
                 optionsName = null;
 
-            QuestionAndOptions questionsAndOptions = new QuestionAndOptions(questionName, optionsName, isOpenEnded);
+            QuestionAndOptions questionsAndOptions = new QuestionAndOptions(questionName, question.getImageLink(), optionsName, isOpenEnded);
             questionAndOptions.add(questionsAndOptions);
         }
 
@@ -225,7 +136,7 @@ public class GameServiceImpl implements GameService {
             }
         }
 
-        GameResponse2 gameResponse = new GameResponse2(currentState.getCurrentState(), questionAndOptions,
+        GameResponse gameResponse = new GameResponse(currentState.getCurrentState(), questionAndOptions,
                 currentState.getYearValue(), pastGameStats, 1.0);
 
         return gameResponse;
@@ -245,9 +156,8 @@ public class GameServiceImpl implements GameService {
             }
         }
 
-        GameResponse gameResponse = new GameResponse(State.completed, null, null, false,
-                currentState.getYearValue(), pastGameStats,
-                currentState.getGameStats() == null ? 1.0 : currentState.getGameStats().getMultiplier());
+        GameResponse gameResponse = new GameResponse(State.completed, null, currentState.getYearValue(),
+                pastGameStats, currentState.getGameStats() == null ? 1.0 : currentState.getGameStats().getMultiplier());
 
         return gameResponse;
     }
@@ -283,8 +193,6 @@ public class GameServiceImpl implements GameService {
     @Override
     public GameStats getAnsweredStats(CurrentState currentState, String[] answers) {
 
-        System.out.println("ran here 1");
-
         QuestionOrder questionOrder = currentState.getQuestionOrder();
         int year = currentState.getYearValue(); // also can be used for question index it is currently on
 
@@ -301,7 +209,7 @@ public class GameServiceImpl implements GameService {
 
         // loop through answer array
         for (String answerString : answers) {
-            System.out.println("ran here 2");
+
             // System.out.println(answerString);
             for (Option option : answerList) {
                 double score = stringSimilarityServiceImpl.score(answerString, option.getOption());
@@ -313,13 +221,12 @@ public class GameServiceImpl implements GameService {
             }
             averageScore += highestScore / 3.0;
             highestScore = 0;
-            System.out.println("average score: " + averageScore);
+            // System.out.println("average score: " + averageScore);
         }
 
-        System.out.println("ran here 3");
 
         GameStats gameStats = new GameStats(0, 0, 0, 0,
-                currentState.getUser(), currentState, averageScore);
+                currentState.getUser(), currentState, (averageScore + 1.0));
 
         gameStatsRepo.saveAndFlush(gameStats);
 
