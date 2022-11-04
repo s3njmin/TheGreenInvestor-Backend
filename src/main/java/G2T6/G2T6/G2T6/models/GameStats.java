@@ -8,6 +8,8 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Getter
 @Setter
@@ -18,26 +20,36 @@ public class GameStats implements Comparable<GameStats>{
 
     // game stats's id and primary key of the game stats database table
     @GeneratedValue(strategy = GenerationType.AUTO) @Id
+    @JsonIgnore
     private Long id;
 
     // income value of game stats
-    @NotNull
+    @Min(-9999) @Max(9999) @NotNull
     private int incomeVal = 0;
 
     // morale value of game stats
-    @Min(0) @Max(100) @NotNull
+    @Min(-9999) @Max(9999) @NotNull
     private int moraleVal = 0;
 
-    // emission value of game stats
-    @Min(0) @Max(100) @NotNull
+    // sustainability value of game stats
+    @Min(-9999) @Max(9999) @NotNull
     private int emissionVal = 0;
+
+    // cost impact of game stats
+    @Min(-9999) @Max(9999) @NotNull
+    private int costVal = 0;
+
+    // multiplier
+    private double multiplier = 1.0;
 
     // current state for this game stats
     @OneToOne
+    @JsonIgnore
     @JoinColumn(name = "currentState_id")
     private CurrentState currentState;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -72,7 +84,16 @@ public class GameStats implements Comparable<GameStats>{
     }
 
     public CurrentState getCurrentState(){
-        return this.currentState;
+        return this.currentState;    
+    }
+    public GameStats(int emission, int morale, int income, int cost, User user, CurrentState currentState, double multiplier){
+        this.incomeVal = income;
+        this.moraleVal = morale;
+        this.emissionVal = emission;
+        this.costVal = cost;
+        this.user = user;
+        this.currentState = currentState;
+        this.multiplier = multiplier;
     }
 
     /**

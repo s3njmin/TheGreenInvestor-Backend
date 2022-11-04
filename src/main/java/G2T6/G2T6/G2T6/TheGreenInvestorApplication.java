@@ -23,13 +23,13 @@ public class TheGreenInvestorApplication {
 
 	public static void saveORepo(OptionRepository oRepo, List<Option> optionList) {
 		for (Option option : optionList) {
-			oRepo.save(option);
+			oRepo.saveAndFlush(option);
 		}
 	}
 
 	public static void saveARepo(ArticleRepository aRepo, List<Article> articleList) {
 		for (Article article : articleList) {
-			aRepo.save(article);
+			aRepo.saveAndFlush(article);
 		}
 	}
 
@@ -44,14 +44,15 @@ public class TheGreenInvestorApplication {
 
 		List<Question> qList = new ArrayList<Question>();
 
+		// Dont think need this for now
 		// populate questionOrders
-		QuestionOrderRepository questionOrderRepository = ctx.getBean(QuestionOrderRepository.class);
-		OptionOrderRepository optionOrderRepository = ctx.getBean(OptionOrderRepository.class);
+		// QuestionOrderRepository questionOrderRepository = ctx.getBean(QuestionOrderRepository.class);
+		// OptionOrderRepository optionOrderRepository = ctx.getBean(OptionOrderRepository.class);
 
-		for (int i = 0; i < 10; i++) {
-			questionOrderRepository.save(new QuestionOrder());
-			optionOrderRepository.save(new OptionOrder());
-		}
+		// for (int i = 0; i < 10; i++) {
+		// 	questionOrderRepository.save(new QuestionOrder());
+		// 	optionOrderRepository.save(new OptionOrder());
+		// }
 
 		// Questions
 		qList.add(new Question(
@@ -88,7 +89,7 @@ public class TheGreenInvestorApplication {
 		oList.add(new Option("Put a limit on each employee on how much paper they can use", "Limiting employees paper use is one way of eliminating paper waste, however it is counter productive to your employees work. Morale has dropped considerably", qList.get(0), 60, -15, 2, 0));
 		oList.add(new Option("Do nothing", "You decided to do nothing to combat paper waste within the company", qList.get(0), -60, 0, 0, 0));
 		qList.get(0).setOptions(oList);
-		qRepo.save(qList.get(0));
+		qRepo.saveAndFlush(qList.get(0));
 		saveORepo(oRepo, oList);
 		oList.clear();
 
@@ -100,7 +101,7 @@ public class TheGreenInvestorApplication {
 		oList.add(new Option("Expand the business further by hiring new people and machinery", "Expanding our business in an unsustainable manner will affect the companys long term vision for sustainability.", qList.get(1), -180, 0, 10, 35));
 		oList.add(new Option("Do nothing", "Your employees did not feel rewarded, and morale has dropped slightly.", qList.get(1), 0, -5, 0, 0));
 		qList.get(1).setOptions(oList);
-		qRepo.save(qList.get(1));
+		qRepo.saveAndFlush(qList.get(1));
 		saveORepo(oRepo, oList);
 		oList.clear();
 		
@@ -112,7 +113,7 @@ public class TheGreenInvestorApplication {
 		oList.add(new Option("Educate your employees on importance of sustainability", "Educating your employees on sustainably can help promote a green culture mentality around the company.", qList.get(2), 60, 0, 0, 5));
 		oList.add(new Option("Do nothing", "You decide to do nothing...", qList.get(2), 0, 0, 0, 0));
 		qList.get(2).setOptions(oList);
-		qRepo.save(qList.get(2));
+		qRepo.saveAndFlush(qList.get(2));
 		saveORepo(oRepo, oList);
 		oList.clear();
 
@@ -124,7 +125,7 @@ public class TheGreenInvestorApplication {
 		oList.add(new Option("Place posters around the office that advocate for importance of preventing wastage", "Placing sustainability and climate posters around the office is a good way to educate and promote importance of sustainability, but some employees find it annoying", qList.get(3), 60, -5, 0, 1));
 		oList.add(new Option("Do nothing", "You decided to do nothing to address your employees complaints...", qList.get(3), 0, -15, 0, 0));
 		qList.get(3).setOptions(oList);
-		qRepo.save(qList.get(3));
+		qRepo.saveAndFlush(qList.get(3));
 		saveORepo(oRepo, oList);
 		oList.clear();
 
@@ -136,7 +137,7 @@ public class TheGreenInvestorApplication {
 		oList.add(new Option("Improve on existing logistics operation to be more efficient", "Streamlining existing logistics operation ensure efficiency and effectiveness, which could prevent time, energy and material waste", qList.get(4), 60, 5, 2, 10));
 		oList.add(new Option("Ignore the report", "You decided to ignore the report...", qList.get(4), -120, 0, 0, 0));
 		qList.get(4).setOptions(oList);
-		qRepo.save(qList.get(4));
+		qRepo.saveAndFlush(qList.get(4));
 		saveORepo(oRepo, oList);
 		oList.clear();
 
@@ -148,7 +149,7 @@ public class TheGreenInvestorApplication {
 		oList.add(new Option("Install more plants around the warehouse", "Unforunately, having more greenery around the warehouse contributes little to sustainability. On the bright side, your employees seem more happy!", qList.get(5), 0, 5, 0, 5));
 		oList.add(new Option("Ignore the goal", "You decided to ignore the goal set by your stakeholders...", qList.get(5), 0, 0, 0, 0));
 		qList.get(5).setOptions(oList);
-		qRepo.save(qList.get(5));
+		qRepo.saveAndFlush(qList.get(5));
 		saveORepo(oRepo, oList);
 		oList.clear();
 		
@@ -160,7 +161,7 @@ public class TheGreenInvestorApplication {
 		oList.add(new Option("Upgrade to a more eco-friendly air conditioner", "Upgrading to a more eco-friendly air conditioner helps reduce the companies carbon footprint", qList.get(6), 180, 5, 0, 10));
 		oList.add(new Option("Implement nudist company policy", "NUDIST POLICY? Some employees might be happy, but I think you belong in jail", qList.get(6), 0, -100, 0, 0));
 		qList.get(6).setOptions(oList);
-		qRepo.save(qList.get(6));
+		qRepo.saveAndFlush(qList.get(6));
 		saveORepo(oRepo, oList);
 		oList.clear();
 
@@ -172,7 +173,7 @@ public class TheGreenInvestorApplication {
 		oList.add(new Option("Stop using wood entirely in your products", "Finding alternative material for your products is extremely costly and will affect future sales", qList.get(7), 60, 0, -15, 35));
 		oList.add(new Option("Close down your business entirely", "You decide to close down your busines... Game over?", qList.get(7), 0, 0, 0, 0));
 		qList.get(7).setOptions(oList);
-		qRepo.save(qList.get(7));
+		qRepo.saveAndFlush(qList.get(7));
 		saveORepo(oRepo, oList);
 		oList.clear();
 		
@@ -184,7 +185,7 @@ public class TheGreenInvestorApplication {
 		oList.add(new Option("Make a statement declaring the pandemic is fake", "Unfortunately, the pandemic is as real as it gets. The public and the employee has lost faith in you and the company. On the other hand, you have gained a following of pseudointellectuals who believe in ridiculous conspiracies", qList.get(8), 0, -50, -20, 0));
 		oList.add(new Option("Redesign and optimise business operations during pandemic", "Analysing and tweaking business operations is ideal now that economic landscape has changed due to the pandemic", qList.get(8), 0, 10, 10, 10));
 		qList.get(8).setOptions(oList);
-		qRepo.save(qList.get(8));
+		qRepo.saveAndFlush(qList.get(8));
 		saveORepo(oRepo, oList);
 		oList.clear();
 		
@@ -196,7 +197,7 @@ public class TheGreenInvestorApplication {
 		oList.add(new Option("Dedicate more time and resources for more sustainability initiatives within the company", "With more investment into internal sustainability policies, we ensure the company is aligned with the government green goals", qList.get(9), 320, 0, 0, 15));
 		oList.add(new Option("Do nothing", "You decide to do nothing, and the goverment decided to impose a hefty green tax on the company for your inactivity", qList.get(9), -180, 0, -20, 0));
 		qList.get(9).setOptions(oList);
-		qRepo.save(qList.get(9));
+		qRepo.saveAndFlush(qList.get(9));
 		saveORepo(oRepo, oList);
 		oList.clear();
 
@@ -208,7 +209,7 @@ public class TheGreenInvestorApplication {
 		oList.add(new Option("Buildings", "null", qList.get(10)));
 		oList.add(new Option("Extraction/Processing of fossil fuels", "null", qList.get(10)));
 		qList.get(10).setOptions(oList);
-		qRepo.save(qList.get(10));
+		qRepo.saveAndFlush(qList.get(10));
 		saveORepo(oRepo, oList);
 		oList.clear();
 	
@@ -220,7 +221,7 @@ public class TheGreenInvestorApplication {
 		oList.add(new Option("Japan", "null", qList.get(11)));
 		oList.add(new Option("Germany", "null", qList.get(11)));
 		qList.get(11).setOptions(oList);
-		qRepo.save(qList.get(11));
+		qRepo.saveAndFlush(qList.get(11));
 		saveORepo(oRepo, oList);
 		oList.clear();
 
@@ -236,8 +237,36 @@ public class TheGreenInvestorApplication {
 				"https://www.espn.com.sg/football/manchester-united-engman_utd/story/4772297/ten-hag-defends-subbing-ronaldo-in-man-united-draw-we-have-to-rotate"));
 		saveARepo(aRepo, aList);
 
-		User ck = new User( "ckasdasd", "ck@gmail.com", "Password1232", "GUEST");
-		User kami = new User( "kamisama", "kami@gmail.com", "Password1233", "ROLE_USER");
+//		User ck = new User( "ckasdasd", "ck@gmail.com", "Password1232", "GUEST");
+//		User kami = new User( "kamisama", "kami@gmail.com", "Password1233", "ROLE_USER");
+//		List<CurrentState> ckStates = new ArrayList<>();
+//		CurrentState currentState01 = new CurrentState(1l, ck, 0, State.start, 0, "");
+//		ckStates.add(currentState01);
+//
+//		List<GameStats> ckStats = new ArrayList<>();
+//		GameStats stats01 = new GameStats(1l, 0, 0, 0, ck, currentState01);
+//		ckStats.add(stats01);
+//
+//		currentState01.setGameStats(stats01);
+//
+//		List<CurrentState> kamiStates = new ArrayList<>();
+//		CurrentState currentState02 = new CurrentState(2l, kami, 0, State.start, 0, "");
+//		kamiStates.add(currentState02);
+//
+//		List<GameStats> kamiStats = new ArrayList<>();
+//		GameStats stats02 = new GameStats(2l, 0, 0, 0, kami, currentState02);
+//		kamiStats.add(stats02);
+//
+//		currentState02.setGameStats(stats02);
+//
+//		ck.setCurrentState(ckStates);
+//		ck.setGameStats(ckStats);
+//		kami.setCurrentState(kamiStates);
+//		kami.setGameStats(kamiStats);
+//
+//		UserRepository testRepo = ctx.getBean(UserRepository.class);
+//		testRepo.saveAndFlush(ck);
+//		testRepo.saveAndFlush(kami);
 
 		GameStatsRepository gRepo = ctx.getBean(GameStatsRepository.class);
 		StateRepository sRepo = ctx.getBean(StateRepository.class);

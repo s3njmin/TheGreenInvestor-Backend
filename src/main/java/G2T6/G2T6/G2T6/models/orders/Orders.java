@@ -7,7 +7,6 @@ import javax.validation.constraints.Size;
 
 import lombok.*;
 
-@Entity
 @Getter
 @Setter
 @ToString

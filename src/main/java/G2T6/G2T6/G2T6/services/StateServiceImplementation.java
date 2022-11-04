@@ -4,6 +4,8 @@ package G2T6.G2T6.G2T6.services;
 import G2T6.G2T6.G2T6.misc.CONSTANTVARIABLES;
 import G2T6.G2T6.G2T6.misc.State;
 import G2T6.G2T6.G2T6.models.CurrentState;
+import G2T6.G2T6.G2T6.models.Question;
+import G2T6.G2T6.G2T6.models.orders.QuestionOrder;
 import G2T6.G2T6.G2T6.repository.StateRepository;
 import G2T6.G2T6.G2T6.repository.UserRepository;
 
@@ -97,6 +99,8 @@ public class StateServiceImplementation implements StateService {
         CurrentState newState = new CurrentState();
         newState.changeState(CONSTANTVARIABLES.DEFAULTSTATE);
         newState.setYearValue(CONSTANTVARIABLES.DEFAULTYEAR);
+        //set default game ID
+        newState.setGameId(CONSTANTVARIABLES.DEFAULTGAMEID);
         return newState;
     }
 

@@ -19,6 +19,10 @@ public class OptionOrder {
     // verify indexArray is 4
     @Size(min = 4, max = 4)
     private ArrayList<Integer> indexArray;
+
+    @ManyToOne
+    @JoinColumn(name = "question_id")
+    private QuestionOrder questionOrder;
     
     public OptionOrder() {
         // generate arraylist
@@ -39,6 +43,9 @@ public class OptionOrder {
         // remove the first two elements in shuffled array 
         manipulatedArray.remove(0);
         manipulatedArray.remove(0);
+
+        // resize the indexArray size to 4
+        manipulatedArray.trimToSize();
 
         return manipulatedArray;
     }
