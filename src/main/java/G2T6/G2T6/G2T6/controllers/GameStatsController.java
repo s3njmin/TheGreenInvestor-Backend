@@ -11,6 +11,8 @@ import G2T6.G2T6.G2T6.models.GameStats;
 import G2T6.G2T6.G2T6.repository.GameStatsRepository;
 import G2T6.G2T6.G2T6.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,14 +52,13 @@ public class GameStatsController {
     @GetMapping("/gameStats/{count}")
     public List<GameStats> getAllTopNGameStats(@PathVariable (value = "count") int count){
         List<GameStats> completedStats = filterAllCompletedGameStats(getAllGameStats());
-
         enoughCount(count, completedStats.size());
 
         Collections.sort(completedStats);
 
         List<GameStats> completedStatsWithOutDuplicate = filterUniqueGameStats(completedStats);
 
-        enoughCount(count, completedStats.size());
+        enoughCount(count, completedStatsWithOutDuplicate.size());
 
         return  completedStatsWithOutDuplicate.subList(0, count);
     }
@@ -79,7 +80,7 @@ public class GameStatsController {
     public List<GameStats> filterAllCompletedGameStats(List<GameStats> gameStats){
         List<GameStats> completedStats = new ArrayList<>();
         for(GameStats gs: gameStats){
-            if(gs.getCurrentState().getCurrentState() == State.completed){
+            if(gs.getCurrentState() != null && gs.getCurrentState().getCurrentState() == State.completed){
                 completedStats.add(gs);
             }
         }
@@ -138,6 +139,7 @@ public class GameStatsController {
      * @param gameStats a GameStats object
      * @return the new game stats added to selected user
      */
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/id/{userId}/gameStats")
     public GameStats addGameStats(@PathVariable (value = "userId") Long userId, @Valid @RequestBody GameStats gameStats){
         return userRepo.findById(userId).map(user ->{
@@ -148,21 +150,15 @@ public class GameStatsController {
 
     /**
      * update selected users game stats with selected id
-     * @param userId a long value
      * @param id a long value
      * @param newStats a GameStats object
      * @return the updated game stats
      */
-    @PutMapping("/id/{userId}/gameStats/{id}")
+    @PutMapping("/gameStats/{id}")
     public GameStats updateGameStats(
-            @PathVariable (value = "userId") Long userId,
             @PathVariable (value = "id") Long id,
             @Valid @RequestBody GameStats newStats){
-
-        if(!userRepo.existsById(userId)){
-            throw new UserNotFoundException(userId);
-        }
-        return gameStateRepo.findByIdAndUserId(id, userId).map(gameStats ->{
+        return gameStateRepo.findById(id).map(gameStats ->{
             gameStats.setIncomeVal(newStats.getIncomeVal());
             gameStats.setEmissionVal(newStats.getEmissionVal());
             gameStats.setMoraleVal(newStats.getMoraleVal());
@@ -171,24 +167,17 @@ public class GameStatsController {
     }
 
     /**
-     * delete a selected users game stats with selected id
-     * @param userId a long value
+     * delete selected game stat
      * @param id a long value
      * @return ResponseEntity of the operation
      */
-    @DeleteMapping("/id/{userId}/gameStats/{id}")
-    public ResponseEntity<?> deleteBook(@PathVariable (value = "userId") Long userId,
-                                        @PathVariable (value = "id") Long id){
-
-        if(!userRepo.existsById(userId)){
-            throw new UserNotFoundException(userId);
-        }
-        Optional<GameStats> gs = gameStateRepo.findByIdAndUserId(id, userId);
-        System.out.println(gs);
-        return gameStateRepo.findByIdAndUserId(id, userId).map(gameStats -> {
-            // gameStateRepo.delete(gameStats);
+    @DeleteMapping("/gameStats/{id}")
+    public void deleteGameStates(@PathVariable (value = "id") Long id){
+        try{
             gameStateRepo.deleteById(id);
-            return ResponseEntity.ok().build();
-        }).orElseThrow(() -> new GameStatsNotFoundException(id));
+        }catch (EmptyResultDataAccessException e){
+            throw new GameStatsNotFoundException(id);
+        }
     }
+
 }

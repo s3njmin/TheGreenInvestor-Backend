@@ -40,6 +40,9 @@ public class StateIntegrationTest {
     private StateRepository stateRepo;
 
     @Autowired
+    private GameStatsRepository gameStatsRepo;
+
+    @Autowired
     private UserRepository userRepo;
 
     private User regularUser;
@@ -50,6 +53,7 @@ public class StateIntegrationTest {
         // clear the database after each test
         stateRepo.deleteAll();
         userRepo.deleteAll();
+        gameStatsRepo.deleteAll();
     }
     @BeforeEach
     void setUp(){
@@ -59,14 +63,70 @@ public class StateIntegrationTest {
      @Test
      public void getState_Success() throws Exception {
          URI uri = new URI(baseUrl + port + "/api/states");
-         stateRepo.save(new CurrentState(CONSTANTVARIABLES.DEFAULTYEAR, CONSTANTVARIABLES.DEFAULTSTATE));
+         stateRepo.save(new CurrentState(CONSTANTVARIABLES.DEFAULTYEAR, State.completed));
 
          ResponseEntity<CurrentState[]> result = restTemplate.getForEntity(uri, CurrentState[].class);
          CurrentState[] states = result.getBody();
 
          assertEquals(200, result.getStatusCode().value());
          assertEquals(1, states.length);
+
      }
+
+     @Test
+     public void getUserState_ValidUser_Success() throws Exception{
+         List<CurrentState> ckStates = new ArrayList<>();
+         CurrentState currentState01 = new CurrentState( regularUser, 0, State.start, 0, "");
+         CurrentState currentState02 = new CurrentState( regularUser, 0, State.completed, 0, "");
+         ckStates.add(currentState01);
+         ckStates.add(currentState02);
+
+
+         List<GameStats> ckStats = new ArrayList<>();
+         GameStats stats01 = new GameStats(0, 0, 0, regularUser, currentState01);
+         ckStats.add(stats01);
+
+         currentState01.setGameStats(stats01);
+
+         regularUser.setCurrentState(ckStates);
+         regularUser.setGameStats(ckStats);
+
+         stateRepo.save(currentState01);
+         stateRepo.save(currentState02);
+
+         gameStatsRepo.save(stats01);
+
+         URI uri = new URI(baseUrl + port + "/api/id/" + regularUser.getId() + "/states");
+         ResponseEntity<CurrentState[]> result = restTemplate.getForEntity(uri, CurrentState[].class);
+         CurrentState[] results = result.getBody();
+         assertEquals(200, result.getStatusCode().value());
+         assertEquals(2, results.length);
+         assertEquals(0, results[0].getYearValue());
+         assertEquals(State.completed, results[1].getCurrentState());
+    }
+
+    @Test
+    public void getUserState_InvalidUser_Failure() throws Exception{
+        List<CurrentState> ckStates = new ArrayList<>();
+        CurrentState currentState01 = new CurrentState( regularUser, 0, State.start, 0, "");
+        ckStates.add(currentState01);
+
+        List<GameStats> ckStats = new ArrayList<>();
+        GameStats stats01 = new GameStats(0, 0, 0, regularUser, currentState01);
+        ckStats.add(stats01);
+
+        currentState01.setGameStats(stats01);
+
+        regularUser.setCurrentState(ckStates);
+        regularUser.setGameStats(ckStats);
+
+        stateRepo.save(currentState01);
+
+        URI uri = new URI(baseUrl + port + "/api/id/" + regularUser.getId()+100 + "/states");
+        ResponseEntity<CurrentState> result = restTemplate.getForEntity(uri, CurrentState.class);
+
+        assertEquals(404, result.getStatusCode().value());
+    }
 
     @Test
     public void getState_ValidUserAndId_Success() throws Exception {
@@ -108,22 +168,19 @@ public class StateIntegrationTest {
 
         Long currentStateId = stateRepo.save(currentState).getId();
 
-        URI uri = new URI(baseUrl + port + "/api/id/" + Math.random() + "/states/" + currentStateId);
+        URI uri = new URI(baseUrl + port + "/api/id/" + 100 + "/states/" + currentStateId);
 
         ResponseEntity<CurrentState> result = restTemplate.getForEntity(uri, CurrentState.class);
 
-        System.out.println(result.getBody().toString());
-        assertEquals(400, result.getStatusCode().value());
+        assertEquals(404, result.getStatusCode().value());
     }
 
      @Test
      public void addState_ValidUser_Success() throws Exception {
-         CurrentState currentState = new CurrentState(CONSTANTVARIABLES.DEFAULTYEAR, CONSTANTVARIABLES.DEFAULTSTATE);
-
+         CurrentState currentState = new CurrentState(CONSTANTVARIABLES.DEFAULTYEAR, CONSTANTVARIABLES.DEFAULTSTATE, regularUser);
          List<CurrentState> currentStates = new ArrayList<>();
-         currentState.setUser(regularUser);
-
          currentStates.add(currentState);
+
          regularUser.setCurrentState(currentStates);
 
          URI uri = new URI(baseUrl + port + "/api/id/" +  regularUser.getId() + "/states");
@@ -136,7 +193,7 @@ public class StateIntegrationTest {
      }
 
     @Test
-    public void addState_InvalidUser_Success() throws Exception {
+    public void addState_InvalidUser_Failure() throws Exception {
         CurrentState currentState = new CurrentState(CONSTANTVARIABLES.DEFAULTYEAR, CONSTANTVARIABLES.DEFAULTSTATE);
 
         List<CurrentState> currentStates = new ArrayList<>();
@@ -144,11 +201,13 @@ public class StateIntegrationTest {
 
         currentStates.add(currentState);
         regularUser.setCurrentState(currentStates);
-        URI uri = new URI(baseUrl + port + "/api/id/" + (regularUser.getId() + Math.random()) + "/states");
+        URI uri = new URI(baseUrl + port + "/api/id/" + (regularUser.getId() + 100) + "/states");
+        System.out.println(regularUser.getId() + " --------------- " + uri);
 
+        // do this
         ResponseEntity<CurrentState> result = restTemplate.postForEntity(uri, currentState, CurrentState.class);
 
-        assertEquals(400, result.getStatusCode().value());
+        assertEquals(404, result.getStatusCode().value());
     }
 
      @Test

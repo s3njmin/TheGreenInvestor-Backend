@@ -107,6 +107,7 @@ public class StateServiceImplementation implements StateService {
      */
     @Override
     public List<CurrentState> listCurrentStateByUserId(Long userid) {
+        System.out.println("eNTER ASIONAN0IBA9UFNAIOS =========" + stateRepository.findByUserId(userid).size());
         return stateRepository.findByUserId(userid);
     }
 

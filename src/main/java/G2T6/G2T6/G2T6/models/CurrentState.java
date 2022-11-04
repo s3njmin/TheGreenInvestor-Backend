@@ -49,12 +49,11 @@ public class CurrentState {
     private String userResponse = "";
 
     // the game stats that this state is connected to
-    @OneToOne(mappedBy = "currentState", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "currentState", cascade = CascadeType.ALL)
     @JsonIgnore
     private GameStats gameStats;
 
-    public CurrentState(Long id, User user, int year, State state, int questionSetId, String userResponse) {
-        this.id = id;
+    public CurrentState(User user, int year, State state, int questionSetId, String userResponse) {
         this.user = user;
         this.yearValue = year;
         this.currentState = state;
@@ -65,6 +64,12 @@ public class CurrentState {
         this.id = id;
         this.yearValue = year;
         this.currentState = state;
+    }
+
+    public CurrentState(int year, State state, User user) {
+        this.yearValue = year;
+        this.currentState = state;
+        this.user = user;
     }
 
     public CurrentState(int year, State state) {

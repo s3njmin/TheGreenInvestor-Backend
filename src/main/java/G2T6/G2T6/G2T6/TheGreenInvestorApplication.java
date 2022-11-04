@@ -236,39 +236,49 @@ public class TheGreenInvestorApplication {
 				"https://www.espn.com.sg/football/manchester-united-engman_utd/story/4772297/ten-hag-defends-subbing-ronaldo-in-man-united-draw-we-have-to-rotate"));
 		saveARepo(aRepo, aList);
 
-//		User ck = new User( "ckasdasd", "ck@gmail.com", "Password1232", "GUEST");
-//		User kami = new User( "kamisama", "kami@gmail.com", "Password1233", "ROLE_USER");
-//		List<CurrentState> ckStates = new ArrayList<>();
-//		CurrentState currentState01 = new CurrentState(1l, ck, 0, State.start, 0, "");
-//		ckStates.add(currentState01);
-//
-//		List<GameStats> ckStats = new ArrayList<>();
-//		GameStats stats01 = new GameStats(1l, 0, 0, 0, ck, currentState01);
-//		ckStats.add(stats01);
-//
-//		currentState01.setGameStats(stats01);
-//
-//		List<CurrentState> kamiStates = new ArrayList<>();
-//		CurrentState currentState02 = new CurrentState(2l, kami, 0, State.start, 0, "");
-//		kamiStates.add(currentState02);
-//
-//		List<GameStats> kamiStats = new ArrayList<>();
-//		GameStats stats02 = new GameStats(2l, 0, 0, 0, kami, currentState02);
-//		kamiStats.add(stats02);
-//
-//		currentState02.setGameStats(stats02);
-//
-//		ck.setCurrentState(ckStates);
-//		ck.setGameStats(ckStats);
-//		kami.setCurrentState(kamiStates);
-//		kami.setGameStats(kamiStats);
-//
-//		UserRepository testRepo = ctx.getBean(UserRepository.class);
-//		testRepo.save(ck);
-//		testRepo.save(kami);
+		User ck = new User( "ckasdasd", "ck@gmail.com", "Password1232", "GUEST");
+		User kami = new User( "kamisama", "kami@gmail.com", "Password1233", "ROLE_USER");
 
-//		System.out.println(ck.getCurrentState());
-//		System.out.println(kami.getCurrentState());
+		GameStatsRepository gRepo = ctx.getBean(GameStatsRepository.class);
+		StateRepository sRepo = ctx.getBean(StateRepository.class);
+
+		List<CurrentState> ckStates = new ArrayList<>();
+		CurrentState currentState01 = new CurrentState( ck, 0, State.start, 0, "");
+		ckStates.add(currentState01);
+
+		List<GameStats> ckStats = new ArrayList<>();
+		GameStats stats01 = new GameStats(0, 0, 0, ck, currentState01);
+		ckStats.add(stats01);
+
+		currentState01.setGameStats(stats01);
+
+		List<CurrentState> kamiStates = new ArrayList<>();
+		CurrentState currentState02 = new CurrentState( kami, 0, State.start, 0, "");
+		kamiStates.add(currentState02);
+
+		List<GameStats> kamiStats = new ArrayList<>();
+		GameStats stats02 = new GameStats( 0, 0, 0, kami, currentState02);
+		kamiStats.add(stats02);
+
+		currentState02.setGameStats(stats02);
+
+		ck.setCurrentState(ckStates);
+		ck.setGameStats(ckStats);
+		kami.setCurrentState(kamiStates);
+		kami.setGameStats(kamiStats);
+
+		UserRepository testRepo = ctx.getBean(UserRepository.class);
+
+		testRepo.save(ck);
+		testRepo.save(kami);
+
+		gRepo.save(stats01);
+		gRepo.save(stats02);
+		sRepo.save(currentState01);
+		sRepo.save(currentState02);
+
+		System.out.println(ck.getCurrentState() + "" + ck.getId());
+		System.out.println(kami.getCurrentState() + "" +  kami.getId());
 
 	}
 

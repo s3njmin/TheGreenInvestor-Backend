@@ -45,13 +45,34 @@ public class GameStats implements Comparable<GameStats>{
         this.id = id;
     }
 
-    public GameStats(Long id, int income, int morale, int emission, User user, CurrentState currentState){
-        this.id = id;
+    public GameStats(int income, int morale, int emission, User user, CurrentState currentState){
         this.incomeVal = income;
         this.moraleVal = morale;
         this.emissionVal = emission;
         this.user = user;
         this.currentState = currentState;
+    }
+
+    public GameStats(int income, int morale, int emission){
+        this.incomeVal = income;
+        this.moraleVal = morale;
+        this.emissionVal = emission;
+    }
+
+
+    public GameStats(int income, int morale, int emission, CurrentState currentState){
+        this.incomeVal = income;
+        this.moraleVal = morale;
+        this.emissionVal = emission;
+        this.currentState = currentState;
+    }
+
+    public void setCurrentState(CurrentState currentState) {
+        this.currentState = currentState;
+    }
+
+    public CurrentState getCurrentState(){
+        return this.currentState;
     }
 
     /**
@@ -72,8 +93,8 @@ public class GameStats implements Comparable<GameStats>{
         Long cV = getTotal();
         Long oV = o.getTotal();
         if(cV == oV) return 0;
-        if(cV > oV) return 1;
-        return -1;
+        if(cV > oV) return -1;
+        return 1;
     }
 
     public String toString(){
