@@ -55,6 +55,7 @@ public class GameStatsIntegrationTest {
         userRepo.deleteAll();
         gameStatsRepo.deleteAll();
     }
+    
     @BeforeEach
     void setUp(){
         regularUser = userRepo.save(new User("ckasdasd123", "ck123@gmail.com", "Password1232", "GUEST"));

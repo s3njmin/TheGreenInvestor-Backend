@@ -1,5 +1,6 @@
 package G2T6.G2T6.G2T6.controllers;
 
+import G2T6.G2T6.G2T6.exceptions.OptionExistsException;
 import G2T6.G2T6.G2T6.exceptions.OptionOrderIdInvalidException;
 import G2T6.G2T6.G2T6.exceptions.QuestionNotFoundException;
 import G2T6.G2T6.G2T6.models.Option;
@@ -45,6 +46,10 @@ public class OptionController {
             @Valid @RequestBody Option option){
 
         return questions.findById(questionId).map(question -> {
+            if (options.findByIdAndQuestionId(option.getId(), questionId) != null) {
+                throw new OptionExistsException(option.getOption());
+            }
+            
             option.setQuestion(question);
             return options.save(option);
         }).orElseThrow(() -> new QuestionNotFoundException(questionId));
