@@ -80,13 +80,13 @@ public class CurrentState {
     @JsonIgnore
     private GameStats gameStats;
 
-    public CurrentState(User user, int year, State state, int questionSetId, String userResponse) {
-        this.user = user;
-        this.yearValue = year;
-        this.currentState = state;
-        this.questionSetId = questionSetId;
-        this.userResponse = userResponse;
-    }
+    // public CurrentState(User user, int year, State state, int questionSetId, String userResponse) {
+    //     this.user = user;
+    //     this.yearValue = year;
+    //     this.currentState = state;
+    //     this.questionSetId = questionSetId;
+    //     this.userResponse = userResponse;
+    // }
     
     private java.util.Date parseTimestamp(String timestamp) {
         try {

@@ -15,6 +15,8 @@ import G2T6.G2T6.G2T6.models.Question;
 import G2T6.G2T6.G2T6.models.orders.OptionOrder;
 import G2T6.G2T6.G2T6.models.orders.QuestionOrder;
 import G2T6.G2T6.G2T6.payload.response.GameResponse;
+import G2T6.G2T6.G2T6.payload.response.GameResponse2;
+import G2T6.G2T6.G2T6.payload.response.QuestionAndOptions;
 import G2T6.G2T6.G2T6.repository.GameStatsRepository;
 import G2T6.G2T6.G2T6.repository.OptionRepository;
 import G2T6.G2T6.G2T6.repository.QuestionOrderRepository;
@@ -100,6 +102,60 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    public GameResponse2 initGame2(CurrentState currentState) {
+
+        QuestionOrder newOrder = new QuestionOrder();
+        currentState.setQuestionOrder(newOrder);
+        // change to answering because user has started the game
+        currentState.setCurrentState(State.answering);
+        ArrayList<CurrentState> states = new ArrayList<CurrentState>();
+        states.add(currentState);
+        newOrder.setCurrentStates(states);
+
+        questionOrderRepo.saveAndFlush(newOrder);
+
+        stateRepo.saveAndFlush(currentState);
+
+        QuestionOrder questionOrder = currentState.getQuestionOrder();
+
+        List<QuestionAndOptions> questionAndOptions = new ArrayList<QuestionAndOptions>();
+
+        for (int i = 0; i < questionOrder.getIndexArray().size(); i++) {
+            Long questionNumber = (long) questionOrder.getIndexArray().get(i);
+
+            Question question = questionRepo.findById(questionNumber + 1)
+                    .orElseThrow(() -> new QuestionNotFoundException(questionNumber));
+
+            String questionName = question.getQuestion();
+            List<String> optionsName = getOptionsList(question, questionOrder.getOptionOrders().get(i));
+            boolean isOpenEnded = question.isOpenEnded();
+
+            if (question.isOpenEnded())
+                optionsName = null;
+
+            QuestionAndOptions questionsAndOptions = new QuestionAndOptions(questionName, optionsName, isOpenEnded);
+            questionAndOptions.add(questionsAndOptions);
+        }
+
+        int year = currentState.getYearValue();
+
+        // get past game stats
+        List<CurrentState> pastState = stateRepo.findByGameIdAndUserId(currentState.getGameId(),
+                currentState.getUser().getId());
+        List<GameStats> pastGameStats = new ArrayList<GameStats>();
+        // iterate through pastState if it exists
+        if (pastState != null) {
+            for (CurrentState state : pastState) {
+                pastGameStats.add(gameStatsRepo.findByCurrentState(state));
+            }
+        }
+
+        GameResponse2 gameResponse = new GameResponse2(State.start, questionAndOptions, year, pastGameStats, 1.0);
+
+        return gameResponse;
+    }
+
+    @Override
     public GameResponse getGameInfo(CurrentState currentState) {
         QuestionOrder questionOrder = currentState.getQuestionOrder();
         int year = currentState.getYearValue(); // also can be used for question index it is currently on
@@ -133,6 +189,48 @@ public class GameServiceImpl implements GameService {
 
         return gameResponse;
     }
+
+    @Override
+    public GameResponse2 getGameInfo2(CurrentState currentState) {
+
+        QuestionOrder questionOrder = currentState.getQuestionOrder();
+
+        List<QuestionAndOptions> questionAndOptions = new ArrayList<QuestionAndOptions>();
+
+        for (int i = 0; i < questionOrder.getIndexArray().size(); i++) {
+            Long questionNumber = (long) questionOrder.getIndexArray().get(i);
+
+            Question question = questionRepo.findById(questionNumber + 1)
+                    .orElseThrow(() -> new QuestionNotFoundException(questionNumber));
+
+            String questionName = question.getQuestion();
+            List<String> optionsName = getOptionsList(question, questionOrder.getOptionOrders().get(i));
+            boolean isOpenEnded = question.isOpenEnded();
+
+            if (question.isOpenEnded())
+                optionsName = null;
+
+            QuestionAndOptions questionsAndOptions = new QuestionAndOptions(questionName, optionsName, isOpenEnded);
+            questionAndOptions.add(questionsAndOptions);
+        }
+
+        // get past game stats
+        List<CurrentState> pastState = stateRepo.findByGameIdAndUserId(currentState.getGameId(),
+                currentState.getUser().getId());
+        List<GameStats> pastGameStats = new ArrayList<GameStats>();
+        // iterate through pastState if it exists
+        if (pastState != null) {
+            for (CurrentState state : pastState) {
+                pastGameStats.add(gameStatsRepo.findByCurrentState(state));
+            }
+        }
+
+        GameResponse2 gameResponse = new GameResponse2(currentState.getCurrentState(), questionAndOptions,
+                currentState.getYearValue(), pastGameStats, 1.0);
+
+        return gameResponse;
+    }
+
 
     @Override
     public GameResponse getEndGameInfo(CurrentState currentState) {

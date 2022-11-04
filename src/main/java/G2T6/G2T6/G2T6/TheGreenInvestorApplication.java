@@ -268,46 +268,46 @@ public class TheGreenInvestorApplication {
 //		testRepo.saveAndFlush(ck);
 //		testRepo.saveAndFlush(kami);
 
-		GameStatsRepository gRepo = ctx.getBean(GameStatsRepository.class);
-		StateRepository sRepo = ctx.getBean(StateRepository.class);
+		// GameStatsRepository gRepo = ctx.getBean(GameStatsRepository.class);
+		// StateRepository sRepo = ctx.getBean(StateRepository.class);
 
-		List<CurrentState> ckStates = new ArrayList<>();
-		CurrentState currentState01 = new CurrentState( ck, 0, State.start, 0, "");
-		ckStates.add(currentState01);
+		// List<CurrentState> ckStates = new ArrayList<>();
+		// CurrentState currentState01 = new CurrentState( ck, 0, State.start, 0, "");
+		// ckStates.add(currentState01);
 
-		List<GameStats> ckStats = new ArrayList<>();
-		GameStats stats01 = new GameStats(0, 0, 0, ck, currentState01);
-		ckStats.add(stats01);
+		// List<GameStats> ckStats = new ArrayList<>();
+		// GameStats stats01 = new GameStats(0, 0, 0, ck, currentState01);
+		// ckStats.add(stats01);
 
-		currentState01.setGameStats(stats01);
+		// currentState01.setGameStats(stats01);
 
-		List<CurrentState> kamiStates = new ArrayList<>();
-		CurrentState currentState02 = new CurrentState( kami, 0, State.start, 0, "");
-		kamiStates.add(currentState02);
+		// List<CurrentState> kamiStates = new ArrayList<>();
+		// CurrentState currentState02 = new CurrentState( kami, 0, State.start, 0, "");
+		// kamiStates.add(currentState02);
 
-		List<GameStats> kamiStats = new ArrayList<>();
-		GameStats stats02 = new GameStats( 0, 0, 0, kami, currentState02);
-		kamiStats.add(stats02);
+		// List<GameStats> kamiStats = new ArrayList<>();
+		// GameStats stats02 = new GameStats( 0, 0, 0, kami, currentState02);
+		// kamiStats.add(stats02);
 
-		currentState02.setGameStats(stats02);
+		// currentState02.setGameStats(stats02);
 
-		ck.setCurrentState(ckStates);
-		ck.setGameStats(ckStats);
-		kami.setCurrentState(kamiStates);
-		kami.setGameStats(kamiStats);
+		// ck.setCurrentState(ckStates);
+		// ck.setGameStats(ckStats);
+		// kami.setCurrentState(kamiStates);
+		// kami.setGameStats(kamiStats);
 
-		UserRepository testRepo = ctx.getBean(UserRepository.class);
+		// UserRepository testRepo = ctx.getBean(UserRepository.class);
 
-		testRepo.save(ck);
-		testRepo.save(kami);
+		// testRepo.save(ck);
+		// testRepo.save(kami);
 
-		gRepo.save(stats01);
-		gRepo.save(stats02);
-		sRepo.save(currentState01);
-		sRepo.save(currentState02);
+		// gRepo.save(stats01);
+		// gRepo.save(stats02);
+		// sRepo.save(currentState01);
+		// sRepo.save(currentState02);
 
-		System.out.println(ck.getCurrentState() + "" + ck.getId());
-		System.out.println(kami.getCurrentState() + "" +  kami.getId());
+		// System.out.println(ck.getCurrentState() + "" + ck.getId());
+		// System.out.println(kami.getCurrentState() + "" +  kami.getId());
 
 	}
 
