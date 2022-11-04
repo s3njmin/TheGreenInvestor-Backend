@@ -9,6 +9,7 @@ import G2T6.G2T6.G2T6.models.Question;
 import G2T6.G2T6.G2T6.models.orders.OptionOrder;
 import G2T6.G2T6.G2T6.repository.QuestionRepository;
 
+import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,14 +53,6 @@ public class QuestionServiceImpl implements QuestionService {
         for (int questionId : questionIndexes) {
             // get question corresponding to idx in questionOrder
             Question question = questions.get(questionId);
-            
-            if (question.getOptions().size() < 6) {
-                // List<Question> error = new ArrayList<>();
-                // error.add(question);
-                // System.out.println("ID is : " + questionId);
-                return questions;
-                // throw new QuestionNotFoundException((long) questionId);
-            }
 
             // if open ended question
             if (question.isOpenEnded()) {
@@ -94,13 +87,14 @@ public class QuestionServiceImpl implements QuestionService {
             }
 
             // update list of options after removing 2 options randomly
-            question.setOptions(randomizedOptions);
+            Question randomizedQuestion = question;
+            randomizedQuestion.setOptions(randomizedOptions);
 
             // add question to randomizedQuestions
-            randomizedQuestions.add(question);
+            randomizedQuestions.add(randomizedQuestion);
         }
 
-        return randomizedQuestions();
+        return randomizedQuestions;
     }
 
 
