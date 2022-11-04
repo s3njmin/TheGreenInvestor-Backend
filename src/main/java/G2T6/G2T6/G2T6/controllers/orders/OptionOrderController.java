@@ -30,26 +30,26 @@ public class OptionOrderController {
         return optionOrderRepository.findAll();
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/optionOrder")
-    public OptionOrder addOptionOrder(){
+    // @ResponseStatus(HttpStatus.CREATED)
+    // @PostMapping("/optionOrder")
+    // public OptionOrder addOptionOrder(){
 
-        // create list of 6 randomly ordered numbers
-        ArrayList<Integer> indexArray = new ArrayList<>();
-        Collections.addAll(indexArray, 1, 2, 3, 4, 5, 6);
-        Collections.shuffle(indexArray);
+    //     // create list of 6 randomly ordered numbers
+    //     ArrayList<Integer> indexArray = new ArrayList<>();
+    //     Collections.addAll(indexArray, 1, 2, 3, 4, 5, 6);
+    //     Collections.shuffle(indexArray);
 
-        // remove last 2 elements of ArrayList
-        indexArray.remove(5);
-        indexArray.remove(4);
+    //     // remove last 2 elements of ArrayList
+    //     indexArray.remove(5);
+    //     indexArray.remove(4);
 
 
-        // create new optionOrder with order in indexArray (not alr in repo)
-        OptionOrder optionOrder = new OptionOrder();
+    //     // create new optionOrder with order in indexArray (not alr in repo)
+    //     OptionOrder optionOrder = new OptionOrder();
 
-        // add to optionOrderRepository
-        optionOrderRepository.save(optionOrder);
+    //     // add to optionOrderRepository
+    //     optionOrderRepository.save(optionOrder);
 
-        return optionOrder;
-    }
+    //     return optionOrder;
+    // }
 }

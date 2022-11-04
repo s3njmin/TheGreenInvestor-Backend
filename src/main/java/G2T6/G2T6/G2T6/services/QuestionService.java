@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface QuestionService {
     List<Question> listQuestions();
+    List<Question> randomizedQuestions();
     Question getQuestion(final Long id);
     Question addQuestion(final Question question);
     Question updateQuestion(final Long id, final Question question);
