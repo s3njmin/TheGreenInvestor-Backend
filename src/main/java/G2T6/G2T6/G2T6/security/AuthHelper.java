@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class AuthHelper {
 
-    public static UserDetails getCurrentUser() {
+    public static UserDetails getUserDetails() {
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -19,4 +19,6 @@ public class AuthHelper {
         return (UserDetails) principal;
 
     }
+
+
 }

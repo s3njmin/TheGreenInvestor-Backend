@@ -75,6 +75,9 @@ public class GameStats implements Comparable<GameStats> {
     // multiplier
     private double multiplier = 1.0;
 
+    // total score
+    private double totalScore = 0.0;
+
     // current state for this game stats
     @OneToOne
     @JsonIgnore
