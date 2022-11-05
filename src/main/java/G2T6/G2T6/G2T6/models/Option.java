@@ -61,4 +61,13 @@ public class Option {
         this.incomeImpact = incomeImpact;
         this.costImpact = costImpact;
     }
+
+    public void replaceOption(Option newOption) {
+        this.option = newOption.getOption();
+        this.feedback = newOption.getFeedback();
+        this.sustainabilityImpact = newOption.getSustainabilityImpact();
+        this.moraleImpact = newOption.getMoraleImpact();
+        this.incomeImpact = newOption.getIncomeImpact();
+        this.costImpact = newOption.getCostImpact();
+    }
 }

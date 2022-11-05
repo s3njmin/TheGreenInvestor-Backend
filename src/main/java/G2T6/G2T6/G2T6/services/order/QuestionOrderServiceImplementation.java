@@ -1,4 +1,4 @@
-package G2T6.G2T6.G2T6.services;
+package G2T6.G2T6.G2T6.services.order;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

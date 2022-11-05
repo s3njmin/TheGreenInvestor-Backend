@@ -1,4 +1,4 @@
-package G2T6.G2T6.G2T6.services;
+package G2T6.G2T6.G2T6.services.order;
 
 import G2T6.G2T6.G2T6.models.orders.OptionOrder;
 

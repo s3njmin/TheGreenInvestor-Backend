@@ -158,8 +158,7 @@ public class OptionIntegrationTest {
     public void updateOption_validOption_Success() throws Exception {
         Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
         Option oldOption = options.save(new Option("Option 1", "Positive Feedback", question, 0, 0, 0, 0));
-        Option newOption = new Option("Option 2", "Trash Feedback", null, 0, 0, 0, 0); // set to null, since @jsonignore doesn't return question
-        newOption.setId(question.getId()); // to store ID
+        Option newOption = new Option(question.getId(), "Option 2", "Trash Feedback", 0, 0, 0, 0, null); // set to null, since @jsonignore doesn't return question
 
         URI uri = new URI(baseUrl + port + "/api/questions/" + question.getId() + "/options/" + oldOption.getId());
 

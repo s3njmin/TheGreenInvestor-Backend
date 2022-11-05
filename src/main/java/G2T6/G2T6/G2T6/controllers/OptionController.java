@@ -1,17 +1,20 @@
 package G2T6.G2T6.G2T6.controllers;
 
 import G2T6.G2T6.G2T6.exceptions.OptionExistsException;
+import G2T6.G2T6.G2T6.exceptions.OptionNotFoundException;
 import G2T6.G2T6.G2T6.exceptions.OptionOrderIdInvalidException;
 import G2T6.G2T6.G2T6.exceptions.QuestionNotFoundException;
 import G2T6.G2T6.G2T6.models.Option;
 import G2T6.G2T6.G2T6.repository.OptionRepository;
 import G2T6.G2T6.G2T6.repository.QuestionRepository;
+import G2T6.G2T6.G2T6.services.OptionService;
 
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,39 +23,28 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/questions")
 @RestController
 public class OptionController {
-    private OptionRepository options;
-    private QuestionRepository questions;
+    private OptionService optionService;
 
     @Autowired
-    public OptionController(final OptionRepository options, final QuestionRepository questions){
-        this.options = options;
-        this.questions = questions;
+    public OptionController(OptionService optionService){
+        this.optionService = optionService;
     }
 
     // Returns all Options specified by Question Id
     @GetMapping("/{questionId}/options")
-    public List<Option> getAllOptionsByQuestionId(@PathVariable (value = "questionId") final Long questionId) {
-        // check if Question Exists
-        if(!questions.existsById(questionId)) {
-            throw new QuestionNotFoundException(questionId);
-        }
-        return options.findByQuestionId(questionId);
+    public List<Option> getAllOptionsByQuestionId(@PathVariable (value = "questionId") final Long questionId) 
+            throws QuestionNotFoundException {
+
+        return optionService.listOptions(questionId);
     }
 
     // Add an Option to specified Question
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{questionId}/options")
     public Option addOption(@PathVariable (value = "questionId") final Long questionId, 
-            @Valid @RequestBody Option option){
+            @Valid @RequestBody Option option) throws QuestionNotFoundException, OptionExistsException {
 
-        return questions.findById(questionId).map(question -> {
-            if (options.findByIdAndQuestionId(option.getId(), questionId) != null) {
-                throw new OptionExistsException(option.getOption());
-            }
-            
-            option.setQuestion(question);
-            return options.save(option);
-        }).orElseThrow(() -> new QuestionNotFoundException(questionId));
+       return optionService.addOption(questionId, option);
     }
 
     // Update an Existing Option
@@ -61,35 +53,20 @@ public class OptionController {
             @PathVariable (value = "optionId") Long optionId,
             @Valid @RequestBody Option newOption) {
         
-        // check if question exists
-        if(!questions.existsById(questionId)) {
-            throw new QuestionNotFoundException(questionId);
-        }
-
-        return options.findByIdAndQuestionId(optionId, questionId).map(option -> {
-            option.setOption(newOption.getOption());
-            option.setFeedback(newOption.getFeedback());
-            option.setSustainabilityImpact(newOption.getSustainabilityImpact());
-            option.setMoraleImpact(newOption.getMoraleImpact());
-            option.setIncomeImpact(newOption.getIncomeImpact());
-            option.setCostImpact(newOption.getCostImpact());
-            return options.save(option);
-        }).orElseThrow(() -> new OptionOrderIdInvalidException(optionId));
+        return optionService.updateOption(questionId, optionId, newOption);
     }
 
     //Delete an Existing Option
     @DeleteMapping("/{questionId}/options/{optionId}")
-    public ResponseEntity<?> deleteOption(@PathVariable (value = "questionId") final Long questionId,
-            @PathVariable (value = "optionId") Long optionId){
+    public void deleteOption(@PathVariable (value = "questionId") final Long questionId,
+            @PathVariable (value = "optionId") Long optionId) throws EmptyResultDataAccessException {
         
-        if(!questions.existsById(questionId)) {
-            throw new QuestionNotFoundException(questionId);
+        // attempt delete, throw OptionNotFoundException if delete fails
+        try{
+            optionService.deleteOption(questionId, optionId);
+        } catch(EmptyResultDataAccessException e) {
+            throw new OptionNotFoundException(optionId);
         }
-
-        return options.findByIdAndQuestionId(optionId, questionId).map(option -> {
-            options.delete(option);
-            return ResponseEntity.ok().build();
-        }).orElseThrow(() -> new OptionOrderIdInvalidException(optionId));
 
     }
 }

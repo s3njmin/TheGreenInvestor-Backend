@@ -105,13 +105,11 @@ public class QuestionIntegrationTest {
 		assertEquals(200, result.getStatusCode().value());
 		assertEquals(2, savedQuestions.length);
 
-		assertEquals(q1.getQuestion(), savedQuestions[0].getQuestion());
-		assertEquals(q1.getImageLink(), savedQuestions[0].getImageLink());
-		assertEquals(q1.isOpenEnded(), savedQuestions[0].isOpenEnded());
+		q1.setOptions(new ArrayList<Option>()); // for verification (otherwise will be null)
+		q2.setOptions(new ArrayList<Option>()); // for verification (otherwise will be null)
 
-		assertEquals(q2.getQuestion(), savedQuestions[1].getQuestion());
-		assertEquals(q2.getImageLink(), savedQuestions[1].getImageLink());
-		assertEquals(q2.isOpenEnded(), savedQuestions[1].isOpenEnded());
+		assertEquals(q1, savedQuestions[0]);
+		assertEquals(q2, savedQuestions[1]);
 	}
 
 
@@ -120,11 +118,13 @@ public class QuestionIntegrationTest {
 	public void getQuestion_ValidQuestionId_Success() throws Exception {
 		Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
 		URI uri = new URI(baseUrl + port + "/api/questions/" + question.getId());
-
+		
 		ResponseEntity<Question> result = restTemplate.getForEntity(uri, Question.class);
+		
+		question.setOptions(new ArrayList<Option>()); // for verification (otherwise will be null)
 
 		assertEquals(200, result.getStatusCode().value());
-		assertEquals(question.getQuestion(), result.getBody().getQuestion());
+		assertEquals(question, result.getBody());
 	}
 
 	@Test
@@ -140,12 +140,13 @@ public class QuestionIntegrationTest {
 	@Test
 	public void addQuestion_newQuestion_Success() throws Exception {
 		URI uri = new URI(baseUrl + port + "/api/questions");
-		Question question = new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true);
+		Question question = new Question(1L, "Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", null ,true);
 
 		ResponseEntity<Question> result = restTemplate.postForEntity(uri, question, Question.class);
 
 		assertEquals(201, result.getStatusCode().value());
-		assertEquals(question.getQuestion(), result.getBody().getQuestion());
+
+		assertEquals(question, result.getBody());
 	}
 
 	@Test
@@ -210,16 +211,14 @@ public class QuestionIntegrationTest {
 
 	@Test
 	public void updateQuestion_validQuestion_Success() throws Exception {
-		Question question = new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true);
-		questions.save(question);
-
+		Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
+		Question updatedQuestion = new Question(question.getId(), "Question 2", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img12.jpg", new ArrayList<Option>(), false);
+		
 		URI uri = new URI(baseUrl + port + "/api/questions/" + question.getId());
-		Question updatedQuestion = new Question("Question 2", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img12.jpg", true);
-
 		ResponseEntity<Question> result = restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(updatedQuestion), Question.class);
 
 		assertEquals(200, result.getStatusCode().value());
-		assertEquals(updatedQuestion.getQuestion(), result.getBody().getQuestion());
+		assertEquals(updatedQuestion, result.getBody());
 	}
 
 	// @DeleteMapping("/questions/{id}")
