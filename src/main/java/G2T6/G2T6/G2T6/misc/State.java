@@ -4,5 +4,6 @@ public enum State{
     start,
     answering,
     feedback,
-    completed
+    completed,
+    nullState
 }

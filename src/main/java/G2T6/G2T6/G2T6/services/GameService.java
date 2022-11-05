@@ -14,14 +14,15 @@ import G2T6.G2T6.G2T6.payload.response.GameResponse;
 
 public interface GameService {
     //init game for user
-    GameResponse initGame(CurrentState state);
+    void initGame(CurrentState state);
     GameResponse getGameInfo(CurrentState state);
     GameStats getAnsweredStats(CurrentState currentState, int answerIdx);
     GameStats getAnsweredStats(CurrentState currentState, String[] answers);
+    void endGame(CurrentState currentState);
     void nextQuestion(CurrentState currentState);
     // List<GameStats> getPastGameStatsByGameIdAndUserId(Long gameId, Long userId);
     //get optionsString for this question
     List<String> getOptionsList(Question question, OptionOrder optionOrderQ);
-    void prepareNextGame(CurrentState currentState);
+    CurrentState prepareNextGame(CurrentState currentState);
     GameResponse getEndGameInfo(CurrentState currentState);
 }

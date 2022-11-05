@@ -14,7 +14,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,10 +35,6 @@ public class CurrentState {
     // Game id to identify which game this state belongs to
     @Column(name = "game_id")
     private Long gameId;
-
-    @Column(name = "dateTime")
-    // @Temporal(TemporalType.TIMESTAMP)
-    private java.util.Date dateTime;
 
     // this Object belong to which user=
     @ManyToOne
@@ -87,14 +82,6 @@ public class CurrentState {
     //     this.questionSetId = questionSetId;
     //     this.userResponse = userResponse;
     // }
-    
-    private java.util.Date parseTimestamp(String timestamp) {
-        try {
-            return new Timestamp(CONSTANTVARIABLES.DATE_TIME_FORMAT.parse(timestamp).getTime());
-        } catch (ParseException e) {
-            throw new IllegalArgumentException(e);
-        }
-    }
 
     public CurrentState(Long gameid, User user, int year, State state, QuestionOrder questionOrder) {
         this(year, state);
@@ -122,18 +109,11 @@ public class CurrentState {
     }
 
     public CurrentState() {
-        String dateTime = CONSTANTVARIABLES.DATE_TIME_FORMAT.format(new java.util.Date());
-        this.dateTime = parseTimestamp(dateTime);
     }
 
     // change state
     public void changeState(State state) {
         this.currentState = state;
-    }
-
-    public void refreshTime() {
-        String dateTime = CONSTANTVARIABLES.DATE_TIME_FORMAT.format(new java.util.Date());
-        this.dateTime = parseTimestamp(dateTime);
     }
 
     /**

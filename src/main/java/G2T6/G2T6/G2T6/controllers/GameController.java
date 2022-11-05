@@ -72,22 +72,57 @@ public class GameController {
         // If user's latest current state is in start -> which means he is in lobby and
         // not in game, hence we init a game for him
         if (currentState.getCurrentState() == State.start) {
-            GameResponse gameResponse = gameService.initGame(currentState);
-            return ResponseEntity.ok(gameResponse);
+            // GameResponse gameResponse = gameService.initGame(currentState);
+            // return ResponseEntity.ok(gameResponse);
+            return ResponseEntity.ok(new GameResponse(State.start, null, 0, null, 0, 0));
         }
 
-        // Conditions to terminate the game
-        if (currentState.getYearValue() == 10 || currentState.getGameStats().getCurrentCashInHand() <= 0
-                || currentState.getGameStats().getCurrentMoraleVal() <= 0
-                || currentState.getGameStats().getCurrentEmissionVal() <= 0) {
+        // if completed game
+        if (currentState.getCurrentState() == State.completed) {
             GameResponse gameResponse = gameService.getEndGameInfo(currentState);
-            gameService.prepareNextGame(currentState);
             return ResponseEntity.ok(gameResponse);
         }
 
         // if any other states, return current info
         GameResponse gameResponse = gameService.getGameInfo(currentState);
         return ResponseEntity.ok(gameResponse);
+
+    }
+
+    // if state is start, change existing state to answering
+    // if state is answering, create new state instance and change state to
+    // answering
+    // if state is completed, create new state instance and change state to
+    // answering
+    @PostMapping("/startGame")
+    public ResponseEntity<?> startGame() {
+
+        User currUser = userRepo.findByUsername(AuthHelper.getUserDetails().getUsername())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        CurrentState currentState = stateRepository.findTopByUserOrderByIdDesc(currUser)
+                .orElseThrow(() -> new StateNotFoundException(currUser.getUsername()));
+
+        State state = currentState.getCurrentState();
+
+        if (state == State.start) {
+
+            gameService.initGame(currentState);
+
+            return ResponseEntity.ok(new MessageResponse("Game started"));
+
+        }
+
+        CurrentState newState = gameService.prepareNextGame(currentState);
+        gameService.initGame(newState);
+
+        if (state == State.completed) {
+
+            return ResponseEntity.ok(new MessageResponse("Game started | previous game has ended successfully"));
+
+        }
+
+        return ResponseEntity.ok(new MessageResponse("Game started | previous game terminated prematurely"));
 
     }
 
@@ -101,12 +136,10 @@ public class GameController {
             CurrentState currentState = stateRepository.findTopByUserOrderByIdDesc(currUser)
                     .orElseThrow(() -> new StateNotFoundException(currUser.getUsername()));
 
-            // Conditions to terminate the game
-            if (currentState.getYearValue() == 10 || currentState.getGameStats().getCurrentCashInHand() <= 0
-                    || currentState.getGameStats().getCurrentMoraleVal() <= 0
-                    || currentState.getGameStats().getCurrentEmissionVal() <= 0) {
+            if (currentState.getYearValue() >= 10 || currentState.getCurrentState() == State.completed) {
+                gameService.endGame(currentState);
                 return ResponseEntity.badRequest()
-                        .body(new MessageResponse("Error: Game is over, please start a new game"));
+                        .body(new MessageResponse("Game is over! Last year has reached! or game is already complete"));
             }
 
             QuestionOrder questionOrder = currentState.getQuestionOrder();
@@ -125,7 +158,7 @@ public class GameController {
                     // save user's answer
                     currentState.setUserResponse(answerRequest.getAnswer());
                     stateRepository.saveAndFlush(currentState);
-                    // get gamestats of answered option
+                    // get gamestats of answered option and update current holdings
                     GameStats gameStats = gameService.getAnsweredStats(currentState, answer);
 
                     // update current vals
@@ -139,6 +172,12 @@ public class GameController {
                             gameStats.getEmissionVal(), gameStats.getCostVal(), currentCashInHand, currentIncomeVal,
                             currentEmissionVal, currentMoraleVal, gameStats.getMultiplier(),
                             question.getOptions().get(answer).getFeedback());
+
+                    // System.out.println("currently is at year " + currentState.getYearValue());
+                    if (checkIfGameShouldEnd(currentState)) {
+                        gameService.endGame(currentState);
+                        return ResponseEntity.ok(answerResponse);
+                    }
 
                     // Next Question
                     gameService.nextQuestion(currentState);
@@ -164,6 +203,12 @@ public class GameController {
                             gameStats.getEmissionVal(), gameStats.getCostVal(), currentCashInHand, currentIncomeVal,
                             currentEmissionVal, currentMoraleVal, gameStats.getMultiplier(), "null");
 
+                    // System.out.println("currently is at year " + currentState.getYearValue());
+                    if (checkIfGameShouldEnd(currentState)) {
+                        gameService.endGame(currentState);
+                        return ResponseEntity.ok(answerResponse);
+                    }
+
                     // Next Question
                     gameService.nextQuestion(currentState);
 
@@ -171,6 +216,8 @@ public class GameController {
                 }
 
             } catch (NumberFormatException e) {
+                e.printStackTrace();
+                gameService.endGame(currentState);
                 return ResponseEntity.badRequest()
                         .body(new MessageResponse("Error: Input is not correct"));
             }
@@ -183,6 +230,17 @@ public class GameController {
                     .body(new MessageResponse("Error: An error has occurred | game is ended?"));
 
         }
+    }
+
+    // Game should terminate at year 9 (this is called before moving on to next
+    // question)
+    private boolean checkIfGameShouldEnd(CurrentState currentState) {
+        if (currentState.getYearValue() >= 9 || currentState.getGameStats().getCurrentCashInHand() <= 0
+                || currentState.getGameStats().getCurrentMoraleVal() <= 0
+                || currentState.getGameStats().getCurrentEmissionVal() <= 0) {
+            return true;
+        }
+        return false;
     }
 
 }
