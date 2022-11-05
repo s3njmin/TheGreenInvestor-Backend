@@ -117,6 +117,9 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
           .antMatchers(HttpMethod.PUT,"/api/subscribe").permitAll()
           // .antMatchers(HttpMethod.GET,"/api/subscribe").permitAll()
 
+          // authentication for carbon
+          .antMatchers("/api/carbon/**").permitAll()
+
           .antMatchers(h2ConsolePath + "/**").permitAll()
 
           // REMOVE THIS WHEN DONE

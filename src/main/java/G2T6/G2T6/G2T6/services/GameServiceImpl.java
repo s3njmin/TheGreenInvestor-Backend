@@ -67,6 +67,7 @@ public class GameServiceImpl implements GameService {
         // set up relationship for GameStats object
         newGameStats.setCurrentState(currentState);
         newGameStats.setUser(currentState.getUser());
+        newGameStats.setMultiplier(1.0);
 
         currentState.setGameStats(newGameStats);
         ArrayList<CurrentState> states = new ArrayList<CurrentState>();
@@ -176,6 +177,12 @@ public class GameServiceImpl implements GameService {
         return gameResponse;
     }
 
+    /**
+     * Handles submit Answer for MCQ questions
+     * @param currentState
+     * @param {number} answerIdx
+     * @return GameStats
+     */
     @Override
     public GameStats getAnsweredStats(CurrentState currentState, int answerIdx) {
 
@@ -211,7 +218,7 @@ public class GameServiceImpl implements GameService {
         currentGameStats.setCurrentEmissionVal(newSustainability);
         currentGameStats.setCurrentIncomeVal(newIncomeImpact);
         currentGameStats.setCurrentMoraleVal(newMorale);
-        currentGameStats.setMultiplier(1.0);
+        currentGameStats.setMultiplier(1.0 * currentGameStats.getMultiplier()); // no multiplier for normal question
         currentGameStats.setTotalScore(calculateTotalScore(currentState));
 
         gameStatsRepo.saveAndFlush(currentGameStats);
@@ -220,6 +227,13 @@ public class GameServiceImpl implements GameService {
 
     }
 
+    /**
+     * Handles submit Answer for open ended questions
+     * 
+     * @param currentState
+     * @param answer
+     * @return {String array} GameStats
+     */
     @Override
     public GameStats getAnsweredStats(CurrentState currentState, String[] answers) {
 
@@ -258,7 +272,7 @@ public class GameServiceImpl implements GameService {
 
         // currentGameStats is not supposed to be null, replace over existing
         // placeholder currentGameStats
-        currentGameStats.setMultiplier(averageScore + 1.0);
+        currentGameStats.setMultiplier(currentGameStats.getMultiplier() * (averageScore + 1.0));
         currentGameStats.setTotalScore(calculateTotalScore(currentState));
 
         gameStatsRepo.saveAndFlush(currentGameStats);
@@ -278,7 +292,7 @@ public class GameServiceImpl implements GameService {
         CurrentState newState = new CurrentState(currentState.getGameId(), currentState.getUser(), nextYear,
                 currentState.getCurrentState(), currentState.getQuestionOrder());
 
-        GameStats newGameStats = new GameStats(currentState.getUser(), newState, 1.0,
+        GameStats newGameStats = new GameStats(currentState.getUser(), newState, oldGameStats.getMultiplier(),
                 oldGameStats.getCurrentEmissionVal(), oldGameStats.getCurrentMoraleVal(),
                 oldGameStats.getCurrentIncomeVal(),
                 oldGameStats.getCurrentCashInHand());
@@ -334,7 +348,11 @@ public class GameServiceImpl implements GameService {
 
     private double calculateTotalScore(CurrentState currentState) {
         GameStats gameStats = currentState.getGameStats();
-        double totalScore = gameStats.getCurrentCashInHand() + gameStats.getCurrentIncomeVal() + gameStats.getCurrentMoraleVal() + (3 * gameStats.getCurrentEmissionVal());
+        double totalScore = gameStats.getCurrentCashInHand() + gameStats.getCurrentIncomeVal()
+                + gameStats.getCurrentMoraleVal() + (3 * gameStats.getCurrentEmissionVal());
+        totalScore *= gameStats.getMultiplier();
+        //round totalScore to 2 decimal place
+        totalScore = Math.round(totalScore * 100.0) / 100.0;
         return totalScore;
     }
 
