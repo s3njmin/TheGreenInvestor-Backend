@@ -153,7 +153,7 @@ public class GameStats implements Comparable<GameStats> {
      * @return calculation
      */
     public Long getTotal() {
-        return (long) (currentCashInHand + currentIncomeVal + currentMoraleVal) -  (3 * currentEmissionVal);
+        return (long) (currentCashInHand + currentIncomeVal + currentMoraleVal) +  (3 * currentEmissionVal);
     }
 
     /**
