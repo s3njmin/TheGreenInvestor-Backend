@@ -293,6 +293,8 @@ public class GameServiceImpl implements GameService {
 
         // change old state to completed and save
         currentState.setCurrentState(State.completed);
+        // give the old state a total score
+        currentState.getGameStats().setTotalScore(calculateTotalScore(currentState));
         stateRepo.saveAndFlush(currentState);
 
         CurrentState newState = stateService.getDefaultState();

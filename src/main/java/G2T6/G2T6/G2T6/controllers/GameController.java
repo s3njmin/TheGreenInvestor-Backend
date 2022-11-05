@@ -63,7 +63,7 @@ public class GameController {
     @GetMapping("/gameInfo")
     public ResponseEntity<?> getGameInfo() {
 
-        User currUser = userRepo.findByUsername(AuthHelper.getCurrentUser().getUsername())
+        User currUser = userRepo.findByUsername(AuthHelper.getUserDetails().getUsername())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         CurrentState currentState = stateRepository.findTopByUserOrderByIdDesc(currUser)
@@ -95,7 +95,7 @@ public class GameController {
     public ResponseEntity<?> submitAnswer(@Valid @RequestBody AnswerRequest2 answerRequest) {
         try {
 
-            User currUser = userRepo.findByUsername(AuthHelper.getCurrentUser().getUsername())
+            User currUser = userRepo.findByUsername(AuthHelper.getUserDetails().getUsername())
                     .orElseThrow(() -> new UserNotFoundException("User not found"));
 
             CurrentState currentState = stateRepository.findTopByUserOrderByIdDesc(currUser)
