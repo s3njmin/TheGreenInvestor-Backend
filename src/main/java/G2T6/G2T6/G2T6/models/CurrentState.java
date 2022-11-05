@@ -153,4 +153,13 @@ public class CurrentState {
         userResponse += currentAns;
         return userResponse;
     }
+
+    public boolean checkIfGameShouldEnd() {
+        if (getYearValue() >= 9 || getGameStats().getCurrentCashInHand() <= 0
+                || getGameStats().getCurrentMoraleVal() <= 0
+                || getGameStats().getCurrentEmissionVal() <= 0) {
+            return true;
+        }
+        return false;
+    }
 }

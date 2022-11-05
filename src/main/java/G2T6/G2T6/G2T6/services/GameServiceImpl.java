@@ -2,9 +2,6 @@ package G2T6.G2T6.G2T6.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import javax.mail.internet.NewsAddress;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +13,6 @@ import G2T6.G2T6.G2T6.models.Option;
 import G2T6.G2T6.G2T6.models.Question;
 import G2T6.G2T6.G2T6.models.orders.OptionOrder;
 import G2T6.G2T6.G2T6.models.orders.QuestionOrder;
-import G2T6.G2T6.G2T6.payload.response.GameResponse;
 import G2T6.G2T6.G2T6.payload.response.GameResponse;
 import G2T6.G2T6.G2T6.payload.response.QuestionAndOptions;
 import G2T6.G2T6.G2T6.repository.GameStatsRepository;
@@ -71,7 +67,7 @@ public class GameServiceImpl implements GameService {
         // set up relationship for GameStats object
         newGameStats.setCurrentState(currentState);
         newGameStats.setUser(currentState.getUser());
-        newGameStats.setMultiplier(1.0);
+        newGameStats.setMultiplier(1.0); // Base Multiplier
 
         currentState.setGameStats(newGameStats);
         ArrayList<CurrentState> states = new ArrayList<CurrentState>();
@@ -84,6 +80,12 @@ public class GameServiceImpl implements GameService {
 
     }
 
+    /**
+     * This method is used to retrieve the most recent game information
+     * 
+     * @param currentState the current state of the user
+     * @return the game response object
+     */
     @Override
     public GameResponse getGameInfo(CurrentState currentState) {
 
@@ -104,28 +106,19 @@ public class GameServiceImpl implements GameService {
 
         double totalScore = calculateTotalScore(currentState);
 
-        // Total score is nothing for now. will be implemented later
         GameResponse gameResponse = new GameResponse(currentState.getCurrentState(), questionAndOptions,
-                currentState.getYearValue(), pastGameStats, 1.0, totalScore);
+                currentState.getYearValue(), pastGameStats,
+                currentState.getGameStats() != null ? currentState.getGameStats().getMultiplier() : 1.0, totalScore);
 
         return gameResponse;
     }
 
-    // changes state of to completed and save highscore and +1 to games played
-    @Override
-    public void endGame(CurrentState currentState) {
-        // save highscore
-        if (currentState.getGameStats().getTotalScore() > currentState.getUser().getHighScore()) {
-            currentState.getUser().setHighScore(currentState.getGameStats().getTotalScore());
-            userRepo.saveAndFlush(currentState.getUser());
-        }
-        // add one to total game count of user
-        currentState.getUser().setGamesPlayed((currentState.getUser().getGamesPlayed() + 1));
-        // change the state to completed
-        currentState.setCurrentState(State.completed);
-        stateRepo.saveAndFlush(currentState);
-    }
-
+    /**
+     * This method returns the game info when the game ends
+     * 
+     * @param currentState the current state of the user
+     * @return the game response object
+     */
     @Override
     public GameResponse getEndGameInfo(CurrentState currentState) {
 
@@ -148,6 +141,45 @@ public class GameServiceImpl implements GameService {
                 totalScore);
 
         return gameResponse;
+    }
+
+    /**
+     * This method is used to end the game. It will update the highscore and
+     * increment total game of user by 1
+     * 
+     * @param currentState the current state of the user
+     */
+    @Override
+    public void endGame(CurrentState currentState) {
+        if (currentState.getGameStats() != null) {
+            // save highscore
+            if (currentState.getGameStats().getTotalScore() > currentState.getUser().getHighScore()) {
+                currentState.getUser().setHighScore(currentState.getGameStats().getTotalScore());
+                userRepo.saveAndFlush(currentState.getUser());
+            }
+            // add one to total game count of user
+            currentState.getUser().setGamesPlayed((currentState.getUser().getGamesPlayed() + 1));
+        }
+        // change the state to completed
+        if (currentState.getCurrentState() != State.completed) {
+            currentState.setCurrentState(State.completed);
+            stateRepo.saveAndFlush(currentState);
+        }
+    }
+
+    /**
+     * This method is used to get the most recent question the user is on
+     * 
+     * @param currentState the current state of the user
+     * @return the question object
+     */
+    @Override
+    public Question getLatestQuestion(CurrentState currentState) {
+        QuestionOrder questionOrder = currentState.getQuestionOrder();
+        Long questionNumber = (long) questionOrder.getIndexArray().get(currentState.getYearValue());
+        Question question = questionRepo.findById(questionNumber + 1)
+                .orElseThrow(() -> new QuestionNotFoundException(questionNumber));
+        return question;
     }
 
     /**
@@ -255,6 +287,11 @@ public class GameServiceImpl implements GameService {
 
     }
 
+    /**
+     * This method moves the user to the next question
+     * 
+     * @param currentState the current state of the user
+     */
     @Override
     public void nextQuestion(CurrentState currentState) {
 
@@ -278,8 +315,13 @@ public class GameServiceImpl implements GameService {
 
     }
 
-    // prepare next game: sets current state to completed, creates new game state
-    // and return
+    /**
+     * This method prepares next game, sets current state to completed and creates a
+     * new game state
+     * 
+     * @param currentState the current state of the user
+     * @return the new game state
+     */
     @Override
     public CurrentState prepareNextGame(CurrentState currentState) {
 
@@ -313,6 +355,14 @@ public class GameServiceImpl implements GameService {
         return newState;
     }
 
+    /**
+     * This methods gets the 4 options for the current question based on the option
+     * order
+     * 
+     * @param question
+     * @param optionOrder
+     * @return {String array} the 4 options for the current question
+     */
     @Override
     public List<String> getOptionsList(Question question, OptionOrder optionOrder) {
 
@@ -326,6 +376,12 @@ public class GameServiceImpl implements GameService {
 
     }
 
+    /**
+     * This method calculates the total score for the game
+     * 
+     * @param currentState
+     * @return {double} the total score
+     */
     private double calculateTotalScore(CurrentState currentState) {
         GameStats gameStats = currentState.getGameStats();
         double totalScore = gameStats.getCurrentCashInHand() + gameStats.getCurrentIncomeVal()
@@ -336,6 +392,12 @@ public class GameServiceImpl implements GameService {
         return totalScore;
     }
 
+    /**
+     * This method gets the List of Question and Options
+     * 
+     * @param questionOrder
+     * @return {List<QuestionAndOptions>} the list of questions and options
+     */
     private List<QuestionAndOptions> getQuestionAndOptionsList(QuestionOrder questionOrder) {
 
         List<QuestionAndOptions> questionAndOptions = new ArrayList<QuestionAndOptions>();

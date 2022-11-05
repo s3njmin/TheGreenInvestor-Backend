@@ -1,17 +1,12 @@
 package G2T6.G2T6.G2T6.controllers;
 
-import G2T6.G2T6.G2T6.exceptions.GameStatsNotFoundException;
-import G2T6.G2T6.G2T6.exceptions.NotEnoughGameStatsException;
 import G2T6.G2T6.G2T6.exceptions.StateNotFoundException;
 import G2T6.G2T6.G2T6.exceptions.UserNotFoundException;
 import G2T6.G2T6.G2T6.misc.State;
 import G2T6.G2T6.G2T6.models.*;
 import G2T6.G2T6.G2T6.repository.StateRepository;
 import G2T6.G2T6.G2T6.models.GameStats;
-import G2T6.G2T6.G2T6.models.orders.QuestionOrder;
 import G2T6.G2T6.G2T6.models.security.User;
-import G2T6.G2T6.G2T6.repository.GameStatsRepository;
-import G2T6.G2T6.G2T6.repository.QuestionRepository;
 import G2T6.G2T6.G2T6.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,27 +15,16 @@ import org.springframework.web.bind.annotation.*;
 import G2T6.G2T6.G2T6.payload.request.AnswerRequest2;
 import G2T6.G2T6.G2T6.payload.response.AnswerResponse2;
 import G2T6.G2T6.G2T6.payload.response.GameResponse;
-import G2T6.G2T6.G2T6.payload.response.GameResponse;
 import G2T6.G2T6.G2T6.payload.response.MessageResponse;
-import G2T6.G2T6.G2T6.repository.UserRepository;
-import G2T6.G2T6.G2T6.models.security.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import G2T6.G2T6.G2T6.security.AuthHelper;
 import G2T6.G2T6.G2T6.services.GameService;
-import G2T6.G2T6.G2T6.services.StateService;
-import io.swagger.models.Response;
-import G2T6.G2T6.G2T6.exceptions.*;
 
 import javax.validation.Valid;
-import java.util.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/api")
 @RestController
 public class GameController {
-
-    @Autowired
-    private GameStatsRepository gameStatsRepo;
 
     @Autowired
     private UserRepository userRepo;
@@ -51,8 +35,20 @@ public class GameController {
     @Autowired
     private GameService gameService;
 
-    @Autowired
-    private QuestionRepository questionRepo;
+    private User currUser;
+    private CurrentState currentState;
+
+    /**
+     * This method is a helper method to setup the current user and current state
+     */
+    private void setup() {
+
+        currUser = userRepo.findByUsername(AuthHelper.getUserDetails().getUsername())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        currentState = stateRepository.findTopByUserOrderByIdDesc(currUser)
+                .orElseThrow(() -> new StateNotFoundException(currUser.getUsername()));
+    }
 
     /**
      * This method is used to fetch the latest game information for a user.
@@ -63,45 +59,38 @@ public class GameController {
     @GetMapping("/gameInfo")
     public ResponseEntity<?> getGameInfo() {
 
-        User currUser = userRepo.findByUsername(AuthHelper.getUserDetails().getUsername())
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        setup();
 
-        CurrentState currentState = stateRepository.findTopByUserOrderByIdDesc(currUser)
-                .orElseThrow(() -> new StateNotFoundException(currUser.getUsername()));
-
-        // If user's latest current state is in start -> which means he is in lobby and
-        // not in game, hence we init a game for him
         if (currentState.getCurrentState() == State.start) {
-            // GameResponse gameResponse = gameService.initGame(currentState);
-            // return ResponseEntity.ok(gameResponse);
+
             return ResponseEntity.ok(new GameResponse(State.start, null, 0, null, 0, 0));
+
         }
 
-        // if completed game
         if (currentState.getCurrentState() == State.completed) {
             GameResponse gameResponse = gameService.getEndGameInfo(currentState);
             return ResponseEntity.ok(gameResponse);
         }
 
-        // if any other states, return current info
         GameResponse gameResponse = gameService.getGameInfo(currentState);
         return ResponseEntity.ok(gameResponse);
 
     }
 
-    // if state is start, change existing state to answering
-    // if state is answering, create new state instance and change state to
-    // answering
-    // if state is completed, create new state instance and change state to
-    // answering
+    /**
+     * This method starts the game
+     * if state is start, change existing state to answering
+     * if state is answering, create new state instance and change state to
+     * answering
+     * if state is completed, create new state instance and change state to
+     * answering
+     * 
+     * @return ResponseEntity<?>
+     */
     @PostMapping("/startGame")
     public ResponseEntity<?> startGame() {
 
-        User currUser = userRepo.findByUsername(AuthHelper.getUserDetails().getUsername())
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
-
-        CurrentState currentState = stateRepository.findTopByUserOrderByIdDesc(currUser)
-                .orElseThrow(() -> new StateNotFoundException(currUser.getUsername()));
+        setup();
 
         State state = currentState.getCurrentState();
 
@@ -126,121 +115,75 @@ public class GameController {
 
     }
 
+    /**
+     * This method is submitAnswer for question (both MCQ and open-ended)
+     * 
+     * @param answerRequest
+     * @return ResponseEntity<?>
+     */
     @PostMapping("/submitAnswer")
     public ResponseEntity<?> submitAnswer(@Valid @RequestBody AnswerRequest2 answerRequest) {
+
+        setup();
+
+        if (currentState.getCurrentState() != State.answering || currentState.getYearValue() >= 10) {
+            gameService.endGame(currentState);
+            return ResponseEntity.badRequest().body(new MessageResponse("Game has not started or Game has ended"));
+        }
+
+        Question question = gameService.getLatestQuestion(currentState);
+        boolean isOpenEnded = question.isOpenEnded();
+
         try {
 
-            User currUser = userRepo.findByUsername(AuthHelper.getUserDetails().getUsername())
-                    .orElseThrow(() -> new UserNotFoundException("User not found"));
-
-            CurrentState currentState = stateRepository.findTopByUserOrderByIdDesc(currUser)
-                    .orElseThrow(() -> new StateNotFoundException(currUser.getUsername()));
-
-            if (currentState.getYearValue() >= 10 || currentState.getCurrentState() == State.completed) {
-                gameService.endGame(currentState);
-                return ResponseEntity.badRequest()
-                        .body(new MessageResponse("Game is over! Last year has reached! or game is already complete"));
-            }
-
-            QuestionOrder questionOrder = currentState.getQuestionOrder();
-            int year = currentState.getYearValue(); // also can be used for question index it is currently on
-            Long questionNumber = (long) questionOrder.getIndexArray().get(year);
-            Question question = questionRepo.findById(questionNumber + 1)
-                    .orElseThrow(() -> new QuestionNotFoundException(questionNumber));
-            boolean isOpenEnded = question.isOpenEnded();
-            // System.out.println("isOpenEnded: " + isOpenEnded);
+            GameStats gameStats = null;
+            int answer = 0;
 
             // try to parse given answer
-            try {
-                if (!isOpenEnded) {
-                    // System.out.println("ran here 123");
-                    int answer = Integer.parseInt(answerRequest.getAnswer()); // 0,1,2,3
-                    // save user's answer
-                    currentState.setUserResponse(answerRequest.getAnswer());
-                    stateRepository.saveAndFlush(currentState);
-                    // get gamestats of answered option and update current holdings
-                    GameStats gameStats = gameService.getAnsweredStats(currentState, answer);
+            if (!isOpenEnded) {
 
-                    // update current vals
-                    int currentCashInHand = gameStats.getCurrentCashInHand();
-                    int currentIncomeVal = gameStats.getCurrentIncomeVal();
-                    int currentEmissionVal = gameStats.getCurrentEmissionVal();
-                    int currentMoraleVal = gameStats.getCurrentMoraleVal();
+                answer = Integer.parseInt(answerRequest.getAnswer());
+                gameStats = gameService.getAnsweredStats(currentState, answer);
 
-                    AnswerResponse2 answerResponse = new AnswerResponse2(gameStats.getIncomeVal(),
-                            gameStats.getMoraleVal(),
-                            gameStats.getEmissionVal(), gameStats.getCostVal(), currentCashInHand, currentIncomeVal,
-                            currentEmissionVal, currentMoraleVal, gameStats.getMultiplier(),
-                            question.getOptions().get(answer).getFeedback());
+            } else {
 
-                    // System.out.println("currently is at year " + currentState.getYearValue());
-                    if (checkIfGameShouldEnd(currentState)) {
-                        gameService.endGame(currentState);
-                        return ResponseEntity.ok(answerResponse);
-                    }
+                String[] answers = answerRequest.getAnswer().split(",");
+                gameStats = gameService.getAnsweredStats(currentState, answers);
 
-                    // Next Question
-                    gameService.nextQuestion(currentState);
-
-                    return ResponseEntity.ok(answerResponse);
-                } else {
-                    String[] answers = answerRequest.getAnswer().split(",");
-                    // save user's answer
-                    currentState.setUserResponse(answerRequest.getAnswer());
-                    stateRepository.saveAndFlush(currentState);
-
-                    // get gamestats of answered option
-                    GameStats gameStats = gameService.getAnsweredStats(currentState, answers);
-
-                    // update current vals
-                    int currentCashInHand = gameStats.getCurrentCashInHand();
-                    int currentIncomeVal = gameStats.getCurrentIncomeVal();
-                    int currentEmissionVal = gameStats.getCurrentEmissionVal();
-                    int currentMoraleVal = gameStats.getCurrentMoraleVal();
-
-                    AnswerResponse2 answerResponse = new AnswerResponse2(gameStats.getIncomeVal(),
-                            gameStats.getMoraleVal(),
-                            gameStats.getEmissionVal(), gameStats.getCostVal(), currentCashInHand, currentIncomeVal,
-                            currentEmissionVal, currentMoraleVal, gameStats.getMultiplier(), "null");
-
-                    // System.out.println("currently is at year " + currentState.getYearValue());
-                    if (checkIfGameShouldEnd(currentState)) {
-                        gameService.endGame(currentState);
-                        return ResponseEntity.ok(answerResponse);
-                    }
-
-                    // Next Question
-                    gameService.nextQuestion(currentState);
-
-                    return ResponseEntity.ok(answerResponse);
-                }
-
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-                gameService.endGame(currentState);
-                return ResponseEntity.badRequest()
-                        .body(new MessageResponse("Error: Input is not correct"));
             }
+
+            currentState.setUserResponse(answerRequest.getAnswer());
+            stateRepository.saveAndFlush(currentState);
+
+            // update current vals
+            int currentCashInHand = gameStats.getCurrentCashInHand();
+            int currentIncomeVal = gameStats.getCurrentIncomeVal();
+            int currentEmissionVal = gameStats.getCurrentEmissionVal();
+            int currentMoraleVal = gameStats.getCurrentMoraleVal();
+
+            AnswerResponse2 answerResponse = new AnswerResponse2(gameStats.getIncomeVal(),
+                    gameStats.getMoraleVal(),
+                    gameStats.getEmissionVal(), gameStats.getCostVal(), currentCashInHand, currentIncomeVal,
+                    currentEmissionVal, currentMoraleVal, gameStats.getMultiplier(),
+                    isOpenEnded ? "null" : question.getOptions().get(answer).getFeedback());
+
+            if (currentState.checkIfGameShouldEnd()) {
+                gameService.endGame(currentState);
+                return ResponseEntity.ok(answerResponse);
+            }
+
+            // Next Question
+            gameService.nextQuestion(currentState);
+            return ResponseEntity.ok(answerResponse);
 
         } catch (Exception e) {
 
             e.printStackTrace();
-
+            gameService.endGame(currentState);
             return ResponseEntity.badRequest()
-                    .body(new MessageResponse("Error: An error has occurred | game is ended?"));
+                    .body(new MessageResponse("Error: An error has occurred | game ended or wrong input"));
 
         }
-    }
-
-    // Game should terminate at year 9 (this is called before moving on to next
-    // question)
-    private boolean checkIfGameShouldEnd(CurrentState currentState) {
-        if (currentState.getYearValue() >= 9 || currentState.getGameStats().getCurrentCashInHand() <= 0
-                || currentState.getGameStats().getCurrentMoraleVal() <= 0
-                || currentState.getGameStats().getCurrentEmissionVal() <= 0) {
-            return true;
-        }
-        return false;
     }
 
 }

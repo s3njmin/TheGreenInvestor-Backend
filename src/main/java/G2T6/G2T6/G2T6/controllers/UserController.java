@@ -46,7 +46,7 @@ public class UserController {
         }
 
         userRepository.save(user);
-        //return status 201 with message
+        // return status 201 with message
         return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("User registered successfully!"));
     }
 
@@ -98,7 +98,8 @@ public class UserController {
     @GetMapping("/profileImageIndex")
     public ResponseEntity<?> getProfileImageIndex() {
         UserDetails userDetails = AuthHelper.getUserDetails();
-        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(() -> new UserNotFoundException(userDetails.getUsername()));
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new UserNotFoundException(userDetails.getUsername()));
         return new ResponseEntity<>(user.getProfileImageIndex(), HttpStatus.OK);
     }
 
@@ -106,10 +107,29 @@ public class UserController {
     @PutMapping("/profileImageIndex/{id}")
     public ResponseEntity<?> setProfileImageIndex(@PathVariable(value = "id") int id) {
         UserDetails userDetails = AuthHelper.getUserDetails();
-        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(() -> new UserNotFoundException(userDetails.getUsername()));
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new UserNotFoundException(userDetails.getUsername()));
         user.setProfileImageIndex(id);
         userRepository.save(user);
         return new ResponseEntity<>(user.getProfileImageIndex(), HttpStatus.OK);
+    }
+
+    // get user high score
+    @GetMapping("/highScore")
+    public ResponseEntity<?> getHighScore() {
+        UserDetails userDetails = AuthHelper.getUserDetails();
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new UserNotFoundException(userDetails.getUsername()));
+        return new ResponseEntity<>(user.getHighScore(), HttpStatus.OK);
+    }
+
+    // get user games played
+    @GetMapping("/gamesPlayed")
+    public ResponseEntity<?> getGamesPlayed() {
+        UserDetails userDetails = AuthHelper.getUserDetails();
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new UserNotFoundException(userDetails.getUsername()));
+        return new ResponseEntity<>(user.getGamesPlayed(), HttpStatus.OK);
     }
 
     // Get all users subscribed to email notifications
