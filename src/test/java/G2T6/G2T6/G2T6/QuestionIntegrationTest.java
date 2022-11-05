@@ -59,12 +59,8 @@ public class QuestionIntegrationTest {
 
 	@Autowired
 	private RefreshTokenRepository refreshRepo;
-
-	private HttpHeaders normalUserHeaders;
-
-	private HttpHeaders adminUserHeaders;
 	
-	@BeforeAll()
+	@BeforeEach()
 	void createUser() throws URISyntaxException {
         // Creating an admin user for test
         User adminUser = new User("johnTheAdmin", "johnny@gmail.com",
@@ -75,7 +71,35 @@ public class QuestionIntegrationTest {
 		User normalUser = new User("bobTheNormie", "bobby@gmail.com",
                 encoder.encode("password"), "ROLE_USER", false);
         usersRepo.save(normalUser);
+    }
 
+	@AfterEach
+	void tearDown() {
+		// clear the database after each test
+		refreshRepo.deleteAll();
+		questions.deleteAll();
+		usersRepo.deleteAll();
+	}
+
+	// called to authenticate as Admin User
+	public HttpHeaders generateAuthAdmin() throws URISyntaxException {
+		// Generate Headers (Authentication as Admin User)
+		URI uriLogin2 = new URI(baseUrl + port + "/api/auth/signin");
+		LoginRequest loginRequest2 = new LoginRequest();
+		loginRequest2.setUsername("johnTheAdmin");
+		loginRequest2.setPassword("myStrongPw");
+		HttpHeaders headers2 = new HttpHeaders();
+		headers2.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		HttpEntity<LoginRequest> entity2 = new HttpEntity<>(loginRequest2, headers2);
+		ResponseEntity<JwtResponse> responseEntity2 = restTemplate.exchange(
+				uriLogin2,
+				HttpMethod.POST, entity2, JwtResponse.class);
+		headers2.add("Authorization", "Bearer " + responseEntity2.getBody().getAccessToken());
+		return headers2;
+	}
+
+	// called to authenticate as Normal User
+	public HttpHeaders generateAuthNormal() throws URISyntaxException {
 		// Generate Headers (Authentication as Normal User)
 		URI uriLogin = new URI(baseUrl + port + "/api/auth/signin");
 		LoginRequest loginRequest = new LoginRequest();
@@ -88,29 +112,7 @@ public class QuestionIntegrationTest {
 				uriLogin,
 				HttpMethod.POST, entity, JwtResponse.class);
 		headers.add("Authorization", "Bearer " + responseEntity.getBody().getAccessToken());
-		normalUserHeaders = headers;
-
-		// Generate Headers (Authentication as Admin User)
-		URI uriLogin2 = new URI(baseUrl + port + "/api/auth/signin");
-		LoginRequest loginRequest2 = new LoginRequest();
-		loginRequest2.setUsername("bobTheNormie");
-		loginRequest2.setPassword("password");
-		HttpHeaders headers2 = new HttpHeaders();
-		headers2.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		HttpEntity<LoginRequest> entity2 = new HttpEntity<>(loginRequest2, headers2);
-		ResponseEntity<JwtResponse> responseEntity2 = restTemplate.exchange(
-				uriLogin2,
-				HttpMethod.POST, entity2, JwtResponse.class);
-		headers2.add("Authorization", "Bearer " + responseEntity2.getBody().getAccessToken());
-		adminUserHeaders = headers2;
-    }
-
-	@AfterEach
-	void tearDown() {
-		// clear the database after each test
-		refreshRepo.deleteAll();
-		questions.deleteAll();
-		usersRepo.deleteAll();
+		return headers;
 	}
 
 	// @GetMapping("/questions")
@@ -170,91 +172,109 @@ public class QuestionIntegrationTest {
 
 	// PostMapping("/questions")
 	@Test
-	public void addQuestion_newQuestion_Success() throws Exception {
+	public void addQuestion_newQuestionIsAdmin_Success() throws Exception {
 		URI uri = new URI(baseUrl + port + "/api/questions");
 		Question question = new Question(1L, "Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", null, true);
 
-		ResponseEntity<Question> result = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(question, adminUserHeaders), Question.class);
+		HttpHeaders headers = generateAuthAdmin();
+		ResponseEntity<Question> result = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(question, headers), Question.class);
 
 		assertEquals(201, result.getStatusCode().value());
 		assertEquals(question, result.getBody());
 	}
 
 	@Test
-	public void addQuestion_existingQuestion_Failure() throws Exception {
-		URI uri = new URI(baseUrl + port + "/api/questions");
-		Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
-
-		ResponseEntity<Question> result = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(question, adminUserHeaders), Question.class);
-
-		assertEquals(409, result.getStatusCode().value());
-	}
-
-
-	@Test
-	public void addQuestion_NonAdmin_Failure() throws Exception {
+	public void addQuestion_newQuestionNonAdmin_Failure() throws Exception {
 		// Use Headers to Authenticate and Test
 		URI uri = new URI(baseUrl + port + "/api/questions");
 		Question question = new Question(1L, "Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", null, true);
 
-		ResponseEntity<Question> result = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(question, normalUserHeaders), Question.class);
+		HttpHeaders headers = generateAuthNormal();
+		ResponseEntity<Question> result = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(question, headers), Question.class);
 
 		assertEquals(403, result.getStatusCode().value());
 	}
 
 	@Test
-	public void addQuestion_Admin_Success() throws Exception {
-		// Use Headers to Authenticate and Test
+	public void addQuestion_existingQuestionIsAdmin_Failure() throws Exception {
 		URI uri = new URI(baseUrl + port + "/api/questions");
-		Question question = new Question(1L, "Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", null, true);
+		Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
+		
+		HttpHeaders headers = generateAuthAdmin();
+		ResponseEntity<Question> result = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(question, headers), Question.class);
 
-		ResponseEntity<Question> result = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(question, adminUserHeaders), Question.class);
-
-		assertEquals(201, result.getStatusCode().value());
-		assertEquals(question, result.getBody());
+		assertEquals(409, result.getStatusCode().value());
 	}
 
 	// @PutMapping("/questions/{id}")
 	@Test
-	public void updateQuestion_invalidQuestion_Failure() throws Exception {
+	public void updateQuestion_invalidQuestionIsAdmin_Failure() throws Exception {
 		Question question = new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true);
 		URI uri = new URI(baseUrl + port + "/api/questions/" + 1);
 		
-		ResponseEntity<Question> result = restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(question), Question.class);
+		HttpHeaders headers = generateAuthAdmin();
+		ResponseEntity<Question> result = restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(question, headers), Question.class);
 
 		assertEquals(404, result.getStatusCode().value());
 	}
 
 	@Test
-	public void updateQuestion_validQuestion_Success() throws Exception {
+	public void updateQuestion_validQuestionIsAdmin_Success() throws Exception {
 		Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
 		Question updatedQuestion = new Question(question.getId(), "Question 2", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img12.jpg", new ArrayList<Option>(), false);
 		
 		URI uri = new URI(baseUrl + port + "/api/questions/" + question.getId());
-		ResponseEntity<Question> result = restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(updatedQuestion), Question.class);
+		HttpHeaders headers = generateAuthAdmin();
+		ResponseEntity<Question> result = restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(updatedQuestion, headers), Question.class);
 
 		assertEquals(200, result.getStatusCode().value());
 		assertEquals(updatedQuestion, result.getBody());
 	}
 
+	@Test
+	public void updateQuestion_validQuestionNotAdmin_Failure() throws Exception {
+		Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
+		Question updatedQuestion = new Question(question.getId(), "Question 2", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img12.jpg", new ArrayList<Option>(), false);
+		
+		URI uri = new URI(baseUrl + port + "/api/questions/" + question.getId());
+		HttpHeaders headers = generateAuthNormal();
+		ResponseEntity<Question> result = restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(updatedQuestion, headers), Question.class);
+
+		assertEquals(403, result.getStatusCode().value());
+	}
+
 	// @DeleteMapping("/questions/{id}")
 	@Test
-	public void deleteQuestion_validQuestion_Success() throws Exception {
+	public void deleteQuestion_validQuestionIsAdmin_Success() throws Exception {
 		Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
 
 		URI uri = new URI(baseUrl + port + "/api/questions/" + question.getId());
-		ResponseEntity<Void> result = restTemplate.exchange(uri, HttpMethod.DELETE, null, Void.class);
+		HttpHeaders headers = generateAuthAdmin();
+		ResponseEntity<Void> result = restTemplate.exchange(uri, HttpMethod.DELETE, new HttpEntity<>(headers), Void.class);
 
 		assertEquals(200, result.getStatusCode().value());
 		assertNull(result.getBody());
 	}
 
 	@Test
-	public void deleteQuestion_invalidQuestion_Failure() throws Exception {
+	public void deleteQuestion_invalidQuestionIsAdmin_Failure() throws Exception {
 		URI uri = new URI(baseUrl + port + "/api/questions/1");
 		
-		ResponseEntity<Void> result = restTemplate.exchange(uri, HttpMethod.DELETE, null, Void.class);
+		HttpHeaders headers = generateAuthAdmin();
+		ResponseEntity<Void> result = restTemplate.exchange(uri, HttpMethod.DELETE, new HttpEntity<>(headers), Void.class);
 
 		assertEquals(404, result.getStatusCode().value());
+	}
+
+	@Test
+	public void deleteQuestion_validQuestionNotAdmin_Success() throws Exception {
+		Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
+
+		URI uri = new URI(baseUrl + port + "/api/questions/" + question.getId());
+		HttpHeaders headers = generateAuthNormal();
+		ResponseEntity<Void> result = restTemplate.exchange(uri, HttpMethod.DELETE, new HttpEntity<>(headers), Void.class);
+
+		assertEquals(403, result.getStatusCode().value());
+		assertNull(result.getBody());
 	}
 }
