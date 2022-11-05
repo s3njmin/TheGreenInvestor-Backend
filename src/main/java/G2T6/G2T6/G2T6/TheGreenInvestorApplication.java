@@ -237,77 +237,72 @@ public class TheGreenInvestorApplication {
 				"https://www.reuters.com/markets/commodities/singapore-hike-carbon-tax-by-five-fold-2024-2022-02-18/"));
 		saveARepo(aRepo, aList);
 
-//		User ck = new User( "ckasdasd", "ck@gmail.com", "Password1232", "GUEST");
-//		User kami = new User( "kamisama", "kami@gmail.com", "Password1233", "ROLE_USER");
-//		List<CurrentState> ckStates = new ArrayList<>();
-//		CurrentState currentState01 = new CurrentState(1l, ck, 0, State.start, 0, "");
-//		ckStates.add(currentState01);
+//		UserRepository userRepo = ctx.getBean(UserRepository.class);
+//		CurrentState stateRepo = ctx.getBean(CurrentState.class);
+//		GameStats gameStatsRepo = ctx.getBean(GameStats.class);
 //
-//		List<GameStats> ckStats = new ArrayList<>();
-//		GameStats stats01 = new GameStats(1l, 0, 0, 0, ck, currentState01);
-//		ckStats.add(stats01);
+//		User regularUser = userRepo.save(new User("ckasdasd123", "ck123@gmail.com", "Password1232", "GUEST"));
 //
-//		currentState01.setGameStats(stats01);
+//		CurrentState cs0101 = new CurrentState(CONSTANTVARIABLES.DEFAULTYEAR, State.completed, regularUser);
+//		CurrentState cs0102 = new CurrentState(10, State.completed, regularUser);
 //
-//		List<CurrentState> kamiStates = new ArrayList<>();
-//		CurrentState currentState02 = new CurrentState(2l, kami, 0, State.start, 0, "");
-//		kamiStates.add(currentState02);
+//		List<CurrentState> csList01 = new ArrayList<>();
+//		csList01.add(cs0101);
+//		csList01.add(cs0102);
 //
-//		List<GameStats> kamiStats = new ArrayList<>();
-//		GameStats stats02 = new GameStats(2l, 0, 0, 0, kami, currentState02);
-//		kamiStats.add(stats02);
+//		GameStats gs1 =  new GameStats(10,10,10, regularUser, cs0101);
+//		GameStats gs2 =  new GameStats(1,1,1, regularUser, cs0102);
+//		List<GameStats> gsList01 = new ArrayList<>();
+//		gsList01.add(gs1);
+//		gsList01.add(gs2);
 //
-//		currentState02.setGameStats(stats02);
+//		regularUser.setCurrentState(csList01);
+//		regularUser.setGameStats(gsList01);
+//		stateRepo.save(cs0101);
+//		stateRepo.save(cs0102);
+//		gameStatsRepo.save(gs1);
+//		gameStatsRepo.save(gs2);
 //
-//		ck.setCurrentState(ckStates);
-//		ck.setGameStats(ckStats);
-//		kami.setCurrentState(kamiStates);
-//		kami.setGameStats(kamiStats);
+//		User user02 = userRepo.save(new User("fasfajisoaisf", "fasfajisoaisf@gmail.com", "PASSWORD123", "GUEST"));
 //
-//		UserRepository testRepo = ctx.getBean(UserRepository.class);
-//		testRepo.saveAndFlush(ck);
-//		testRepo.saveAndFlush(kami);
-
-		// GameStatsRepository gRepo = ctx.getBean(GameStatsRepository.class);
-		// StateRepository sRepo = ctx.getBean(StateRepository.class);
-
-		// List<CurrentState> ckStates = new ArrayList<>();
-		// CurrentState currentState01 = new CurrentState( ck, 0, State.start, 0, "");
-		// ckStates.add(currentState01);
-
-		// List<GameStats> ckStats = new ArrayList<>();
-		// GameStats stats01 = new GameStats(0, 0, 0, ck, currentState01);
-		// ckStats.add(stats01);
-
-		// currentState01.setGameStats(stats01);
-
-		// List<CurrentState> kamiStates = new ArrayList<>();
-		// CurrentState currentState02 = new CurrentState( kami, 0, State.start, 0, "");
-		// kamiStates.add(currentState02);
-
-		// List<GameStats> kamiStats = new ArrayList<>();
-		// GameStats stats02 = new GameStats( 0, 0, 0, kami, currentState02);
-		// kamiStats.add(stats02);
-
-		// currentState02.setGameStats(stats02);
-
-		// ck.setCurrentState(ckStates);
-		// ck.setGameStats(ckStats);
-		// kami.setCurrentState(kamiStates);
-		// kami.setGameStats(kamiStats);
-
-		// UserRepository testRepo = ctx.getBean(UserRepository.class);
-
-		// testRepo.save(ck);
-		// testRepo.save(kami);
-
-		// gRepo.save(stats01);
-		// gRepo.save(stats02);
-		// sRepo.save(currentState01);
-		// sRepo.save(currentState02);
-
-		// System.out.println(ck.getCurrentState() + "" + ck.getId());
-		// System.out.println(kami.getCurrentState() + "" +  kami.getId());
+//		CurrentState cs0201 = new CurrentState(CONSTANTVARIABLES.DEFAULTYEAR, State.completed, user02);
+//		CurrentState cs0202 = new CurrentState(10, State.completed, user02);
+//
+//		List<CurrentState> csList02 = new ArrayList<>();
+//		csList01.add(cs0201);
+//		csList02.add(cs0202);
+//
+//		GameStats gs3 =  new GameStats(10,9,10, user02, cs0201);
+//		GameStats gs4 =  new GameStats(1,2,1, user02, cs0202);
+//		List<GameStats> gsList02 = new ArrayList<>();
+//		gsList02.add(gs3);
+//		gsList02.add(gs4);
+//
+//		user02.setCurrentState(csList02);
+//		user02.setGameStats(gsList02);
+//		stateRepo.save(cs0201);
+//		stateRepo.save(cs0202);
+//		gameStatsRepo.save(gs3);
+//		gameStatsRepo.save(gs4);
+//
+//		User user03 = userRepo.save(new User("asf3fq3", "asf3fq3@gmail.com", "PASSWORD12345", "GUEST"));
+//
+//		CurrentState cs0301 = new CurrentState(CONSTANTVARIABLES.DEFAULTYEAR, State.completed, user03);
+//
+//		List<CurrentState> csList03 = new ArrayList<>();
+//		csList03.add(cs0301);
+//
+//		GameStats gs5 =  new GameStats(10,9,8, user03, cs0301);
+//		List<GameStats> gsList03 = new ArrayList<>();
+//		gsList03.add(gs5);
+//
+//		user03.setCurrentState(csList03);
+//		user03.setGameStats(gsList03);
+//		stateRepo.save(cs0301);
+//		gameStatsRepo.save(gs5);
+//
+//		 System.out.println(ck.getCurrentState() + "" + ck.getId());
+//		 System.out.println(kami.getCurrentState() + "" +  kami.getId());
 
 	}
 

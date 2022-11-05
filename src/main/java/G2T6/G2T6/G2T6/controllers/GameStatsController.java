@@ -41,6 +41,20 @@ public class GameStatsController {
         return gameStateRepo.findAll();
     }
 
+    @GetMapping("/gameStats/allUnique")
+    public List<GameStats> getAllUniqueGameStats(){
+        List<GameStats> completedStats = filterAllCompletedGameStats(getAllGameStats());
+        Collections.sort(completedStats);
+        List<GameStats> completedStatsWithOutDuplicate = filterUniqueGameStats(completedStats);
+        for(int i = 0; i < completedStatsWithOutDuplicate.size(); i++){
+            System.out.println(completedStatsWithOutDuplicate.get(i).getId() + " - id") ;
+            System.out.println(completedStatsWithOutDuplicate.get(i).getCurrentState().getId() + " - state id");
+            System.out.println(completedStatsWithOutDuplicate.get(i).getUser().getId() + " - user id");
+            System.out.println();
+        }
+        return completedStatsWithOutDuplicate;
+    }
+
     /**
      * List all top n game stats in the system
      * First it filter through all game stats and only select those that have completed state

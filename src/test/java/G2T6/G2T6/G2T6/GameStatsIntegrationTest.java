@@ -18,6 +18,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,6 @@ public class GameStatsIntegrationTest {
     }
 
     // get
-    //     @GetMapping("/gameStats")
     @Test
     public void getAllGameStats_NoData_Success() throws Exception{
         URI uri = new URI(baseUrl + port + "/api/gameStats");
@@ -156,6 +156,77 @@ public class GameStatsIntegrationTest {
 
         ResponseEntity<GameStats> result = restTemplate.getForEntity(uri, GameStats.class);
         assertEquals(404, result.getStatusCode().value());
+    }
+
+    // always success
+    @Test
+    public void getAllUniqueGameStats_Success() throws Exception{
+        CurrentState cs0101 = new CurrentState(CONSTANTVARIABLES.DEFAULTYEAR, State.completed, regularUser);
+        CurrentState cs0102 = new CurrentState(10, State.completed, regularUser);
+
+        List<CurrentState> csList01 = new ArrayList<>();
+        csList01.add(cs0101);
+        csList01.add(cs0102);
+
+        GameStats gs1 =  new GameStats(10,10,10, regularUser, cs0101);
+        GameStats gs2 =  new GameStats(1,1,1, regularUser, cs0102);
+        List<GameStats> gsList01 = new ArrayList<>();
+        gsList01.add(gs1);
+        gsList01.add(gs2);
+
+        regularUser.setCurrentState(csList01);
+        regularUser.setGameStats(gsList01);
+        stateRepo.save(cs0101);
+        stateRepo.save(cs0102);
+        gameStatsRepo.save(gs1);
+        gameStatsRepo.save(gs2);
+
+        User user02 = userRepo.save(new User("fasfajisoaisf", "fasfajisoaisf@gmail.com", "PASSWORD123", "GUEST"));
+
+        CurrentState cs0201 = new CurrentState(CONSTANTVARIABLES.DEFAULTYEAR, State.completed, user02);
+        CurrentState cs0202 = new CurrentState(10, State.completed, user02);
+
+        List<CurrentState> csList02 = new ArrayList<>();
+        csList01.add(cs0201);
+        csList02.add(cs0202);
+
+        GameStats gs3 =  new GameStats(10,9,10, user02, cs0201);
+        GameStats gs4 =  new GameStats(1,2,1, user02, cs0202);
+        List<GameStats> gsList02 = new ArrayList<>();
+        gsList02.add(gs3);
+        gsList02.add(gs4);
+
+        user02.setCurrentState(csList02);
+        user02.setGameStats(gsList02);
+        stateRepo.save(cs0201);
+        stateRepo.save(cs0202);
+        gameStatsRepo.save(gs3);
+        gameStatsRepo.save(gs4);
+
+        User user03 = userRepo.save(new User("asf3fq3", "asf3fq3@gmail.com", "PASSWORD12345", "GUEST"));
+
+        CurrentState cs0301 = new CurrentState(CONSTANTVARIABLES.DEFAULTYEAR, State.completed, user03);
+
+        List<CurrentState> csList03 = new ArrayList<>();
+        csList03.add(cs0301);
+
+        GameStats gs5 =  new GameStats(10,9,8, user03, cs0301);
+        List<GameStats> gsList03 = new ArrayList<>();
+        gsList03.add(gs5);
+
+        user03.setCurrentState(csList03);
+        user03.setGameStats(gsList03);
+        stateRepo.save(cs0301);
+        gameStatsRepo.save(gs5);
+
+        URI uri = new URI(baseUrl + port + "/api/gameStats/allUnique");
+        ResponseEntity<GameStats[]> result = restTemplate.getForEntity(uri, GameStats[].class);
+        GameStats[] gsArray = result.getBody();
+        assertEquals(200, result.getStatusCode().value());
+        assertEquals(3, gsArray.length);
+
+        assertEquals(gs1.getTotal(), gsArray[0].getTotal());
+        assertEquals(gs3.getTotal(), gsArray[1].getTotal());
     }
 
     @Test
