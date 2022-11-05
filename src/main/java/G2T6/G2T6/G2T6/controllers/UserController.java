@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -90,6 +91,24 @@ public class UserController {
 
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse("User updated successfully!"));
+    }
+
+    // Get User profile image index
+    @GetMapping("/profileImageIndex")
+    public ResponseEntity<?> getProfileImageIndex() {
+        UserDetails userDetails = AuthHelper.getUserDetails();
+        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(() -> new UserNotFoundException(userDetails.getUsername()));
+        return new ResponseEntity<>(user.getProfileImageIndex(), HttpStatus.OK);
+    }
+
+    // Set User profile image index
+    @PutMapping("/profileImageIndex/{id}")
+    public ResponseEntity<?> setProfileImageIndex(@PathVariable(value = "id") int id) {
+        UserDetails userDetails = AuthHelper.getUserDetails();
+        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(() -> new UserNotFoundException(userDetails.getUsername()));
+        user.setProfileImageIndex(id);
+        userRepository.save(user);
+        return new ResponseEntity<>(user.getProfileImageIndex(), HttpStatus.OK);
     }
 
     // Get all users subscribed to email notifications

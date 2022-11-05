@@ -334,9 +334,7 @@ public class GameServiceImpl implements GameService {
 
     private double calculateTotalScore(CurrentState currentState) {
         GameStats gameStats = currentState.getGameStats();
-        double totalScore = 0;
-        totalScore = (gameStats.getCurrentEmissionVal()) * 1.0 + gameStats.getCurrentMoraleVal() * 1.0
-                + gameStats.getCurrentCashInHand() * 1.0 + gameStats.getCurrentIncomeVal() * 1.0;
+        double totalScore = gameStats.getCurrentCashInHand() + gameStats.getCurrentIncomeVal() + gameStats.getCurrentMoraleVal() + (3 * gameStats.getCurrentEmissionVal());
         return totalScore;
     }
 
