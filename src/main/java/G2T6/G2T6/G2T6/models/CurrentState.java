@@ -41,7 +41,7 @@ public class CurrentState {
     // @Temporal(TemporalType.TIMESTAMP)
     private java.util.Date dateTime;
 
-    // this Object belong to which user
+    // this Object belong to which user=
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

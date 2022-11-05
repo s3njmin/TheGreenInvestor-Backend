@@ -30,4 +30,7 @@ public class GameResponse {
     // latest multiplier
     private double multiplier;
 
+    // total score
+    private double totalScore;
+
 }
