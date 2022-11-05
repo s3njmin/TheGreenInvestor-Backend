@@ -27,11 +27,70 @@ import G2T6.G2T6.G2T6.security.AuthHelper;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user")
 public class UserController {
 
     @Autowired
     UserRepository userRepository;
+
+    // POST: create user
+    @PostMapping("/create")
+    public ResponseEntity<?> createUser(@Valid @RequestBody User user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+        }
+
+        if (userRepository.existsByEmail(user.getEmail())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
+        }
+
+        userRepository.save(user);
+        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+
+    // GET: get all users
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    // GET: get user by username
+    @GetMapping("/username")
+    @PreAuthorize("hasRole('ADMIN')")
+    public User getUserByUsername(@RequestBody String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
+    }
+
+    // GET: get user by email
+    @GetMapping("/email")
+    @PreAuthorize("hasRole('ADMIN')")
+    public User getUserByEmail(@RequestBody String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
+    }
+
+    // GET: get user by id
+    @GetMapping("/id")
+    @PreAuthorize("hasRole('ADMIN')")
+    public User getUserById(@RequestBody Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+    // PUT: update user
+    @PutMapping("/update")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> updateUser(@Valid @RequestBody User user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+        }
+
+        if (userRepository.existsByEmail(user.getEmail())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
+        }
+
+        userRepository.save(user);
+        return ResponseEntity.ok(new MessageResponse("User updated successfully!"));
+    }
 
     // Get all users subscribed to email notifications
     @GetMapping("/subscribedlist")
@@ -57,8 +116,8 @@ public class UserController {
 
         try {
 
-            User currUser = userRepository.findByUsername(AuthHelper.getCurrentUser().getUsername())
-            .orElseThrow(() -> new UserNotFoundException("User not found"));
+            User currUser = userRepository.findByUsername(AuthHelper.getUserDetails().getUsername())
+                    .orElseThrow(() -> new UserNotFoundException("User not found"));
 
             if (currUser == null) {
                 return new ResponseEntity<>(new MessageResponse("Error: User not found"),
@@ -73,6 +132,7 @@ public class UserController {
                     HttpStatus.OK);
 
         } catch (Exception e) {
+
             return new ResponseEntity<>(new MessageResponse("Error: " + e.getMessage()),
                     HttpStatus.INTERNAL_SERVER_ERROR);
 
