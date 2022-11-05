@@ -4,18 +4,10 @@ import java.util.*;
 
 import javax.validation.Valid;
 
-import G2T6.G2T6.G2T6.exceptions.OptionOrderIdInvalidException;
 import G2T6.G2T6.G2T6.exceptions.QuestionExistsException;
 import G2T6.G2T6.G2T6.exceptions.QuestionNotFoundException;
-import G2T6.G2T6.G2T6.exceptions.QuestionOrderIdInvalidException;
-import G2T6.G2T6.G2T6.models.Option;
 import G2T6.G2T6.G2T6.models.Question;
-import G2T6.G2T6.G2T6.models.orders.OptionOrder;
-import G2T6.G2T6.G2T6.models.orders.QuestionOrder;
-import G2T6.G2T6.G2T6.repository.OptionOrderRepository;
-import G2T6.G2T6.G2T6.repository.QuestionOrderRepository;
 import G2T6.G2T6.G2T6.services.QuestionService;
-import lombok.AllArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -33,11 +25,11 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
-    // return all questions & options (called from frontend & start of game)
-    @GetMapping("/questionsAndOptions")
-    public List<Question> getQuestionAndOptions() {
-        return questionService.randomizedQuestions();
-    }
+    // return all questions & options
+    // @GetMapping("/questionsAndOptions")
+    // public List<Question> getQuestionAndOptions() {
+    //     return questionService.randomizedQuestions();
+    // }
 
     // return all questions
     @GetMapping("/questions")
@@ -45,30 +37,35 @@ public class QuestionController {
         return questionService.listQuestions();
     }
 
+    // return question by id
     @GetMapping("/questions/{id}")
-    public Question getQuestion(@PathVariable final Long id) {
+    public Question getQuestion(@PathVariable final Long id) throws QuestionNotFoundException {
         Question question = questionService.getQuestion(id);
         if(question == null) throw new QuestionNotFoundException(id);
-        return questionService.getQuestion(id);
+        return question;
     }
 
+    // add question 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/questions")
-    public Question addQuestion(@RequestBody final Question question){
-        Question savedQuestion = questionService.addQuestion(question);
+    public Question addQuestion(@RequestBody final Question question) throws QuestionExistsException {
+        // returns null if question already exists
+        Question savedQuestion = questionService.addQuestion(question); 
         if (savedQuestion ==  null) throw new QuestionExistsException(question.getQuestion());
         return savedQuestion;
     }
 
+    // update question
     @PutMapping("/questions/{id}")
-    public Question updateQuestion(@PathVariable final Long id, @Valid @RequestBody final Question newQuestionInfo){
+    public Question updateQuestion(@PathVariable final Long id, @Valid @RequestBody final Question newQuestionInfo)  throws QuestionNotFoundException {
         Question question = questionService.updateQuestion(id, newQuestionInfo);
         if(question == null) throw new QuestionNotFoundException(id);
         return question;
     }
 
+    // delete question
     @DeleteMapping("/questions/{id}")
-    public void deleteQuestion(@PathVariable final Long id){
+    public void deleteQuestion(@PathVariable final Long id) throws QuestionNotFoundException {
         try{
             questionService.deleteQuestion(id);
         } catch(EmptyResultDataAccessException e) {

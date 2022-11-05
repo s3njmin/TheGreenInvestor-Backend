@@ -3,6 +3,7 @@ package G2T6.G2T6.G2T6;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import G2T6.G2T6.G2T6.models.Option;
 import G2T6.G2T6.G2T6.models.Question;
@@ -80,6 +81,40 @@ public class OptionIntegrationTest {
 		usersRepo.deleteAll();
 	}
 
+    // called to authenticate as Admin User
+	public HttpHeaders generateAuthAdmin() throws URISyntaxException {
+		// Generate Headers (Authentication as Admin User)
+		URI uriLogin2 = new URI(baseUrl + port + "/api/auth/signin");
+		LoginRequest loginRequest2 = new LoginRequest();
+		loginRequest2.setUsername("johnTheAdmin");
+		loginRequest2.setPassword("myStrongPw");
+		HttpHeaders headers2 = new HttpHeaders();
+		headers2.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		HttpEntity<LoginRequest> entity2 = new HttpEntity<>(loginRequest2, headers2);
+		ResponseEntity<JwtResponse> responseEntity2 = restTemplate.exchange(
+				uriLogin2,
+				HttpMethod.POST, entity2, JwtResponse.class);
+		headers2.add("Authorization", "Bearer " + responseEntity2.getBody().getAccessToken());
+		return headers2;
+	}
+
+	// called to authenticate as Normal User
+	public HttpHeaders generateAuthNormal() throws URISyntaxException {
+		// Generate Headers (Authentication as Normal User)
+		URI uriLogin = new URI(baseUrl + port + "/api/auth/signin");
+		LoginRequest loginRequest = new LoginRequest();
+		loginRequest.setUsername("bobTheNormie");
+		loginRequest.setPassword("password");
+		HttpHeaders headers = new HttpHeaders();
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+		HttpEntity<LoginRequest> entity = new HttpEntity<>(loginRequest, headers);
+		ResponseEntity<JwtResponse> responseEntity = restTemplate.exchange(
+				uriLogin,
+				HttpMethod.POST, entity, JwtResponse.class);
+		headers.add("Authorization", "Bearer " + responseEntity.getBody().getAccessToken());
+		return headers;
+	}
+
     // @GetMapping("/{questionId}/options")
     @Test
     public void getAllOptionsByQuestionId_invalidQuestionId_Failure() throws Exception {
@@ -123,86 +158,123 @@ public class OptionIntegrationTest {
         Option option = options.save(new Option("Option 1", "Positive Feedback", question, 0, 0, 0, 0));
 
         URI uri = new URI(baseUrl + port + "/api/questions/" + question.getId() + "/options");
-
-        ResponseEntity<Option> result = restTemplate.postForEntity(uri, option, Option.class);
+        HttpHeaders headers = generateAuthAdmin();
+        ResponseEntity<Option> result = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(option, headers), Option.class);
 
         assertEquals(409, result.getStatusCode().value());
     }
 
     @Test
-    public void addOption_newOption_Success() throws Exception {
+    public void addOption_newOptionIsAdmin_Success() throws Exception {
         Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
         Option option = new Option("Option 1", "Positive Feedback", question, 0, 0, 0, 0);
 
         URI uri = new URI(baseUrl + port + "/api/questions/" + question.getId() + "/options");
-
-        ResponseEntity<Option> result = restTemplate.postForEntity(uri, option, Option.class);
+        HttpHeaders headers = generateAuthAdmin();
+        ResponseEntity<Option> result = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(option, headers), Option.class);
 
         assertEquals(201, result.getStatusCode().value());
     }
 
     @Test
-    public void addOption_invalidQuestionId_Failure() throws Exception {
+    public void addOption_invalidQuestionIsAdmin_Failure() throws Exception {
         Question question = new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true);
         Option option = new Option("Option 1", "Positive Feedback", question, 0, 0, 0, 0);
 
+        URI uri = new URI(baseUrl + port + "/api/questions/88/options");
+        HttpHeaders headers = generateAuthAdmin();
+        ResponseEntity<Option> result = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(option, headers), Option.class);
+
+        assertEquals(404, result.getStatusCode().value());
+    }
+
+    @Test
+    public void addOption_newOptionNotAdmin_Success() throws Exception {
+        Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
+        Option option = new Option("Option 1", "Positive Feedback", question, 0, 0, 0, 0);
+
         URI uri = new URI(baseUrl + port + "/api/questions/" + question.getId() + "/options");
+        HttpHeaders headers = generateAuthNormal();
+        ResponseEntity<Option> result = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(option, headers), Option.class);
 
-        ResponseEntity<Option> result = restTemplate.postForEntity(uri, option, Option.class);
-
-        assertEquals(400, result.getStatusCode().value());
+        assertEquals(403, result.getStatusCode().value());
     }
 
     // @PutMapping("/{questionId}/options/{optionId}")
     @Test
-    public void updateOption_validOption_Success() throws Exception {
+    public void updateOption_validOptionIsAdmin_Success() throws Exception {
         Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
         Option oldOption = options.save(new Option("Option 1", "Positive Feedback", question, 0, 0, 0, 0));
-        Option newOption = new Option("Option 2", "Trash Feedback", question, 0, 0, 0, 0);
+        Option newOption = new Option(question.getId(), "Option 2", "Trash Feedback", 0, 0, 0, 0, null); // set to null, since @jsonignore doesn't return question
 
         URI uri = new URI(baseUrl + port + "/api/questions/" + question.getId() + "/options/" + oldOption.getId());
+        HttpHeaders headers = generateAuthAdmin();
+        ResponseEntity<Option> result = restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(newOption, headers), Option.class);
 
-        ResponseEntity<Option> result = restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(newOption), Option.class);
-
-        assertEquals(200, result.getStatusCode().value());
-        assertEquals(newOption.getOption(), result.getBody().getOption()); 
+        assertEquals(200, result.getStatusCode().value()); 
     }
 
     @Test
-    public void updateOption_invalidOption_Failure() throws Exception {
+    public void updateOption_invalidOptionIsAdmin_Failure() throws Exception {
         Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
         Option oldOption = options.save(new Option("Option 1", "Positive Feedback", question, 0, 0, 0, 0));
         Option newOption = new Option("Option 2", "Trash Feedback", question, 0, 0, 0, 0);
 
         URI uri = new URI(baseUrl + port + "/api/questions/" + question.getId() + "/options/404");
-
-        ResponseEntity<Option> result = restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(newOption), Option.class);
+        HttpHeaders headers = generateAuthAdmin();
+        ResponseEntity<Option> result = restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(newOption, headers), Option.class);
 
         assertEquals(404, result.getStatusCode().value());
     }
 
+    @Test
+    public void updateOption_validOptionNotAdmin_Failure() throws Exception {
+        Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
+        Option oldOption = options.save(new Option("Option 1", "Positive Feedback", question, 0, 0, 0, 0));
+        Option newOption = new Option(question.getId(), "Option 2", "Trash Feedback", 0, 0, 0, 0, null); // set to null, since @jsonignore doesn't return question
+
+        URI uri = new URI(baseUrl + port + "/api/questions/" + question.getId() + "/options/" + oldOption.getId());
+        HttpHeaders headers = generateAuthNormal();
+        ResponseEntity<Option> result = restTemplate.exchange(uri, HttpMethod.PUT, new HttpEntity<>(newOption, headers), Option.class);
+
+        assertEquals(403, result.getStatusCode().value());
+    }
+
     // @DeleteMapping("/{questionId}/options/{optionId}")
     @Test
-    public void deleteOption_validOption_Success() throws Exception {
+    public void deleteOption_validOptionIsAdmin_Success() throws Exception {
         Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
         Option oldOption = options.save(new Option("Option 1", "Positive Feedback", question, 0, 0, 0, 0));
 
         URI uri = new URI(baseUrl + port + "/api/questions/" + question.getId() + "/options/" +  + oldOption.getId());
-
-        ResponseEntity<Void> result = restTemplate.exchange(uri, HttpMethod.DELETE, null, Void.class);
+        HttpHeaders headers = generateAuthAdmin();
+        ResponseEntity<Option> result = restTemplate.exchange(uri, HttpMethod.DELETE, new HttpEntity<>(headers), Option.class);
 
         assertEquals(200, result.getStatusCode().value());
         assertNull(result.getBody());
     }
 
     @Test
-    public void deleteOption_invalidOption_Failure() throws Exception {
+    public void deleteOption_invalidOptionIsAdmin_Failure() throws Exception {
         Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
 
         URI uri = new URI(baseUrl + port + "/api/questions/" + question.getId() + "/options/404");
-
-        ResponseEntity<Void> result = restTemplate.exchange(uri, HttpMethod.DELETE, null, Void.class);
+        HttpHeaders headers = generateAuthAdmin();
+        ResponseEntity<Option> result = restTemplate.exchange(uri, HttpMethod.DELETE, new HttpEntity<>(headers), Option.class);
 
         assertEquals(404, result.getStatusCode().value());
+    }
+
+    @Test
+    public void deleteOption_validOptionNotAdmin_Failure() throws Exception {
+        Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
+        Option oldOption = options.save(new Option("Option 1", "Positive Feedback", question, 0, 0, 0, 0));
+
+        URI uri = new URI(baseUrl + port + "/api/questions/" + question.getId() + "/options/" +  + oldOption.getId());
+        HttpHeaders headers = generateAuthNormal();
+        ResponseEntity<Option> result = restTemplate.exchange(uri, HttpMethod.DELETE, new HttpEntity<>(headers), Option.class);
+
+        assertEquals(403, result.getStatusCode().value());
+        assertNull(result.getBody());
     }
 }
