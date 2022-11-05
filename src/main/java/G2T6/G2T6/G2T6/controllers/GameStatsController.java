@@ -27,7 +27,7 @@ public class GameStatsController {
     private UserRepository userRepo;
 
     @Autowired
-    public GameStatsController(GameStatsRepository gameStateRepo, UserRepository userRepo){
+    public GameStatsController(final GameStatsRepository gameStateRepo, final UserRepository userRepo){
         this.gameStateRepo = gameStateRepo;
         this.userRepo = userRepo;
     }
@@ -46,12 +46,6 @@ public class GameStatsController {
         List<GameStats> completedStats = filterAllCompletedGameStats(getAllGameStats());
         Collections.sort(completedStats);
         List<GameStats> completedStatsWithOutDuplicate = filterUniqueGameStats(completedStats);
-        for(int i = 0; i < completedStatsWithOutDuplicate.size(); i++){
-            System.out.println(completedStatsWithOutDuplicate.get(i).getId() + " - id") ;
-            System.out.println(completedStatsWithOutDuplicate.get(i).getCurrentState().getId() + " - state id");
-            System.out.println(completedStatsWithOutDuplicate.get(i).getUser().getId() + " - user id");
-            System.out.println();
-        }
         return completedStatsWithOutDuplicate;
     }
 
@@ -64,7 +58,7 @@ public class GameStatsController {
      * @return return count number of people in term of total game stats score
      */
     @GetMapping("/gameStats/{count}")
-    public List<GameStats> getAllTopNGameStats(@PathVariable (value = "count") int count){
+    public List<GameStats> getAllTopNGameStats(@PathVariable (value = "count") final int count){
         List<GameStats> completedStats = filterAllCompletedGameStats(getAllGameStats());
         enoughCount(count, completedStats.size());
 
@@ -82,7 +76,7 @@ public class GameStatsController {
      * @param expectedCount a integer value
      * @param count a integer value
      */
-    public void enoughCount(int expectedCount, int count){
+    public void enoughCount(final int expectedCount,final int count){
         if(expectedCount > count) throw new NotEnoughGameStatsException(count);
     }
 
@@ -91,7 +85,7 @@ public class GameStatsController {
      * @param gameStats a list of GameStats object
      * @return  all completed game stats
      */
-    public List<GameStats> filterAllCompletedGameStats(List<GameStats> gameStats){
+    public List<GameStats> filterAllCompletedGameStats(final List<GameStats> gameStats){
         List<GameStats> completedStats = new ArrayList<>();
         for(GameStats gs: gameStats){
             if(gs.getCurrentState() != null && gs.getCurrentState().getCurrentState() == State.completed){
@@ -106,7 +100,7 @@ public class GameStatsController {
      * @param gameStats a list of GameStats object
      * @return one game stats from each user
      */
-    public List<GameStats> filterUniqueGameStats(List<GameStats> gameStats){
+    public List<GameStats> filterUniqueGameStats(final List<GameStats> gameStats){
         List<GameStats> completedStatsWithOutDuplicate = new ArrayList<>();List<Long> userIds = new ArrayList<>();
         for(int i = 0; i < gameStats.size(); i++){
             Long userId = gameStats.get(i).getUser().getId();
@@ -124,7 +118,7 @@ public class GameStatsController {
      * @return return all selected user's game stats
      **/
     @GetMapping("/id/{userId}/gameStats")
-    public List<GameStats> getAllSelectedUserGameStats(@PathVariable (value = "userId") Long userId){
+    public List<GameStats> getAllSelectedUserGameStats(@PathVariable (value = "userId") final Long userId){
         if(!userRepo.existsById(userId)){
             throw new UserNotFoundException(userId);
         }
@@ -138,12 +132,11 @@ public class GameStatsController {
      * @return game states of selected user and selected game stats id
      */
     @GetMapping("/id/{userId}/gameStats/{id}")
-    public Optional<GameStats> getGameStats(@PathVariable (value = "userId") Long userId,
-                                            @PathVariable (value = "id") Long id){
+    public Optional<GameStats> getGameStats(@PathVariable (value = "userId") final Long userId,
+                                            @PathVariable (value = "id") final Long id){
         if(!userRepo.existsById(userId)){
             throw new UserNotFoundException(userId);
         }
-        System.out.println("entered");
         return gameStateRepo.findByIdAndUserId(id, userId);
     }
 
@@ -155,7 +148,7 @@ public class GameStatsController {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/id/{userId}/gameStats")
-    public GameStats addGameStats(@PathVariable (value = "userId") Long userId, @Valid @RequestBody GameStats gameStats){
+    public GameStats addGameStats(@PathVariable (value = "userId") final Long userId, @Valid @RequestBody final GameStats gameStats){
         return userRepo.findById(userId).map(user ->{
             gameStats.setUser(user);
             return gameStateRepo.save(gameStats);
@@ -170,8 +163,8 @@ public class GameStatsController {
      */
     @PutMapping("/gameStats/{id}")
     public GameStats updateGameStats(
-            @PathVariable (value = "id") Long id,
-            @Valid @RequestBody GameStats newStats){
+            @PathVariable (value = "id") final Long id,
+            @Valid @RequestBody final GameStats newStats){
         return gameStateRepo.findById(id).map(gameStats ->{
             gameStats.setIncomeVal(newStats.getIncomeVal());
             gameStats.setEmissionVal(newStats.getEmissionVal());
@@ -186,7 +179,7 @@ public class GameStatsController {
      * @return ResponseEntity of the operation
      */
     @DeleteMapping("/gameStats/{id}")
-    public void deleteGameStates(@PathVariable (value = "id") Long id){
+    public void deleteGameStates(@PathVariable (value = "id") final Long id){
         try{
             gameStateRepo.deleteById(id);
         }catch (EmptyResultDataAccessException e){
