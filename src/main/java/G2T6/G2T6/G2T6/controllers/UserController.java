@@ -46,7 +46,8 @@ public class UserController {
         }
 
         userRepository.save(user);
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        //return status 201 with message
+        return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("User registered successfully!"));
     }
 
     // GET: get all users
