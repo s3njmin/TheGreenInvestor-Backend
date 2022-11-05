@@ -47,6 +47,14 @@ public class GameServiceImpl implements GameService {
     @Autowired
     private StateService stateService;
 
+    /**
+     * This method is used to initialize the game. It will create a new game state
+     * for user that has current state as "start"
+     * 
+     * @param currentState the current state of the user
+     * @return GameResponse object that contains the question and options for the
+     *         user
+     */
     @Override
     public GameResponse initGame(CurrentState currentState) {
 
@@ -93,7 +101,9 @@ public class GameServiceImpl implements GameService {
 
         int year = currentState.getYearValue();
 
-        GameResponse gameResponse = new GameResponse(State.start, questionAndOptions, year, null, 1.0);
+        double totalScore = currentState.getGameStats().getTotalScore();
+
+        GameResponse gameResponse = new GameResponse(State.start, questionAndOptions, year, null, 1.0, totalScore);
 
         return gameResponse;
     }
@@ -134,8 +144,11 @@ public class GameServiceImpl implements GameService {
             }
         }
 
+        double totalScore = calculateTotalScore(currentState);
+
+        // Total score is nothing for now. will be implemented later
         GameResponse gameResponse = new GameResponse(currentState.getCurrentState(), questionAndOptions,
-                currentState.getYearValue(), pastGameStats, 1.0);
+                currentState.getYearValue(), pastGameStats, 1.0, totalScore);
 
         return gameResponse;
     }
@@ -153,8 +166,12 @@ public class GameServiceImpl implements GameService {
             }
         }
 
+        // calculate totalscore
+        double totalScore = calculateTotalScore(currentState);
+
         GameResponse gameResponse = new GameResponse(State.completed, null, currentState.getYearValue(),
-                pastGameStats, currentState.getGameStats() == null ? 1.0 : currentState.getGameStats().getMultiplier());
+                pastGameStats, currentState.getGameStats() == null ? 1.0 : currentState.getGameStats().getMultiplier(),
+                totalScore);
 
         return gameResponse;
     }
@@ -181,7 +198,8 @@ public class GameServiceImpl implements GameService {
         // currentGameStats is not supposed to be null, replace over existing
         // placeholder currentGameStats
         GameStats currentGameStats = currentState.getGameStats();
-        int newCashInHand = currentGameStats.getCurrentCashInHand() + currentGameStats.getCurrentIncomeVal() - costImpact;
+        int newCashInHand = currentGameStats.getCurrentCashInHand() + currentGameStats.getCurrentIncomeVal()
+                - costImpact;
         int newMorale = currentGameStats.getCurrentMoraleVal() + moraleImpact;
         int newSustainability = currentGameStats.getCurrentEmissionVal() + sustainabilityImpact;
         int newIncomeImpact = currentGameStats.getCurrentIncomeVal() + incomeImpact;
@@ -194,6 +212,7 @@ public class GameServiceImpl implements GameService {
         currentGameStats.setCurrentIncomeVal(newIncomeImpact);
         currentGameStats.setCurrentMoraleVal(newMorale);
         currentGameStats.setMultiplier(1.0);
+        currentGameStats.setTotalScore(calculateTotalScore(currentState));
 
         gameStatsRepo.saveAndFlush(currentGameStats);
 
@@ -240,6 +259,7 @@ public class GameServiceImpl implements GameService {
         // currentGameStats is not supposed to be null, replace over existing
         // placeholder currentGameStats
         currentGameStats.setMultiplier(averageScore + 1.0);
+        currentGameStats.setTotalScore(calculateTotalScore(currentState));
 
         gameStatsRepo.saveAndFlush(currentGameStats);
 
@@ -270,6 +290,10 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public void prepareNextGame(CurrentState currentState) {
+
+        // change old state to completed and save
+        currentState.setCurrentState(State.completed);
+        stateRepo.saveAndFlush(currentState);
 
         CurrentState newState = stateService.getDefaultState();
 
@@ -304,6 +328,14 @@ public class GameServiceImpl implements GameService {
 
         return optionsName;
 
+    }
+
+    private double calculateTotalScore(CurrentState currentState) {
+        GameStats gameStats = currentState.getGameStats();
+        double totalScore = 0;
+        totalScore = (gameStats.getCurrentEmissionVal()) * 1.0 + gameStats.getCurrentMoraleVal() * 1.0
+                + gameStats.getCurrentCashInHand() * 1.0 + gameStats.getCurrentIncomeVal() * 1.0;
+        return totalScore;
     }
 
 }

@@ -54,53 +54,40 @@ public class GameController {
     @Autowired
     private QuestionRepository questionRepo;
 
+    /**
+     * This method is used to fetch the latest game information for a user.
+     * 
+     * @return GameResponse object that contains the list of questions and options
+     *         for the user to answer.
+     */
     @GetMapping("/gameInfo")
-    // this version gets all the quesetions at the start
     public ResponseEntity<?> getGameInfo() {
 
-        try {
-            UserDetails user = AuthHelper.getCurrentUser();
-            if (user == null) {
-                return ResponseEntity.badRequest()
-                        .body(new MessageResponse("Error: User is invalid, bad authentication"));
-            }
+        User currUser = userRepo.findByUsername(AuthHelper.getCurrentUser().getUsername())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-            // get the user object
-            User currUser = userRepo.findByUsername(user.getUsername())
-                    .orElseThrow(() -> new UserNotFoundException(user.getUsername()));
+        CurrentState currentState = stateRepository.findTopByUserOrderByIdDesc(currUser)
+                .orElseThrow(() -> new StateNotFoundException(currUser.getUsername()));
 
-            CurrentState currentState = stateRepository.findTopByUserOrderByIdDesc(currUser)
-                    .orElseThrow(() -> new StateNotFoundException(currUser.getUsername()));
-
-            // get state of the user
-            State state = currentState.getCurrentState();
-
-            // if state is "start", which means not in game, then initialise a new game for
-            // user
-            if (state == State.start) {
-                GameResponse gameResponse = gameService.initGame(currentState);
-                return ResponseEntity.ok(gameResponse);
-            }
-
-            if (currentState.getYearValue() == 10 || currentState.getGameStats().getCurrentCashInHand() <= 0
-                    || currentState.getGameStats().getCurrentMoraleVal() <= 0
-                    || currentState.getGameStats().getCurrentEmissionVal() <= 0) {
-                GameResponse gameResponse = gameService.getEndGameInfo(currentState);
-                gameService.prepareNextGame(currentState);
-                return ResponseEntity.ok(gameResponse);
-            }
-
-            // if any other states, return current info
-            GameResponse gameResponse = gameService.getGameInfo(currentState);
+        // If user's latest current state is in start -> which means he is in lobby and
+        // not in game, hence we init a game for him
+        if (currentState.getCurrentState() == State.start) {
+            GameResponse gameResponse = gameService.initGame(currentState);
             return ResponseEntity.ok(gameResponse);
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-            return ResponseEntity.badRequest()
-                    .body(new MessageResponse("Error: Some other error please contact admin"));
         }
+
+        // Conditions to terminate the game
+        if (currentState.getYearValue() == 10 || currentState.getGameStats().getCurrentCashInHand() <= 0
+                || currentState.getGameStats().getCurrentMoraleVal() <= 0
+                || currentState.getGameStats().getCurrentEmissionVal() <= 0) {
+            GameResponse gameResponse = gameService.getEndGameInfo(currentState);
+            gameService.prepareNextGame(currentState);
+            return ResponseEntity.ok(gameResponse);
+        }
+
+        // if any other states, return current info
+        GameResponse gameResponse = gameService.getGameInfo(currentState);
+        return ResponseEntity.ok(gameResponse);
 
     }
 
@@ -108,21 +95,13 @@ public class GameController {
     public ResponseEntity<?> submitAnswer(@Valid @RequestBody AnswerRequest2 answerRequest) {
         try {
 
-            UserDetails user = AuthHelper.getCurrentUser();
+            User currUser = userRepo.findByUsername(AuthHelper.getCurrentUser().getUsername())
+                    .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-            if (user == null) {
-                return ResponseEntity.badRequest()
-                        .body(new MessageResponse("Error: User is invalid, bad authentication"));
-            }
-
-            // get the user object
-            User currUser = userRepo.findByUsername(user.getUsername())
-                    .orElseThrow(() -> new UserNotFoundException(user.getUsername()));
-
-            // get the most recent state of the user from database by state id
             CurrentState currentState = stateRepository.findTopByUserOrderByIdDesc(currUser)
                     .orElseThrow(() -> new StateNotFoundException(currUser.getUsername()));
 
+            // Conditions to terminate the game
             if (currentState.getYearValue() == 10 || currentState.getGameStats().getCurrentCashInHand() <= 0
                     || currentState.getGameStats().getCurrentMoraleVal() <= 0
                     || currentState.getGameStats().getCurrentEmissionVal() <= 0) {
@@ -201,7 +180,7 @@ public class GameController {
             e.printStackTrace();
 
             return ResponseEntity.badRequest()
-                    .body(new MessageResponse("Error: An error has occurred"));
+                    .body(new MessageResponse("Error: An error has occurred | game is ended?"));
 
         }
     }

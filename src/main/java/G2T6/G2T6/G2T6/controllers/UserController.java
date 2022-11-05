@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import G2T6.G2T6.G2T6.payload.response.MessageResponse;
 import G2T6.G2T6.G2T6.repository.UserRepository;
+import G2T6.G2T6.G2T6.exceptions.UserNotFoundException;
 import G2T6.G2T6.G2T6.models.security.User;
 import G2T6.G2T6.G2T6.security.AuthHelper;
 
@@ -56,20 +57,17 @@ public class UserController {
 
         try {
 
-            UserDetails currUser = AuthHelper.getCurrentUser();
+            User currUser = userRepository.findByUsername(AuthHelper.getCurrentUser().getUsername())
+            .orElseThrow(() -> new UserNotFoundException("User not found"));
 
             if (currUser == null) {
                 return new ResponseEntity<>(new MessageResponse("Error: User not found"),
                         HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
-            System.out.println(currUser.getUsername());
+            currUser.setSubscribedEmail(!currUser.isSubscribedEmail());
 
-            User user = userRepository.findByUsername(currUser.getUsername()).get();
-
-            user.setSubscribedEmail(!user.isSubscribedEmail());
-
-            userRepository.save(user);
+            userRepository.save(currUser);
 
             return new ResponseEntity<>(new MessageResponse("User subscription status changed successfully!"),
                     HttpStatus.OK);
