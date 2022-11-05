@@ -5,9 +5,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.*;
 
 @Entity
@@ -19,41 +17,45 @@ import lombok.*;
 @EqualsAndHashCode
 public class Option {
 
+    // Option Id is Primary Key of Option Table
     private @Id @GeneratedValue (strategy = GenerationType.AUTO) Long id;
 
-    @NotNull(message = "Option Text should not be null")
+    // Option Body
+    @NotNull(message = "Option should not be null")
     @Length(max=300)
     private String option;
 
-    // @NotNull(message = "Feedback should not be null")
+    // Feedback after selecting an option
+    @NotNull(message = "Feedback should not be null")
     @Length(max=300)
     private String feedback;
 
     // impact on GameStats
-    
     @Min(-1000) @Max(1000) @NotNull
-    private int sustainabilityImpact;
+    private int sustainabilityImpact; //impact on Sustainability Score
     @Min(-100) @Max(100) @NotNull
-    private int moraleImpact;
+    private int moraleImpact; //impact on Morale
     @Min(-100) @Max(100) @NotNull
-    private int incomeImpact;
+    private int incomeImpact; //impact on Income
     @Min(0) @Max(100) @NotNull
-    private int costImpact;
+    private int costImpact; // impact on Cash Stash
 
+    // question that option is mapped to 
     @ManyToOne
     @JoinColumn(name="question_id", nullable=false)
-    @JsonIgnore
+    @JsonIgnore // ignore in json object to avoid infinite loop of referencing
     private Question question;
 
+    // constructor1 that takes in option, feedback, question
     public Option(final String option, final String feedback, final Question qn) {
         this.option = option;
         this.feedback = feedback;
         this.question = qn;
     }
 
+    // constructor2 that takes in  gameStat metrics in addiion to option, feedback, question
     public Option(final String option, final String feedback, final Question qn, final int sustainabilityImpact, final int moraleImpact ,final int incomeImpact, final int costImpact) {
-        this(option, feedback, qn);
-
+        this(option, feedback, qn); // calls constructor1
         this.sustainabilityImpact = sustainabilityImpact;
         this.moraleImpact = moraleImpact;
         this.incomeImpact = incomeImpact;

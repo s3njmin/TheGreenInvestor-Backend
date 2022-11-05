@@ -39,18 +39,14 @@ public class Question {
     @NotNull(message = "Question type should not be null")
     private boolean isOpenEnded;
 
-    // public Question(final String qn) {
-    //     this.question = qn;
-    // }
+    public Question(final String qn) {
+        this.question = qn;
+    }
 
     // constructor - pass in question, imageLink, isOpenEnded
     public Question(final String qn, final String imageLink, final boolean isOpenEnded) {
         this.question = qn;
         this.imageLink = imageLink;
         this.isOpenEnded = isOpenEnded;
-    }
-
-    public Question(final String qn){
-        this.question = qn;
     }
 }

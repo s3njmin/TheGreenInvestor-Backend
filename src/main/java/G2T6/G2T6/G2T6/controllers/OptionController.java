@@ -68,6 +68,11 @@ public class OptionController {
 
         return options.findByIdAndQuestionId(optionId, questionId).map(option -> {
             option.setOption(newOption.getOption());
+            option.setFeedback(newOption.getFeedback());
+            option.setSustainabilityImpact(newOption.getSustainabilityImpact());
+            option.setMoraleImpact(newOption.getMoraleImpact());
+            option.setIncomeImpact(newOption.getIncomeImpact());
+            option.setCostImpact(newOption.getCostImpact());
             return options.save(option);
         }).orElseThrow(() -> new OptionOrderIdInvalidException(optionId));
     }

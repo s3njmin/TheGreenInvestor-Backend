@@ -168,26 +168,30 @@ public class QuestionIntegrationTest {
 	@Test
 	public void addQuestion_Admin_Success() throws Exception {
 
-		// //Login as admin
-		// URI uri = new URI(baseUrl + port + "/api/questions");
-        // LoginRequest loginRequest = new LoginRequest();
-        // loginRequest.setUsername("johnTheAdmin");
-        // loginRequest.setPassword("myStrongPw");
+		//Login as admin
+		URI uri = new URI(baseUrl + port + "/api/questions");
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("johnTheAdmin");
+        loginRequest.setPassword("myStrongPw");
 
-        // HttpHeaders headers = new HttpHeaders();
-        // headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 
-        // HttpEntity<LoginRequest> entity = new HttpEntity<>(loginRequest, headers);
+        HttpEntity<LoginRequest> entity = new HttpEntity<>(loginRequest, headers);
 
-		// // Create question
-		// Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
+		ResponseEntity<JwtResponse> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.POST, entity, JwtResponse.class);
 
-		// ResponseEntity<Question> result = restTemplate.exchange(uri,
-		// 	HttpMethod.POST, new HttpEntity<>(question, headers), Question.class);
+		// Create question
+		Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
+
+		ResponseEntity<Question> result = restTemplate.exchange(uri,
+			HttpMethod.POST, new HttpEntity<>(question, headers), Question.class);
 
 		// // ResponseEntity<Question> result2 = restTemplate.postForEntity(uri, question, Question.class);
 
-		// assertEquals(201, result.getStatusCode().value());
+		assertEquals(200, responseEntity.getStatusCode().value());
 		
 		// assertEquals(201, result2.getStatusCode().value());
 		// assertEquals(question.getQuestion(), result2.getBody().getQuestion());
