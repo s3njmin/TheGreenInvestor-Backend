@@ -21,7 +21,7 @@ import javax.validation.constraints.NotNull;
 public class Question {
 
     // Question Id is Primary Key of Question Table
-    private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
+    private @Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;
 
     // Question Body
     @NotNull(message = "Question should not be null")
@@ -62,7 +62,7 @@ public class Question {
     }
 
     // constructor - testing purposes, accepts list of options
-    public Question(final String qn, final String imageLink, final List<Option> options, final boolean isOpenEnded) {
+    public Question(final String qn, final String imageLink, final List<Option> options, final boolean isOpenEnded, final Article article) {
         this(qn, imageLink, isOpenEnded);
         this.options = options;
     }
@@ -71,12 +71,12 @@ public class Question {
     // @Override
     // public boolean equals(Object question) {
     // if (!(question instanceof Question)) {
-    // return false;
+    //     return false;
     // }
     // Question qn = (Question) question;
 
     // return (this.id == qn.getId()) && (this.question == qn.getQuestion()) &&
-    // (this.imageLink == qn.getImageLink()) && (this.options == this.getOptions())
-    // && (this.isOpenEnded == this.isOpenEnded());
+    //     (this.imageLink == qn.getImageLink()) && (this.options == qn.getOptions())
+    //     && (this.isOpenEnded == qn.isOpenEnded()) && (this.article == qn.getArticle());
     // }
 }
