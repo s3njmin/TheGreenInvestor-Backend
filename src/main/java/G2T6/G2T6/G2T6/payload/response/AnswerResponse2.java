@@ -22,16 +22,16 @@ public class AnswerResponse2 {
     private int changeInCashVal = 0;
 
     // current cash in hand
-    private int currentCash = 0;
+    private int currentCashVal = 0;
 
     // current profitability/income/GPT
-    private int currentIncome = 0;
+    private int currentIncomeVal = 0;
 
     // current sustainability
-    private int currentSustainability = 0;
+    private int currentSustainabilityVal = 0;
 
     // current morale
-    private int currentMorale = 0;
+    private int currentMoraleVal = 0;
 
     // multiplier
     private double multiplier = 1.0;
