@@ -1,8 +1,6 @@
 package G2T6.G2T6.G2T6.models;
 
-import G2T6.G2T6.G2T6.misc.CONSTANTVARIABLES;
 import G2T6.G2T6.G2T6.misc.State;
-import G2T6.G2T6.G2T6.models.orders.OptionOrder;
 import G2T6.G2T6.G2T6.models.orders.QuestionOrder;
 import G2T6.G2T6.G2T6.models.security.User;
 
@@ -14,8 +12,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -157,7 +153,7 @@ public class CurrentState {
     public boolean checkIfGameShouldEnd() {
         if (getYearValue() >= 9 || getGameStats().getCurrentCashInHand() <= 0
                 || getGameStats().getCurrentMoraleVal() <= 0
-                || getGameStats().getCurrentEmissionVal() <= 0) {
+                || getGameStats().getCurrentSustainabilityVal() <= 0) {
             return true;
         }
         return false;

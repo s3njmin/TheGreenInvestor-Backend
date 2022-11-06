@@ -214,14 +214,14 @@ public class GameServiceImpl implements GameService {
         int newCashInHand = currentGameStats.getCurrentCashInHand() + currentGameStats.getCurrentIncomeVal()
                 - costImpact;
         int newMorale = currentGameStats.getCurrentMoraleVal() + moraleImpact;
-        int newSustainability = currentGameStats.getCurrentEmissionVal() + sustainabilityImpact;
+        int newSustainability = currentGameStats.getCurrentSustainabilityVal() + sustainabilityImpact;
         int newIncomeImpact = currentGameStats.getCurrentIncomeVal() + incomeImpact;
-        currentGameStats.setEmissionVal(sustainabilityImpact);
-        currentGameStats.setMoraleVal(moraleImpact);
-        currentGameStats.setIncomeVal(incomeImpact);
-        currentGameStats.setCostVal(costImpact);
+        currentGameStats.setChangeInSustainabilityVal(sustainabilityImpact);
+        currentGameStats.setChangeInMoraleVal(moraleImpact);
+        currentGameStats.setChangeInIncomeVal(incomeImpact);
+        currentGameStats.setChangeInCostVal(costImpact);
         currentGameStats.setCurrentCashInHand(newCashInHand);
-        currentGameStats.setCurrentEmissionVal(newSustainability);
+        currentGameStats.setCurrentSustainabilityVal(newSustainability);
         currentGameStats.setCurrentIncomeVal(newIncomeImpact);
         currentGameStats.setCurrentMoraleVal(newMorale);
         currentGameStats.setMultiplier(1.0 * currentGameStats.getMultiplier()); // no multiplier for normal question
@@ -305,7 +305,7 @@ public class GameServiceImpl implements GameService {
                 State.answering, currentState.getQuestionOrder());
 
         GameStats newGameStats = new GameStats(currentState.getUser(), newState, oldGameStats.getMultiplier(),
-                oldGameStats.getCurrentEmissionVal(), oldGameStats.getCurrentMoraleVal(),
+                oldGameStats.getCurrentSustainabilityVal(), oldGameStats.getCurrentMoraleVal(),
                 oldGameStats.getCurrentIncomeVal(),
                 oldGameStats.getCurrentCashInHand());
 
@@ -385,7 +385,7 @@ public class GameServiceImpl implements GameService {
     private double calculateTotalScore(CurrentState currentState) {
         GameStats gameStats = currentState.getGameStats();
         double totalScore = gameStats.getCurrentCashInHand() + gameStats.getCurrentIncomeVal()
-                + gameStats.getCurrentMoraleVal() + (3 * gameStats.getCurrentEmissionVal());
+                + gameStats.getCurrentMoraleVal() + (3 * gameStats.getCurrentSustainabilityVal());
         totalScore *= gameStats.getMultiplier();
         // round totalScore to 2 decimal place
         totalScore = Math.round(totalScore * 100.0) / 100.0;

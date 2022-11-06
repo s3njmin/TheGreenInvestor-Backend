@@ -2,18 +2,14 @@ package G2T6.G2T6.G2T6.controllers;
 
 import G2T6.G2T6.G2T6.exceptions.GameStatsNotFoundException;
 import G2T6.G2T6.G2T6.exceptions.NotEnoughGameStatsException;
-import G2T6.G2T6.G2T6.exceptions.StateNotFoundException;
 import G2T6.G2T6.G2T6.exceptions.UserNotFoundException;
 import G2T6.G2T6.G2T6.misc.State;
-import G2T6.G2T6.G2T6.models.CurrentState;
-import G2T6.G2T6.G2T6.repository.StateRepository;
 import G2T6.G2T6.G2T6.models.GameStats;
 import G2T6.G2T6.G2T6.repository.GameStatsRepository;
 import G2T6.G2T6.G2T6.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -166,9 +162,18 @@ public class GameStatsController {
             @PathVariable (value = "id") final Long id,
             @Valid @RequestBody final GameStats newStats){
         return gameStateRepo.findById(id).map(gameStats ->{
-            gameStats.setIncomeVal(newStats.getIncomeVal());
-            gameStats.setEmissionVal(newStats.getEmissionVal());
-            gameStats.setMoraleVal(newStats.getMoraleVal());
+            gameStats.setChangeInIncomeVal(newStats.getChangeInIncomeVal());
+            gameStats.setChangeInSustainabilityVal(newStats.getChangeInSustainabilityVal());
+            gameStats.setChangeInMoraleVal(newStats.getChangeInMoraleVal());
+            gameStats.setChangeInCostVal(newStats.getChangeInCostVal());
+
+            gameStats.setCurrentIncomeVal(newStats.getCurrentIncomeVal());
+            gameStats.setCurrentSustainabilityVal(newStats.getCurrentSustainabilityVal());
+            gameStats.setCurrentMoraleVal(newStats.getCurrentMoraleVal());
+            gameStats.setCurrentCashInHand(newStats.getCurrentCashInHand());
+
+            gameStats.setMultiplier(newStats.getMultiplier());
+            gameStats.setTotalScore(newStats.getTotalScore());
             return gameStateRepo.save(gameStats);
         }).orElseThrow(() -> new GameStatsNotFoundException(id));
     }

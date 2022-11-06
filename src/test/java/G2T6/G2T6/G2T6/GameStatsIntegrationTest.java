@@ -81,8 +81,8 @@ public class GameStatsIntegrationTest {
         GameStats[] gs = result.getBody();
         assertEquals(200, result.getStatusCode().value());
         assertEquals(2, gs.length);
-        assertEquals(gs1.getEmissionVal(), gs[0].getEmissionVal());
-        assertEquals(gs2.getEmissionVal() , gs[1].getEmissionVal());
+        assertEquals(gs1.getCurrentSustainabilityVal(), gs[0].getCurrentSustainabilityVal());
+        assertEquals(gs2.getCurrentSustainabilityVal() , gs[1].getCurrentSustainabilityVal());
     }
 
     //     @GetMapping("/id/{userId}/gameStats/{id}")
@@ -92,9 +92,9 @@ public class GameStatsIntegrationTest {
         URI uri = new URI(baseUrl + port + "/api/id/" + regularUser.getId() +"/gameStats/" + gs1.getId());
         ResponseEntity<GameStats> result = restTemplate.getForEntity(uri, GameStats.class);
         assertEquals(200, result.getStatusCode().value());
-        assertEquals(gs1.getEmissionVal(), result.getBody().getEmissionVal());
-        assertEquals(gs1.getIncomeVal(), result.getBody().getIncomeVal());
-        assertEquals(gs1.getMoraleVal(), result.getBody().getMoraleVal());
+        assertEquals(gs1.getCurrentSustainabilityVal(), result.getBody().getCurrentSustainabilityVal());
+        assertEquals(gs1.getCurrentIncomeVal(), result.getBody().getCurrentIncomeVal());
+        assertEquals(gs1.getCurrentMoraleVal(), result.getBody().getCurrentMoraleVal());
 
     }
     @Test
@@ -128,8 +128,8 @@ public class GameStatsIntegrationTest {
         assertEquals(200, result.getStatusCode().value());
         GameStats[] gsResult = result.getBody();
         assertEquals(2, gsResult.length);
-        assertEquals(gs1.getEmissionVal(), gsResult[0].getEmissionVal());
-        assertEquals(gs2.getEmissionVal(), gsResult[1].getEmissionVal());
+        assertEquals(gs1.getCurrentSustainabilityVal(), gsResult[0].getCurrentSustainabilityVal());
+        assertEquals(gs2.getCurrentSustainabilityVal(), gsResult[1].getCurrentSustainabilityVal());
     }
 
     @Test
@@ -227,6 +227,85 @@ public class GameStatsIntegrationTest {
 
         assertEquals(gs1.getTotal(), gsArray[0].getTotal());
         assertEquals(gs3.getTotal(), gsArray[1].getTotal());
+    }
+
+    @Test
+    public void getAllUniqueGameStatsZeroCompleted_Success() throws Exception{
+        CurrentState cs0101 = new CurrentState(CONSTANTVARIABLES.DEFAULTYEAR, State.start, regularUser);
+        CurrentState cs0102 = new CurrentState(10, State.start, regularUser);
+
+        List<CurrentState> csList01 = new ArrayList<>();
+        csList01.add(cs0101);
+        csList01.add(cs0102);
+
+        GameStats gs1 =  new GameStats(10,10,10, regularUser, cs0101);
+        GameStats gs2 =  new GameStats(1,1,1, regularUser, cs0102);
+        List<GameStats> gsList01 = new ArrayList<>();
+        gsList01.add(gs1);
+        gsList01.add(gs2);
+
+        regularUser.setCurrentState(csList01);
+        regularUser.setGameStats(gsList01);
+        stateRepo.save(cs0101);
+        stateRepo.save(cs0102);
+        gameStatsRepo.save(gs1);
+        gameStatsRepo.save(gs2);
+
+        User user02 = userRepo.save(new User("fasfajisoaisf", "fasfajisoaisf@gmail.com", "PASSWORD123", "GUEST"));
+
+        CurrentState cs0201 = new CurrentState(CONSTANTVARIABLES.DEFAULTYEAR, State.start, user02);
+        CurrentState cs0202 = new CurrentState(10, State.start, user02);
+
+        List<CurrentState> csList02 = new ArrayList<>();
+        csList01.add(cs0201);
+        csList02.add(cs0202);
+
+        GameStats gs3 =  new GameStats(10,9,10, user02, cs0201);
+        GameStats gs4 =  new GameStats(1,2,1, user02, cs0202);
+        List<GameStats> gsList02 = new ArrayList<>();
+        gsList02.add(gs3);
+        gsList02.add(gs4);
+
+        user02.setCurrentState(csList02);
+        user02.setGameStats(gsList02);
+        stateRepo.save(cs0201);
+        stateRepo.save(cs0202);
+        gameStatsRepo.save(gs3);
+        gameStatsRepo.save(gs4);
+
+        User user03 = userRepo.save(new User("asf3fq3", "asf3fq3@gmail.com", "PASSWORD12345", "GUEST"));
+
+        CurrentState cs0301 = new CurrentState(CONSTANTVARIABLES.DEFAULTYEAR, State.start, user03);
+
+        List<CurrentState> csList03 = new ArrayList<>();
+        csList03.add(cs0301);
+
+        GameStats gs5 =  new GameStats(10,9,8, user03, cs0301);
+        List<GameStats> gsList03 = new ArrayList<>();
+        gsList03.add(gs5);
+
+        user03.setCurrentState(csList03);
+        user03.setGameStats(gsList03);
+        stateRepo.save(cs0301);
+        gameStatsRepo.save(gs5);
+
+        URI uri = new URI(baseUrl + port + "/api/gameStats/allUnique");
+        ResponseEntity<GameStats[]> result = restTemplate.getForEntity(uri, GameStats[].class);
+        GameStats[] gsArray = result.getBody();
+        assertEquals(200, result.getStatusCode().value());
+        assertEquals(0, gsArray.length);
+
+    }
+
+    @Test
+    public void getAllUniqueGameStatsEmpty_Success() throws Exception{
+
+        URI uri = new URI(baseUrl + port + "/api/gameStats/allUnique");
+        ResponseEntity<GameStats[]> result = restTemplate.getForEntity(uri, GameStats[].class);
+        GameStats[] gsArray = result.getBody();
+        assertEquals(200, result.getStatusCode().value());
+        assertEquals(0, gsArray.length);
+
     }
 
     @Test
@@ -343,9 +422,9 @@ public class GameStatsIntegrationTest {
         URI uri = new URI(baseUrl + port + "/api/id/" + regularUser.getId() +"/gameStats");
         ResponseEntity<GameStats> result = restTemplate.getRestTemplate().postForEntity(uri, gameStats, GameStats.class);
         assertEquals(201, result.getStatusCode().value());
-        assertEquals(gameStats.getIncomeVal(), result.getBody().getIncomeVal());
-        assertEquals(gameStats.getEmissionVal(), result.getBody().getEmissionVal());
-        assertEquals(gameStats.getMoraleVal(), result.getBody().getMoraleVal());
+        assertEquals(gameStats.getCurrentIncomeVal(), result.getBody().getCurrentIncomeVal());
+        assertEquals(gameStats.getCurrentSustainabilityVal(), result.getBody().getCurrentSustainabilityVal());
+        assertEquals(gameStats.getCurrentMoraleVal(), result.getBody().getCurrentMoraleVal());
     }
 
     @Test
@@ -372,9 +451,9 @@ public class GameStatsIntegrationTest {
         GameStats newReplacingGameStats = new GameStats(10,5,0,regularUser, null);
         ResponseEntity<GameStats> result = restTemplate.getRestTemplate().exchange(uri, HttpMethod.PUT,  new HttpEntity<>(newReplacingGameStats), GameStats.class);
         assertEquals(200, result.getStatusCode().value());
-        assertEquals(newReplacingGameStats.getIncomeVal(), result.getBody().getIncomeVal());
-        assertEquals(newReplacingGameStats.getEmissionVal(), result.getBody().getEmissionVal());
-        assertEquals(newReplacingGameStats.getMoraleVal(), result.getBody().getMoraleVal());
+        assertEquals(newReplacingGameStats.getCurrentIncomeVal(), result.getBody().getCurrentIncomeVal());
+        assertEquals(newReplacingGameStats.getCurrentSustainabilityVal(), result.getBody().getCurrentSustainabilityVal());
+        assertEquals(newReplacingGameStats.getCurrentMoraleVal(), result.getBody().getCurrentMoraleVal());
     }
 
     @Test

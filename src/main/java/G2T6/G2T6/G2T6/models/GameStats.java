@@ -21,38 +21,37 @@ public class GameStats implements Comparable<GameStats> {
     // game stats's id and primary key of the game stats database table
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    @JsonIgnore
     private Long id;
 
     // sustainability value of game stats
     @Min(-9999)
     @Max(9999)
     @NotNull
-    private int emissionVal = 0;
+    private int changeInSustainabilityVal = 0;
 
     // morale value of game stats
     @Min(-9999)
     @Max(9999)
     @NotNull
-    private int moraleVal = 0;
+    private int changeInMoraleVal = 0;
 
     // income value of game stats
     @Min(-9999)
     @Max(9999)
     @NotNull
-    private int incomeVal = 0;
+    private int changeInIncomeVal = 0;
 
     // cost impact of game stats
     @Min(-9999)
     @Max(9999)
     @NotNull
-    private int costVal = 0;
+    private int changeInCostVal = 0;
 
     // sustainability value of game stats
     @Min(-9999)
     @Max(9999)
     @NotNull
-    private int currentEmissionVal = 150;
+    private int currentSustainabilityVal = 150;
 
     // morale value of game stats
     @Min(-9999)
@@ -85,7 +84,6 @@ public class GameStats implements Comparable<GameStats> {
     private CurrentState currentState;
 
     @ManyToOne
-    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -93,24 +91,24 @@ public class GameStats implements Comparable<GameStats> {
         this.id = id;
     }
 
-    public GameStats(int income, int morale, int emission, User user, CurrentState currentState) {
-        this.incomeVal = income;
-        this.moraleVal = morale;
-        this.emissionVal = emission;
+    public GameStats(int currentIncomeVal, int currentMoraleVal, int currentSustainabilityVal, User user, CurrentState currentState) {
+        this.currentIncomeVal = currentIncomeVal;
+        this.currentMoraleVal = currentMoraleVal;
+        this.currentSustainabilityVal = currentSustainabilityVal;
         this.user = user;
         this.currentState = currentState;
     }
 
-    public GameStats(int income, int morale, int emission) {
-        this.incomeVal = income;
-        this.moraleVal = morale;
-        this.emissionVal = emission;
+    public GameStats(int currentIncomeVal, int currentMoraleVal, int currentSustainabilityVal) {
+        this.currentIncomeVal = currentIncomeVal;
+        this.currentMoraleVal = currentMoraleVal;
+        this.currentSustainabilityVal = currentSustainabilityVal;
     }
 
-    public GameStats(int income, int morale, int emission, CurrentState currentState) {
-        this.incomeVal = income;
-        this.moraleVal = morale;
-        this.emissionVal = emission;
+    public GameStats(int currentIncomeVal, int currentMoraleVal, int currentSustainabilityVal, CurrentState currentState) {
+        this.currentIncomeVal = currentIncomeVal;
+        this.currentMoraleVal = currentMoraleVal;
+        this.currentSustainabilityVal = currentSustainabilityVal;
         this.currentState = currentState;
     }
 
@@ -122,16 +120,16 @@ public class GameStats implements Comparable<GameStats> {
         return this.currentState;
     }
 
-    public GameStats(int emission, int morale, int income, int cost, User user, CurrentState currentState,
+    public GameStats(int currentIncomeVal, int currentMoraleVal, int currentSustainabilityVal, int cost, User user, CurrentState currentState,
             double multiplier, int currentEmission, int currentMorale, int currentIncome, int currentCashInHand) {
-        this.incomeVal = income;
-        this.moraleVal = morale;
-        this.emissionVal = emission;
-        this.costVal = cost;
+        this.currentIncomeVal = currentIncomeVal;
+        this.currentMoraleVal = currentMoraleVal;
+        this.currentSustainabilityVal = currentSustainabilityVal;
+        this.changeInCostVal = cost;
         this.user = user;
         this.currentState = currentState;
         this.multiplier = multiplier;
-        this.currentEmissionVal = currentEmission;
+        this.currentSustainabilityVal = currentEmission;
         this.currentMoraleVal = currentMorale;
         this.currentIncomeVal = currentIncome;
         this.currentCashInHand = currentCashInHand;
@@ -142,7 +140,7 @@ public class GameStats implements Comparable<GameStats> {
         this.user = user;
         this.currentState = currentState;
         this.multiplier = multiplier;
-        this.currentEmissionVal = currentEmission;
+        this.currentSustainabilityVal = currentEmission;
         this.currentMoraleVal = currentMorale;
         this.currentIncomeVal = currentIncome;
         this.currentCashInHand = currentCashInHand;
@@ -154,7 +152,7 @@ public class GameStats implements Comparable<GameStats> {
      * @return calculation
      */
     public Long getTotal() {
-        return (long) (currentCashInHand + currentIncomeVal + currentMoraleVal) +  (3 * currentEmissionVal);
+        return (long) (currentCashInHand + currentIncomeVal + currentMoraleVal) +  (3 * currentSustainabilityVal);
     }
 
     /**

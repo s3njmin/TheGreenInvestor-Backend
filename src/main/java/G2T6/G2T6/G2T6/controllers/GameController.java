@@ -158,12 +158,12 @@ public class GameController {
             // update current vals
             int currentCashInHand = gameStats.getCurrentCashInHand();
             int currentIncomeVal = gameStats.getCurrentIncomeVal();
-            int currentEmissionVal = gameStats.getCurrentEmissionVal();
+            int currentEmissionVal = gameStats.getCurrentSustainabilityVal();
             int currentMoraleVal = gameStats.getCurrentMoraleVal();
 
-            AnswerResponse2 answerResponse = new AnswerResponse2(gameStats.getIncomeVal(),
-                    gameStats.getMoraleVal(),
-                    gameStats.getEmissionVal(), gameStats.getCostVal(), currentCashInHand, currentIncomeVal,
+            AnswerResponse2 answerResponse = new AnswerResponse2(gameStats.getCurrentIncomeVal(),
+                    gameStats.getChangeInMoraleVal(),
+                    gameStats.getCurrentSustainabilityVal(), gameStats.getChangeInCostVal(), currentCashInHand, currentIncomeVal,
                     currentEmissionVal, currentMoraleVal, gameStats.getMultiplier(),
                     isOpenEnded ? "null" : question.getOptions().get(answer).getFeedback());
 
