@@ -219,7 +219,7 @@ public class GameServiceImpl implements GameService {
         currentGameStats.setChangeInSustainabilityVal(sustainabilityImpact);
         currentGameStats.setChangeInMoraleVal(moraleImpact);
         currentGameStats.setChangeInIncomeVal(incomeImpact);
-        currentGameStats.setChangeInCostVal(costImpact);
+        currentGameStats.setChangeInCashVal(costImpact);
         currentGameStats.setCurrentCashInHand(newCashInHand);
         currentGameStats.setCurrentSustainabilityVal(newSustainability);
         currentGameStats.setCurrentIncomeVal(newIncomeImpact);

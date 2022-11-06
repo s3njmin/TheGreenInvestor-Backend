@@ -11,28 +11,28 @@ import lombok.Setter;
 public class AnswerResponse2 {
 
     // income value of game stats
-    private int incomeVal = 0;
+    private int changeInIncomeVal = 0;
 
     // morale value of game stats
-    private int moraleVal = 0;
+    private int changeInMoraleVal = 0;
 
     // sustainability value of game stats
-    private int emissionVal = 0;
+    private int changeInSustainabilityVal = 0;
 
-    // cost impact of game stats
-    private int costVal = 0;
+    // cash impact of game stats
+    private int changeInCashVal = 0;
 
     // current cash in hand
-    private int currentCash = 0;
+    private int currentCashVal = 0;
 
     // current profitability/income/GPT
-    private int currentIncome = 0;
+    private int currentIncomeVal = 0;
 
     // current sustainability
-    private int currentEmission = 0;
+    private int currentSustainabilityVal = 0;
 
     // current morale
-    private int currentMorale = 0;
+    private int currentMoraleVal = 0;
 
     // multiplier
     private double multiplier = 1.0;

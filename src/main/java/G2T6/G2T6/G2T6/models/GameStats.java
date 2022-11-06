@@ -41,11 +41,11 @@ public class GameStats implements Comparable<GameStats> {
     @NotNull
     private int changeInIncomeVal = 0;
 
-    // cost impact of game stats
+    // cash impact of game stats
     @Min(-9999)
     @Max(9999)
     @NotNull
-    private int changeInCostVal = 0;
+    private int changeInCashVal = 0;
 
     // sustainability value of game stats
     @Min(-9999)
@@ -84,6 +84,7 @@ public class GameStats implements Comparable<GameStats> {
     private CurrentState currentState;
 
     @ManyToOne
+
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -125,7 +126,7 @@ public class GameStats implements Comparable<GameStats> {
         this.currentIncomeVal = currentIncomeVal;
         this.currentMoraleVal = currentMoraleVal;
         this.currentSustainabilityVal = currentSustainabilityVal;
-        this.changeInCostVal = cost;
+        this.changeInCashVal = cost;
         this.user = user;
         this.currentState = currentState;
         this.multiplier = multiplier;

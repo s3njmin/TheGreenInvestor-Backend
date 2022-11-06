@@ -65,6 +65,7 @@ public class StateServiceImplementation implements StateService {
         return stateRepository.findById(id).map(newState -> {
                 newState.changeState(state.getCurrentState());
                 newState.setYearValue(state.getYearValue());
+                newState.setUserResponse(state.getUserResponse());
             return stateRepository.save(newState );
         }).orElse(null);
     }

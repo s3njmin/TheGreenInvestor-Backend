@@ -171,8 +171,7 @@ public class GameController {
 
             AnswerResponse2 answerResponse = new AnswerResponse2(gameStats.getCurrentIncomeVal(),
                     gameStats.getChangeInMoraleVal(),
-                    gameStats.getCurrentSustainabilityVal(), gameStats.getChangeInCostVal(), currentCashInHand,
-                    currentIncomeVal,
+                    gameStats.getCurrentSustainabilityVal(), gameStats.getChangeInCashVal(), currentCashInHand, currentIncomeVal,
                     currentEmissionVal, currentMoraleVal, gameStats.getMultiplier(),
                     isOpenEnded ? questionRepo.findById(question.getId()).get().getOptions().get(0).getFeedback()
                             : question.getOptions().get(answer).getFeedback(),
