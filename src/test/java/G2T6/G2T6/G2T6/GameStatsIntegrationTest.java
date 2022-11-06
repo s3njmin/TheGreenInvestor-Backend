@@ -422,6 +422,7 @@ public class GameStatsIntegrationTest {
         URI uri = new URI(baseUrl + port + "/api/id/" + regularUser.getId() +"/gameStats");
         ResponseEntity<GameStats> result = restTemplate.getRestTemplate().postForEntity(uri, gameStats, GameStats.class);
         assertEquals(201, result.getStatusCode().value());
+
         assertEquals(gameStats.getCurrentIncomeVal(), result.getBody().getCurrentIncomeVal());
         assertEquals(gameStats.getCurrentSustainabilityVal(), result.getBody().getCurrentSustainabilityVal());
         assertEquals(gameStats.getCurrentMoraleVal(), result.getBody().getCurrentMoraleVal());
