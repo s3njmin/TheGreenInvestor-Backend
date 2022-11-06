@@ -84,6 +84,7 @@ public class GameStats implements Comparable<GameStats> {
     private CurrentState currentState;
 
     @ManyToOne
+
     @JoinColumn(name = "user_id")
     private User user;
 

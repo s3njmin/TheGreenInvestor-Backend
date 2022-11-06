@@ -202,7 +202,7 @@ public class TheGreenInvestorApplication {
 		oList.clear();
 
 		// Question 11's Options (open-ended) treating options as answers
-		oList.add(new Option("Electricity and Heat Production", "null", qList.get(10)));
+		oList.add(new Option("Electricity and Heat Production", "Since the start of the Industrial Revolution and the advent of coal-powered steam engines, human activities have vastly increased the volume of greenhouse gases emitted into the atmosphere. It is estimated that between 1750 and 2011, atmospheric concentrations of carbon dioxide increased by 40 percent, methane by 150 percent, and nitrous oxide by 20 percent.", qList.get(10)));
 		oList.add(new Option("Agriculture and Land Use Changes", "null", qList.get(10)));
 		oList.add(new Option("Industry", "null", qList.get(10)));
 		oList.add(new Option("Transportation", "null", qList.get(10)));
@@ -214,7 +214,7 @@ public class TheGreenInvestorApplication {
 		oList.clear();
 	
 		// Question 12's Options (open-ended) treating options as answers
-		oList.add(new Option("China", "null", qList.get(11)));
+		oList.add(new Option("China", "These countries won’t be able to reach carbon neutrality only by reducing their domestic emissions.  They will need to offset much of their carbon footprint on international carbon markets.", qList.get(11)));
 		oList.add(new Option("United States", "null", qList.get(11)));
 		oList.add(new Option("India", "null", qList.get(11)));
 		oList.add(new Option("Russia", "null", qList.get(11)));

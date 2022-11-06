@@ -22,12 +22,12 @@ public class Option {
 
     // Option Body
     @NotNull(message = "Option should not be null")
-    @Length(max=300)
+    @Length(max=400)
     private String option;
 
     // Feedback after selecting an option
     @NotNull(message = "Feedback should not be null")
-    @Length(max=300)
+    @Length(max=400)
     private String feedback;
 
     // impact on GameStats
