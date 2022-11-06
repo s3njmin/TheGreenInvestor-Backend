@@ -18,8 +18,8 @@ public class AnswerResponse2 {
     // sustainability value of game stats
     private int changeInSustainabilityVal = 0;
 
-    // cost impact of game stats
-    private int changeInCostVal = 0;
+    // cash impact of game stats
+    private int changeInCashVal = 0;
 
     // current cash in hand
     private int currentCash = 0;
@@ -28,7 +28,7 @@ public class AnswerResponse2 {
     private int currentIncome = 0;
 
     // current sustainability
-    private int currentEmission = 0;
+    private int currentSustainability = 0;
 
     // current morale
     private int currentMorale = 0;

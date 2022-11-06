@@ -165,7 +165,7 @@ public class GameStatsController {
             gameStats.setChangeInIncomeVal(newStats.getChangeInIncomeVal());
             gameStats.setChangeInSustainabilityVal(newStats.getChangeInSustainabilityVal());
             gameStats.setChangeInMoraleVal(newStats.getChangeInMoraleVal());
-            gameStats.setChangeInCostVal(newStats.getChangeInCostVal());
+            gameStats.setChangeInCashVal(newStats.getChangeInCashVal());
 
             gameStats.setCurrentIncomeVal(newStats.getCurrentIncomeVal());
             gameStats.setCurrentSustainabilityVal(newStats.getCurrentSustainabilityVal());
