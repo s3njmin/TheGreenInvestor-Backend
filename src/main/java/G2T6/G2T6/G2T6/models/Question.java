@@ -21,7 +21,7 @@ import javax.validation.constraints.NotNull;
 public class Question {
 
     // Question Id is Primary Key of Question Table
-    private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
+    private @Id @GeneratedValue(strategy = GenerationType.AUTO) Long id;
 
     // Question Body
     @NotNull(message = "Question should not be null")

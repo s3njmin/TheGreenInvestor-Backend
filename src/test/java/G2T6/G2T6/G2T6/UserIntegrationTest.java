@@ -43,7 +43,13 @@ public class UserIntegrationTest {
     private final String baseUrl = "http://localhost:";
 
     @Autowired
-    TestRestTemplate restTemplate;
+    private TestRestTemplate restTemplate;
+
+    @Autowired
+    private StateRepository stateRepo;
+
+    @Autowired
+    private GameStatsRepository gameStatsRepo;
 
     @Autowired
     UserRepository usersRepo;
@@ -53,6 +59,9 @@ public class UserIntegrationTest {
 
     @Autowired
     BCryptPasswordEncoder encoder;
+
+    @Autowired
+    private UserRepository userRepo;
 
     // private User regularUser;
 
@@ -124,7 +133,7 @@ public class UserIntegrationTest {
         // Create a new user
         URI uri = new URI(baseUrl + port + "/api/user/create");
         User user = new User("testUser", "testUser@gmail.com",
-                encoder.encode("password"), "ROLE_USER", false, 0, 0.0, 0);
+                encoder.encode("password"), "ROLE_USER", false);
 
         // Send request
         HttpEntity<User> entity = new HttpEntity<>(user, headers);
