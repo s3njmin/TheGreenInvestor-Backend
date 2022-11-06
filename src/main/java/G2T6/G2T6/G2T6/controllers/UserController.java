@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import G2T6.G2T6.G2T6.payload.response.MessageResponse;
+import G2T6.G2T6.G2T6.payload.response.ProfileResponse;
 import G2T6.G2T6.G2T6.repository.UserRepository;
 import G2T6.G2T6.G2T6.exceptions.UserNotFoundException;
 import G2T6.G2T6.G2T6.models.security.User;
@@ -130,6 +131,19 @@ public class UserController {
         User user = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new UserNotFoundException(userDetails.getUsername()));
         return new ResponseEntity<>(user.getGamesPlayed(), HttpStatus.OK);
+    }
+
+    // get profileresponse
+    @GetMapping("/getProfile")
+    public ResponseEntity<?> getProfile() {
+        UserDetails userDetails = AuthHelper.getUserDetails();
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new UserNotFoundException(userDetails.getUsername()));
+
+        // return profileresponse dto
+        return new ResponseEntity<>(
+                new ProfileResponse(user.getHighScore(), user.getGamesPlayed(), user.getProfileImageIndex()),
+                HttpStatus.OK);
     }
 
     // Get all users subscribed to email notifications
