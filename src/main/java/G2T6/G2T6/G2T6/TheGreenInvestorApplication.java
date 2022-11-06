@@ -54,31 +54,42 @@ public class TheGreenInvestorApplication {
 		// 	optionOrderRepository.save(new OptionOrder());
 		// }
 
+		List<Article> aList = new ArrayList<Article>();
+		aList.add(new Article(
+			"Illegal logging is still going on in many parts of the world, endangering the ecosystem and biodiverity of the forests. One such case is in Indonesia, where a company has been accused of logging in peat forests and orangutan habitats by activists, whom have photographic evidence of their acts.",
+			"https://www.bbc.com/news/world-asia-pacific-10798849"));
+		aList.add(new Article(
+				"The pandemic is no stranger to most of us, with the COVID-19 outbreak reaching to every corner of the world. Companies have had to change their business strategy and model to continue operating under the new economic landscape. Some of these new models have continued on even in a post-pandemic world such as 'remote work' and a 'digital-first' strategy.",
+				"https://www.bbc.com/worklife/article/20210915-how-companies-around-the-world-are-shifting-the-way-they-work"));
+		aList.add(new Article(
+				"Singapore is one example of a country who has set an aim for zero carbon emissions by the year 2050. From 2024 to 2030, they will increase their carbon tax from S$25 to S$80. Companies will have to adapt and source for higher quality carbon credits to reduce their carbon footprint.",
+				"https://www.reuters.com/markets/commodities/singapore-hike-carbon-tax-by-five-fold-2024-2022-02-18/"));
+
 		// Questions
 		qList.add(new Question(
 				"Company stakeholders are pressuring you to eliminate paper waste in every office. Will you:",
-				"https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img1.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
+				"https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img1.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED, null));
 		qList.add(new Question("The company has earned a record profit for the year. You decide to use the money for:",
-				"https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img2.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
+				"https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img2.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED, null));
 		qList.add(new Question("It is 22 April, AKA Earth Day! Your company decide to celebrate in the following way:",
-				"https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img3.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
-		qList.add(new Question("Some employees are complaining that we can do better to reduce wastage at work. You decided to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img4.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
+				"https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img3.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED, null));
+		qList.add(new Question("Some employees are complaining that we can do better to reduce wastage at work. You decided to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img4.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED, null));
 
-		qList.add(new Question("An internal company sustainability report has found out that the distribution and logistics arm of the company can improve its sustainability practices. You decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img5.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
+		qList.add(new Question("An internal company sustainability report has found out that the distribution and logistics arm of the company can improve its sustainability practices. You decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img5.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED, null));
 		
-		qList.add(new Question("Company stakeholders have a set a goal to achieve a more sustainable supply chain within the next 5 years. You decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img6.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
+		qList.add(new Question("Company stakeholders have a set a goal to achieve a more sustainable supply chain within the next 5 years. You decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img6.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED, null));
 		
-		qList.add(new Question("Temperature has been rising considerably the past few months, and so has the electricity bill due to lower thermostat in the office. To combat this, you decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img7.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
+		qList.add(new Question("Temperature has been rising considerably the past few months, and so has the electricity bill due to lower thermostat in the office. To combat this, you decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img7.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED, null));
 		
 		// events
-		qList.add(new Question("The illegal logging of endagered trees in Imaginationland has gone viral. The public are pressuring companies to stop using wood from endangered species such as teak, mahagony and rosewood. As a company that uses these wood for manufacturing, you decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img8.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
-		qList.add(new Question("A worldwide pandemic has started and has impacted businesses everywhere. To ensure continued green sustainability practices within the company during trying times, you decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img9.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
-		qList.add(new Question("A new change in the government has led to a more aggressive push to achieve net zero carbon emission in the country. Facing pressure from the government, you decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img10.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED));
+		qList.add(new Question("The illegal logging of endagered trees in Imaginationland has gone viral. The public are pressuring companies to stop using wood from endangered species such as teak, mahagony and rosewood. As a company that uses these wood for manufacturing, you decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img8.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED, aList.get(0)));
+		qList.add(new Question("A worldwide pandemic has started and has impacted businesses everywhere. To ensure continued green sustainability practices within the company during trying times, you decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img9.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED, aList.get(1)));
+		qList.add(new Question("A new change in the government has led to a more aggressive push to achieve net zero carbon emission in the country. Facing pressure from the government, you decide to:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img10.jpg", CONSTANTVARIABLES.NOT_OPEN_ENDED, aList.get(2)));
 
 
 		// open-ended
-		qList.add(new Question("Name 3 main causes of greenhouse gas emissions:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img11.jpg", CONSTANTVARIABLES.OPEN_ENDED));
-		qList.add(new Question("Name 3 countries that contribute the most to carbon emissions:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img12.jpg", CONSTANTVARIABLES.OPEN_ENDED));
+		qList.add(new Question("Name 3 main causes of greenhouse gas emissions:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img11.jpg", CONSTANTVARIABLES.OPEN_ENDED, null));
+		qList.add(new Question("Name 3 countries that contribute the most to carbon emissions:", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/questions/img12.jpg", CONSTANTVARIABLES.OPEN_ENDED, null));
 		List<Option> oList = new ArrayList<Option>();
 
 		// Question 1's Options
@@ -225,16 +236,10 @@ public class TheGreenInvestorApplication {
 		saveORepo(oRepo, oList);
 		oList.clear();
 
-		List<Article> aList = new ArrayList<Article>();
-		aList.add(new Article(
-				"Illegal logging is still going on in many parts of the world, endangering the ecosystem and biodiverity of the forests. One such case is in Indonesia, where a company has been accused of logging in peat forests and orangutan habitats by activists, whom have photographic evidence of their acts.",
-				"https://www.bbc.com/news/world-asia-pacific-10798849"));
-		aList.add(new Article(
-				"The pandemic is no stranger to most of us, with the COVID-19 outbreak reaching to every corner of the world. Companies have had to change their business strategy and model to continue operating under the new economic landscape. Some of these new models have continued on even in a post-pandemic world such as 'remote work' and a 'digital-first' strategy.",
-				"https://www.bbc.com/worklife/article/20210915-how-companies-around-the-world-are-shifting-the-way-they-work"));
-		aList.add(new Article(
-				"Singapore is one example of a country who has set an aim for zero carbon emissions by the year 2050. From 2024 to 2030, they will increase their carbon tax from S$25 to S$80. Companies will have to adapt and source for higher quality carbon credits to reduce their carbon footprint.",
-				"https://www.reuters.com/markets/commodities/singapore-hike-carbon-tax-by-five-fold-2024-2022-02-18/"));
+		//only save after questions are done for articles
+		aList.get(0).setQuestion(qList.get(6));
+		aList.get(1).setQuestion(qList.get(7));
+		aList.get(2).setQuestion(qList.get(8));
 		saveARepo(aRepo, aList);
 
 //		UserRepository userRepo = ctx.getBean(UserRepository.class);

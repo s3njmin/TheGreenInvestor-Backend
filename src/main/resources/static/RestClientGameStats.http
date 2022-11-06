@@ -25,3 +25,5 @@ Content-Type: application/json
     "emissionVal":0
 }
 ###
+
+GET http://localhost:8080/api/gameStats/allUnique

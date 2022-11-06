@@ -11,5 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     List<Question> findByQuestion(final String question);
-    Optional<Question> findById(final Long id);
+
+    Optional<Question> findById(Long id);
 }

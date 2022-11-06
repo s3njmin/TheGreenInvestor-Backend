@@ -1,5 +1,6 @@
 package G2T6.G2T6.G2T6.payload.response;
 
+import G2T6.G2T6.G2T6.models.Article;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,5 +39,8 @@ public class AnswerResponse2 {
 
     // feedback
     private String feedback = "";
+
+    // Article 
+    private Article article = null;
 
 }

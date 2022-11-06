@@ -4,6 +4,8 @@ import G2T6.G2T6.G2T6.exceptions.StateNotFoundException;
 import G2T6.G2T6.G2T6.exceptions.UserNotFoundException;
 import G2T6.G2T6.G2T6.misc.State;
 import G2T6.G2T6.G2T6.models.*;
+import G2T6.G2T6.G2T6.repository.ArticleRepository;
+import G2T6.G2T6.G2T6.repository.QuestionRepository;
 import G2T6.G2T6.G2T6.repository.StateRepository;
 import G2T6.G2T6.G2T6.models.GameStats;
 import G2T6.G2T6.G2T6.models.security.User;
@@ -34,6 +36,12 @@ public class GameController {
 
     @Autowired
     private GameService gameService;
+
+    @Autowired
+    private ArticleRepository articleRepo;
+
+    @Autowired
+    private QuestionRepository questionRepo;
 
     private User currUser;
     private CurrentState currentState;
@@ -163,9 +171,12 @@ public class GameController {
 
             AnswerResponse2 answerResponse = new AnswerResponse2(gameStats.getCurrentIncomeVal(),
                     gameStats.getChangeInMoraleVal(),
-                    gameStats.getCurrentSustainabilityVal(), gameStats.getChangeInCostVal(), currentCashInHand, currentIncomeVal,
+                    gameStats.getCurrentSustainabilityVal(), gameStats.getChangeInCostVal(), currentCashInHand,
+                    currentIncomeVal,
                     currentEmissionVal, currentMoraleVal, gameStats.getMultiplier(),
-                    isOpenEnded ? "null" : question.getOptions().get(answer).getFeedback());
+                    isOpenEnded ? questionRepo.findById(question.getId()).get().getOptions().get(0).getFeedback()
+                            : question.getOptions().get(answer).getFeedback(),
+                    question.getArticle());
 
             if (currentState.checkIfGameShouldEnd()) {
                 gameService.endGame(currentState);

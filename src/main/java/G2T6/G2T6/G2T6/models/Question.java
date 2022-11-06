@@ -5,6 +5,8 @@ import java.util.List;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import lombok.*;
 import javax.validation.constraints.NotNull;
@@ -17,13 +19,13 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class Question {
-    
+
     // Question Id is Primary Key of Question Table
-    private @Id @GeneratedValue (strategy = GenerationType.IDENTITY) Long id;
-    
+    private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
+
     // Question Body
     @NotNull(message = "Question should not be null")
-    @Length(max=300)
+    @Length(max = 300)
     private String question;
 
     // Link to Image hosted on AWS
@@ -38,7 +40,12 @@ public class Question {
     // whether question is open-ended
     @NotNull(message = "Question type should not be null")
     private boolean isOpenEnded;
-    
+
+    // article and its url
+    @OneToOne(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Article article;
+
     // constructor - pass in question, imageLink, isOpenEnded
     public Question(final String qn, final String imageLink, final boolean isOpenEnded) {
         this.question = qn;
@@ -46,8 +53,16 @@ public class Question {
         this.isOpenEnded = isOpenEnded;
     }
 
+    // constructor - pass in question, imageLink, isOpenEnded, article
+    public Question(final String qn, final String imageLink, final boolean isOpenEnded, final Article article) {
+        this.question = qn;
+        this.imageLink = imageLink;
+        this.isOpenEnded = isOpenEnded;
+        this.article = article;
+    }
+
     // constructor - testing purposes, accepts list of options
-    public Question(final String qn, final String imageLink, final List<Option> options,final boolean isOpenEnded) {
+    public Question(final String qn, final String imageLink, final List<Option> options, final boolean isOpenEnded) {
         this(qn, imageLink, isOpenEnded);
         this.options = options;
     }
@@ -55,11 +70,13 @@ public class Question {
     // compare two questions, check for equality - testing purposes
     // @Override
     // public boolean equals(Object question) {
-    //     if (!(question instanceof Question)) {
-    //         return false;
-    //     }
-    //     Question qn = (Question) question;
+    // if (!(question instanceof Question)) {
+    // return false;
+    // }
+    // Question qn = (Question) question;
 
-    //     return (this.id == qn.getId()) && (this.question == qn.getQuestion()) && (this.imageLink == qn.getImageLink()) && (this.options == this.getOptions()) && (this.isOpenEnded == this.isOpenEnded());
+    // return (this.id == qn.getId()) && (this.question == qn.getQuestion()) &&
+    // (this.imageLink == qn.getImageLink()) && (this.options == this.getOptions())
+    // && (this.isOpenEnded == this.isOpenEnded());
     // }
 }

@@ -174,7 +174,7 @@ public class QuestionIntegrationTest {
 	@Test
 	public void addQuestion_newQuestionIsAdmin_Success() throws Exception {
 		URI uri = new URI(baseUrl + port + "/api/questions");
-		Question question = new Question(1L, "Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", null, true);
+		Question question = new Question(1L, "Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", null, true, null);
 
 		HttpHeaders headers = generateAuthAdmin();
 		ResponseEntity<Question> result = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(question, headers), Question.class);
@@ -187,7 +187,7 @@ public class QuestionIntegrationTest {
 	public void addQuestion_newQuestionNonAdmin_Failure() throws Exception {
 		// Use Headers to Authenticate and Test
 		URI uri = new URI(baseUrl + port + "/api/questions");
-		Question question = new Question(1L, "Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", null, true);
+		Question question = new Question(1L, "Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", null, true, null);
 
 		HttpHeaders headers = generateAuthNormal();
 		ResponseEntity<Question> result = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(question, headers), Question.class);
@@ -221,7 +221,7 @@ public class QuestionIntegrationTest {
 	@Test
 	public void updateQuestion_validQuestionIsAdmin_Success() throws Exception {
 		Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
-		Question updatedQuestion = new Question(question.getId(), "Question 2", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img12.jpg", new ArrayList<Option>(), false);
+		Question updatedQuestion = new Question(question.getId(), "Question 2", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img12.jpg", new ArrayList<Option>(), false, null);
 		
 		URI uri = new URI(baseUrl + port + "/api/questions/" + question.getId());
 		HttpHeaders headers = generateAuthAdmin();
@@ -234,7 +234,7 @@ public class QuestionIntegrationTest {
 	@Test
 	public void updateQuestion_validQuestionNotAdmin_Failure() throws Exception {
 		Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
-		Question updatedQuestion = new Question(question.getId(), "Question 2", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img12.jpg", new ArrayList<Option>(), false);
+		Question updatedQuestion = new Question(question.getId(), "Question 2", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img12.jpg", new ArrayList<Option>(), false, null);
 		
 		URI uri = new URI(baseUrl + port + "/api/questions/" + question.getId());
 		HttpHeaders headers = generateAuthNormal();
