@@ -174,6 +174,12 @@ public class OptionIntegrationTest {
         ResponseEntity<Option> result = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(option, headers), Option.class);
 
         assertEquals(201, result.getStatusCode().value());
+        assertEquals(option.getOption(), result.getBody().getOption());
+        assertEquals(option.getFeedback(), result.getBody().getFeedback());
+        assertEquals(option.getSustainabilityImpact(), result.getBody().getSustainabilityImpact());
+        assertEquals(option.getMoraleImpact(), result.getBody().getMoraleImpact());
+        assertEquals(option.getIncomeImpact(), result.getBody().getIncomeImpact());
+        assertEquals(option.getCostImpact(), result.getBody().getCostImpact());
     }
 
     @Test

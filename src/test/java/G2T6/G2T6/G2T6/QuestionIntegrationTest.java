@@ -7,13 +7,10 @@ import java.net.URISyntaxException;
 
 import G2T6.G2T6.G2T6.models.Option;
 import G2T6.G2T6.G2T6.models.Question;
-import G2T6.G2T6.G2T6.repository.OptionRepository;
 import G2T6.G2T6.G2T6.repository.QuestionRepository;
 import G2T6.G2T6.G2T6.models.security.User;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,8 +24,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
 import java.util.*;
 
@@ -180,14 +175,16 @@ public class QuestionIntegrationTest {
 		ResponseEntity<Question> result = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(question, headers), Question.class);
 
 		assertEquals(201, result.getStatusCode().value());
-		assertEquals(question, result.getBody());
+		assertEquals(question.getQuestion(), result.getBody().getQuestion());
+		assertEquals(question.getImageLink(), result.getBody().getImageLink());
+		assertEquals(question.isOpenEnded(), result.getBody().isOpenEnded());
 	}
 
 	@Test
 	public void addQuestion_newQuestionNonAdmin_Failure() throws Exception {
 		// Use Headers to Authenticate and Test
 		URI uri = new URI(baseUrl + port + "/api/questions");
-		Question question = new Question(1L, "Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", null, true, null);
+		Question question = new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true);
 
 		HttpHeaders headers = generateAuthNormal();
 		ResponseEntity<Question> result = restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(question, headers), Question.class);
