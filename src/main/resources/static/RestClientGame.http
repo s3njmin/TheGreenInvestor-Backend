@@ -22,20 +22,20 @@ Content-Type: application/json
 
 ### get game info about this user
 GET http://localhost:8080/api/gameInfo
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjMiLCJpYXQiOjE2Njc3MjMyNTYsImV4cCI6MTY2NzcyNjg1Nn0.Qvcy6BOrv7UF2-HfAATbSScYKsuGbbrl0FkFhuS2wTAGZjNvxe4RwGiHVthuSDl8od84-6hwiog5D3qLDEkWPw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjMiLCJpYXQiOjE2Njc3MTc2MzEsImV4cCI6MTY2NzcyMTIzMX0.UBDOaFE5OxAhd78uEDkTFP6pgjeRvRyt7yXXYeGwBY26M8J0TXYababKrZNtLk_nMnmH4EcvpI6cCuW2qrFdSw
 ###
 
 
 ### start game for current user
 POST http://localhost:8080/api/startGame
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjMiLCJpYXQiOjE2Njc3MjMyNTYsImV4cCI6MTY2NzcyNjg1Nn0.Qvcy6BOrv7UF2-HfAATbSScYKsuGbbrl0FkFhuS2wTAGZjNvxe4RwGiHVthuSDl8od84-6hwiog5D3qLDEkWPw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjMiLCJpYXQiOjE2Njc3MTc2MzEsImV4cCI6MTY2NzcyMTIzMX0.UBDOaFE5OxAhd78uEDkTFP6pgjeRvRyt7yXXYeGwBY26M8J0TXYababKrZNtLk_nMnmH4EcvpI6cCuW2qrFdSw
 ###
 
 
 ### submit mcq answer #index from 0,1,2,3
 POST http://localhost:8080/api/submitAnswer
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjMiLCJpYXQiOjE2Njc3MjMyNTYsImV4cCI6MTY2NzcyNjg1Nn0.Qvcy6BOrv7UF2-HfAATbSScYKsuGbbrl0FkFhuS2wTAGZjNvxe4RwGiHVthuSDl8od84-6hwiog5D3qLDEkWPw
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjMiLCJpYXQiOjE2Njc3MTc2MzEsImV4cCI6MTY2NzcyMTIzMX0.UBDOaFE5OxAhd78uEDkTFP6pgjeRvRyt7yXXYeGwBY26M8J0TXYababKrZNtLk_nMnmH4EcvpI6cCuW2qrFdSw
 
 {
     "answer": "2"

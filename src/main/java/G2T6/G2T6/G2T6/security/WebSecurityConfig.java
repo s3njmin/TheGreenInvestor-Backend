@@ -24,16 +24,16 @@ import G2T6.G2T6.G2T6.security.jwt.AuthTokenFilter;
 import G2T6.G2T6.G2T6.security.services.UserDetailsServiceImpl;
 
 @Configuration
-// @EnableWebSecurity
+//@EnableWebSecurity
 @EnableGlobalMethodSecurity(
     // securedEnabled = true,
     // jsr250Enabled = true,
     prePostEnabled = true)
 public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
-
+  
   @Value("${spring.h2.console.path}")
   private String h2ConsolePath;
-
+  
   @Autowired
   UserDetailsServiceImpl userDetailsService;
 
@@ -45,28 +45,27 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     return new AuthTokenFilter();
   }
 
-  // @Override
-  // public void configure(AuthenticationManagerBuilder
-  // authenticationManagerBuilder) throws Exception {
-  // authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-  // }
-
+//  @Override
+//  public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+//    authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+//  }
+  
   @Bean
   public DaoAuthenticationProvider authenticationProvider() {
-    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-
-    authProvider.setUserDetailsService(userDetailsService);
-    authProvider.setPasswordEncoder(passwordEncoder());
-
-    return authProvider;
+      DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+       
+      authProvider.setUserDetailsService(userDetailsService);
+      authProvider.setPasswordEncoder(passwordEncoder());
+   
+      return authProvider;
   }
 
-  // @Bean
-  // @Override
-  // public AuthenticationManager authenticationManagerBean() throws Exception {
-  // return super.authenticationManagerBean();
-  // }
-
+//  @Bean
+//  @Override
+//  public AuthenticationManager authenticationManagerBean() throws Exception {
+//    return super.authenticationManagerBean();
+//  }
+  
   @Bean
   public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
     return authConfig.getAuthenticationManager();
@@ -77,67 +76,65 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     return new BCryptPasswordEncoder();
   }
 
-  // @Override
-  // protected void configure(HttpSecurity http) throws Exception {
-  // http.cors().and().csrf().disable()
-  // .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-  // .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-  // .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-  // .antMatchers("/api/test/**").permitAll()
-  // .antMatchers(h2ConsolePath + "/**").permitAll()
-  // .anyRequest().authenticated();
-  //
-  // // fix H2 database console: Refused to display ' in a frame because it set
-  // 'X-Frame-Options' to 'deny'
-  // http.headers().frameOptions().sameOrigin();
-  //
-  // http.addFilterBefore(authenticationJwtTokenFilter(),
-  // UsernamePasswordAuthenticationFilter.class);
-  // }
-
+//  @Override
+//  protected void configure(HttpSecurity http) throws Exception {
+//    http.cors().and().csrf().disable()
+//      .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+//      .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+//      .authorizeRequests().antMatchers("/api/auth/**").permitAll()
+//      .antMatchers("/api/test/**").permitAll()
+//      .antMatchers(h2ConsolePath + "/**").permitAll()
+//      .anyRequest().authenticated();
+//    
+//    // fix H2 database console: Refused to display ' in a frame because it set 'X-Frame-Options' to 'deny'
+//    http.headers().frameOptions().sameOrigin();
+//
+//    http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+//  }
+  
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.cors().and().csrf().disable()
         .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
         .authorizeRequests()
-        .antMatchers("/api/auth/**").permitAll()
+          .antMatchers("/api/auth/**").permitAll()
 
-        // authentication for question & option API calls
-        .antMatchers(HttpMethod.GET, "/api/questions/**", "/api/questions/*/options").hasRole("ADMIN")
-        .antMatchers(HttpMethod.POST, "/api/questions", "/api/questions/*/options").hasRole("ADMIN")
-        .antMatchers(HttpMethod.PUT, "/api/questions/*", "/api/questions/*/options/*").hasRole("ADMIN")
-        .antMatchers(HttpMethod.DELETE, "/api/questions/*", "/api/questions/*/options/*").hasRole("ADMIN")
+          // authentication for question & option API calls
+          .antMatchers(HttpMethod.GET, "/api/questions/**", "/api/questions/*/options").permitAll()
+          .antMatchers(HttpMethod.POST,"/api/questions", "/api/questions/*/options").hasRole("ADMIN")
+          .antMatchers(HttpMethod.PUT,"/api/questions/*", "/api/questions/*/options/*").hasRole("ADMIN")
+          .antMatchers(HttpMethod.DELETE,"/api/questions/*", "/api/questions/*/options/*").hasRole("ADMIN")
 
-        // authentication for states
-        .antMatchers("/api/states/**", "/api/states").hasRole("ADMIN")
-        .antMatchers("/api/gameStats/allUnique").permitAll()
-        .antMatchers("/api/gameStats/*").hasRole("ADMIN")
-        .antMatchers("/api/gameStats").hasRole("ADMIN")
-        .antMatchers("/api/id/**/gameStats/**").hasRole("ADMIN")
-        .antMatchers("/api/id/**").hasRole("ADMIN")
-        .antMatchers("/favicon.ico").permitAll()
-        .antMatchers(HttpMethod.PUT, "/api/subscribe").permitAll()
-        // .antMatchers(HttpMethod.GET,"/api/subscribe").permitAll()
+          // authentication for states
+          .antMatchers("/api/states/**", "/api/states").permitAll()
+          .antMatchers("/api/gameStats/*").permitAll()
+            .antMatchers("/api/gameStats").permitAll()
+          .antMatchers("/api/test/**").permitAll()
+          .antMatchers("/api/id/**/gameStats/**").permitAll()
+          .antMatchers("/api/id/**").permitAll()
+          .antMatchers("/favicon.ico").permitAll()
+          .antMatchers("/api/getSimilarity").permitAll()
+          .antMatchers(HttpMethod.PUT,"/api/subscribe").permitAll()
+          // .antMatchers(HttpMethod.GET,"/api/subscribe").permitAll()
 
-        // authentication for carbon
-        .antMatchers("/api/carbon/**").permitAll()
+          // authentication for carbon
+          .antMatchers("/api/carbon/**").permitAll()
 
-        // .antMatchers(h2ConsolePath + "/**").permitAll()
+          .antMatchers(h2ConsolePath + "/**").permitAll()
 
-        // REMOVE THIS WHEN DONE
-        // .antMatchers("/**").permitAll()
+          // REMOVE THIS WHEN DONE
+          // .antMatchers("/**").permitAll()
 
         .anyRequest().authenticated();
-
-    // fix H2 database console: Refused to display ' in a frame because it set
-    // 'X-Frame-Options' to 'deny'
+    
+ // fix H2 database console: Refused to display ' in a frame because it set 'X-Frame-Options' to 'deny'
     http.headers().frameOptions().sameOrigin();
-
+    
     http.authenticationProvider(authenticationProvider());
 
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-
+    
     return http.build();
   }
 }
