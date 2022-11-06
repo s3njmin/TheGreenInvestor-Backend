@@ -18,7 +18,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import org.json.*;
-import java.io.*;
+import java.io.InputStream;
 
 @SpringBootApplication
 @EnableScheduling
@@ -63,11 +63,8 @@ public class TheGreenInvestorApplication {
 		List<Article> aList = new ArrayList<Article>();
 
 		InputStream articlesInput = null;
-		try {
-			articlesInput = new FileInputStream("articles.json");
-		} catch (FileNotFoundException e) {
-			System.out.println("Article file not found");
-		}
+		articlesInput = TheGreenInvestorApplication.class
+				.getClassLoader().getResourceAsStream("articles.json");
 
 		JSONTokener articleTokener = new JSONTokener(articlesInput);
 		JSONObject articleObj = new JSONObject(articleTokener);
@@ -80,11 +77,8 @@ public class TheGreenInvestorApplication {
 		}
 
 		InputStream questionAndAnswerInput = null;
-		try {
-			questionAndAnswerInput = new FileInputStream("questions-and-answer.json");
-		} catch (FileNotFoundException e) {
-			System.out.println("Question and Answer file not found.");
-		}
+		questionAndAnswerInput = TheGreenInvestorApplication.class
+				.getClassLoader().getResourceAsStream("questions-and-answer.json");
 
 		JSONTokener questionAndAnswerTokener = new JSONTokener(questionAndAnswerInput);
 		JSONObject questionAndAnswerObj = new JSONObject(questionAndAnswerTokener);
