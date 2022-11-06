@@ -12,6 +12,9 @@ import G2T6.G2T6.G2T6.models.GameStats;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import G2T6.G2T6.G2T6.models.CurrentState;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
@@ -21,7 +24,9 @@ import java.util.List;
     @UniqueConstraint(columnNames = "username"),
     @UniqueConstraint(columnNames = "email")
 })
-
+@Getter
+@Setter
+@AllArgsConstructor
 public class User {
 
   @Id
@@ -85,6 +90,13 @@ public class User {
     this(username, email, password);
     this.role = role;
     this.isSubscribedEmail = isSubscribedEmail;
+  }
+
+  public User(String username, String email, String password, String role, boolean isSubscribedEmail, int profileImageIndex, double highScore, int gamesPlayed) {
+    this (username, email, password, role, isSubscribedEmail);
+    this.profileImageIndex = profileImageIndex;
+    this.highScore = highScore;
+    this.gamesPlayed = gamesPlayed;
   }
 
   public boolean isSubscribedEmail() {
