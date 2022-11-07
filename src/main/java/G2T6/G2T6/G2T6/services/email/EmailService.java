@@ -49,7 +49,7 @@ public class EmailService {
             int recipientSize = textEmailAddr.length;
             for (int i = 0; i < recipientSize; i++) {
 
-                helper.setFrom(new InternetAddress("greeninvestor45@gmail.com", "Green Investor"));
+                helper.setFrom(new InternetAddress("greeninvestor8@gmail.com", "Green Investor"));
                 helper.setTo(textEmailAddr[i]);
                 helper.setSubject("Weekly News");
                 helper.setText("<h1>" + "Here is your weekly news" + "</h1>" + "<br>" + "<p>" + articles.get(index).getBody() + "</p>" + "<br>" + "<p>" + articles.get(index).getArticle() + "</p>", true);
@@ -72,6 +72,7 @@ public class EmailService {
                 String[] emails = attchEmailAddr.split(",");
                 int recipientSize = emails.length;
                 for (int i = 0; i < recipientSize; i++) {
+                    helper.setFrom(new InternetAddress("greeninvestor8@gmail.com", "Green Investor"));
                     helper.setTo(emails[i]);
                     helper.setSubject("Attachment File !");
                     helper.setText("<h1>" + "Find the Attachment file" + "</h1>", true);
@@ -82,6 +83,7 @@ public class EmailService {
                 }
 
             } else {
+                helper.setFrom(new InternetAddress("greeninvestor8@gmail.com", "Green Investor"));
                 helper.setTo(attchEmailAddr);
                 helper.setSubject("Attachment File !");
                 // default = text/plain
