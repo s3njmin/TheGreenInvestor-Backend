@@ -272,6 +272,17 @@ public class OptionIntegrationTest {
     }
 
     @Test
+    public void deleteOption_invalidQuestionIsAdmin_Failure() throws Exception {
+        Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
+
+        URI uri = new URI(baseUrl + port + "/api/questions/404" + question.getId() + "/options/1");
+        HttpHeaders headers = generateAuthAdmin();
+        ResponseEntity<Option> result = restTemplate.exchange(uri, HttpMethod.DELETE, new HttpEntity<>(headers), Option.class);
+
+        assertEquals(404, result.getStatusCode().value());
+    }
+
+    @Test
     public void deleteOption_validOptionNotAdmin_Failure() throws Exception {
         Question question = questions.save(new Question("Question 1", "https://tgi-bucket.s3.ap-southeast-1.amazonaws.com/img11.jpg", true));
         Option oldOption = options.save(new Option("Option 1", "Positive Feedback", question, 0, 0, 0, 0));
