@@ -20,6 +20,7 @@ import G2T6.G2T6.G2T6.payload.response.GameResponse;
 import G2T6.G2T6.G2T6.payload.response.MessageResponse;
 import G2T6.G2T6.G2T6.security.AuthHelper;
 import G2T6.G2T6.G2T6.services.GameService;
+import io.jsonwebtoken.lang.Arrays;
 
 import javax.validation.Valid;
 
@@ -169,12 +170,24 @@ public class GameController {
             int currentEmissionVal = gameStats.getCurrentSustainabilityVal();
             int currentMoraleVal = gameStats.getCurrentMoraleVal();
 
+            //to find the correct index that matches the options order
+            int idx = 0;
+            for (int i = 0; i < currentState.getQuestionOrder().getIndexArray().size(); i++) {
+                if ((currentState.getQuestionOrder().getIndexArray().get(i) + 1) == question.getId().intValue()) {
+                    idx = i;
+                }
+            }
+
+            int optionIdx = currentState.getQuestionOrder().getOptionOrders().get(idx)
+                    .getIndexArray().get(answer);
+
             AnswerResponse2 answerResponse = new AnswerResponse2(gameStats.getCurrentIncomeVal(),
                     gameStats.getChangeInMoraleVal(),
-                    gameStats.getChangeInSustainabilityVal(), gameStats.getChangeInCashVal(), currentCashInHand, currentIncomeVal,
+                    gameStats.getChangeInSustainabilityVal(), gameStats.getChangeInCashVal(), currentCashInHand,
+                    currentIncomeVal,
                     currentEmissionVal, currentMoraleVal, gameStats.getMultiplier(),
                     isOpenEnded ? questionRepo.findById(question.getId()).get().getOptions().get(0).getFeedback()
-                            : question.getOptions().get(answer).getFeedback(),
+                            : question.getOptions().get(optionIdx).getFeedback(),
                     question.getArticle());
 
             if (currentState.checkIfGameShouldEnd()) {
