@@ -4,10 +4,7 @@ package G2T6.G2T6.G2T6.services;
 import G2T6.G2T6.G2T6.misc.CONSTANTVARIABLES;
 import G2T6.G2T6.G2T6.misc.State;
 import G2T6.G2T6.G2T6.models.CurrentState;
-import G2T6.G2T6.G2T6.models.Question;
-import G2T6.G2T6.G2T6.models.orders.QuestionOrder;
 import G2T6.G2T6.G2T6.repository.StateRepository;
-import G2T6.G2T6.G2T6.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

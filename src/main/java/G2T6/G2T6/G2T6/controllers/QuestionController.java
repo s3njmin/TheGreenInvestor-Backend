@@ -25,12 +25,6 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
-    // return all questions & options
-    // @GetMapping("/questionsAndOptions")
-    // public List<Question> getQuestionAndOptions() {
-    //     return questionService.randomizedQuestions();
-    // }
-
     // return all questions
     @GetMapping("/questions")
     public List<Question> getQuestion() {
@@ -39,7 +33,7 @@ public class QuestionController {
 
     // return question by id
     @GetMapping("/questions/{id}")
-    public Question getQuestion(@PathVariable final Long id) throws QuestionNotFoundException {
+    public Question getQuestionById(@PathVariable final Long id) throws QuestionNotFoundException {
         Question question = questionService.getQuestion(id);
         if(question == null) throw new QuestionNotFoundException(id);
         return question;
