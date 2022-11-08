@@ -42,7 +42,7 @@ public class GameStatsController {
         List<GameStats> completedStats = filterAllCompletedGameStats(getAllGameStats());
         Collections.sort(completedStats);
         List<GameStats> completedStatsWithOutDuplicate = filterUniqueGameStats(completedStats);
-        return removeZeroScoreGameStats(completedStatsWithOutDuplicate);
+        return removeZeroOrLowerScoreGameStats(completedStatsWithOutDuplicate);
     }
 
     /**
@@ -109,15 +109,15 @@ public class GameStatsController {
     }
 
     /**
-     * remove all the zero score game stats
+     * remove all the zero and negataive score game stats
      * @param gameStats a list of GameStats object
-     * @return all gameStats that does not have total equals to 0
+     * @return all gameStats that does not have > than zero
      */
 
-    public List<GameStats> removeZeroScoreGameStats(List<GameStats> gameStats){
+    public List<GameStats> removeZeroOrLowerScoreGameStats(List<GameStats> gameStats){
         List<GameStats> nonZeroTotal = new ArrayList<>();
         for(GameStats gs: gameStats){
-            if(gs.getTotal() != 0){
+            if(gs.getTotal() > 0){
                 nonZeroTotal.add(gs);
             }
         }
