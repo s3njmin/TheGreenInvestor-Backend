@@ -39,9 +39,6 @@ public class GameController {
     private GameService gameService;
 
     @Autowired
-    private ArticleRepository articleRepo;
-
-    @Autowired
     private QuestionRepository questionRepo;
 
     private User currUser;

@@ -1,23 +1,17 @@
 package G2T6.G2T6.G2T6;
 
-import G2T6.G2T6.G2T6.misc.CONSTANTVARIABLES;
-import G2T6.G2T6.G2T6.misc.State;
-import G2T6.G2T6.G2T6.models.CurrentState;
-import G2T6.G2T6.G2T6.models.GameStats;
 import G2T6.G2T6.G2T6.models.security.User;
 import G2T6.G2T6.G2T6.payload.request.LoginRequest;
 import G2T6.G2T6.G2T6.payload.response.JwtResponse;
+import G2T6.G2T6.G2T6.payload.response.ProfileResponse;
 import G2T6.G2T6.G2T6.repository.GameStatsRepository;
 import G2T6.G2T6.G2T6.repository.RefreshTokenRepository;
 import G2T6.G2T6.G2T6.repository.StateRepository;
 import G2T6.G2T6.G2T6.repository.UserRepository;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -124,4 +118,189 @@ public class UserIntegrationTest {
         headers.add("Authorization", "Bearer " + responseEntity.getBody().getAccessToken());
         return headers;
     }
+
+    //called to generate jwt token for an invalid user
+    public HttpHeaders generateAuthInvalid() throws Exception {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.add("Authorization", "Bearer " + "JK#@K#!IamInvalidTokeneji12j3i!@#");
+        return headers;
+    }
+
+    @Test
+    public void getProfileImageIndex_whenUserIsCorrect_thenReturns200() throws Exception {
+        HttpHeaders headers = generateAuthNormal();
+        URI uri = new URI(baseUrl + port + "/api/user/profileImageIndex");
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.GET, new HttpEntity<>(headers), String.class);
+        assertEquals(200, responseEntity.getStatusCodeValue());
+    }
+
+    @Test
+    public void getProfileImageIndex_whenUserIsInvalid_thenReturns401() throws Exception {
+        HttpHeaders headers = generateAuthInvalid();
+        URI uri = new URI(baseUrl + port + "/api/user/profileImageIndex");
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.GET, new HttpEntity<>(headers), String.class);
+        assertEquals(401, responseEntity.getStatusCodeValue());
+    }
+
+    @Test
+    public void getProfileImageIndex_whenUserIsAdmin_thenReturns200() throws Exception {
+        HttpHeaders headers = generateAuthAdmin();
+        URI uri = new URI(baseUrl + port + "/api/user/profileImageIndex");
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.GET, new HttpEntity<>(headers), String.class);
+        assertEquals(200, responseEntity.getStatusCodeValue());
+    }
+
+    @Test
+    public void getProfileImageIndex_whenUserIsNotLoggedIn_thenReturns401() throws Exception {
+        HttpHeaders headers = new HttpHeaders();
+        URI uri = new URI(baseUrl + port + "/api/user/profileImageIndex");
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.GET, new HttpEntity<>(headers), String.class);
+        assertEquals(401, responseEntity.getStatusCodeValue());
+    }
+
+    //new user created should have default profile image index of 1
+    @Test
+    public void getProfileImageIndex_whenUserIsCorrect_thenReturnsCorrectIndex() throws Exception {
+        HttpHeaders headers = generateAuthNormal();
+        URI uri = new URI(baseUrl + port + "/api/user/profileImageIndex");
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.GET, new HttpEntity<>(headers), String.class);
+        assertEquals("1", responseEntity.getBody());
+    }
+
+    @Test
+    public void getProfileImageIndex_whenUserIsAdmin_thenReturnsCorrectIndex() throws Exception {
+        HttpHeaders headers = generateAuthAdmin();
+        URI uri = new URI(baseUrl + port + "/api/user/profileImageIndex");
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.GET, new HttpEntity<>(headers), String.class);
+        assertEquals("1", responseEntity.getBody());
+    }
+
+    //try to change profile image index to 2
+    @Test
+    public void updateProfileImageIndex_whenUserIsCorrect_thenReturns200() throws Exception {
+        HttpHeaders headers = generateAuthNormal();
+        URI uri = new URI(baseUrl + port + "/api/user/profileImageIndex/2");
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.PUT, new HttpEntity<>(headers), String.class);
+        assertEquals(200, responseEntity.getStatusCodeValue());
+    }
+
+    @Test
+    public void updateProfileImageIndex_whenUserIsInvalid_thenReturns401() throws Exception {
+        HttpHeaders headers = generateAuthInvalid();
+        URI uri = new URI(baseUrl + port + "/api/user/profileImageIndex/2");
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.PUT, new HttpEntity<>(headers), String.class);
+        assertEquals(401, responseEntity.getStatusCodeValue());
+    }
+
+    @Test
+    public void updateProfileImageIndex_whenUserIsAdmin_thenReturns200() throws Exception {
+        HttpHeaders headers = generateAuthAdmin();
+        URI uri = new URI(baseUrl + port + "/api/user/profileImageIndex/2");
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.PUT, new HttpEntity<>(headers), String.class);
+        assertEquals(200, responseEntity.getStatusCodeValue());
+    }
+
+    @Test
+    public void updateProfileImageIndex_whenUserIsNotLoggedIn_thenReturns401() throws Exception {
+        HttpHeaders headers = new HttpHeaders();
+        URI uri = new URI(baseUrl + port + "/api/user/profileImageIndex/2");
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.PUT, new HttpEntity<>(headers), String.class);
+        assertEquals(401, responseEntity.getStatusCodeValue());
+    }
+
+    @Test
+    public void updateProfileImageIndex_whenUserIsCorrect_thenReturnsCorrectIndex() throws Exception {
+        HttpHeaders headers = generateAuthNormal();
+        URI uri = new URI(baseUrl + port + "/api/user/profileImageIndex/2");
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.PUT, new HttpEntity<>(headers), String.class);
+        assertEquals("2", responseEntity.getBody());
+    }
+
+    @Test
+    public void updateProfileImageIndex_whenUserIsAdmin_thenReturnsCorrectIndex() throws Exception {
+        HttpHeaders headers = generateAuthAdmin();
+        URI uri = new URI(baseUrl + port + "/api/user/profileImageIndex/2");
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.PUT, new HttpEntity<>(headers), String.class);
+        assertEquals("2", responseEntity.getBody());
+    }
+
+    @Test
+    public void getProfile_whenUserIsCorrect_thenReturns200() throws Exception {
+        HttpHeaders headers = generateAuthNormal();
+        URI uri = new URI(baseUrl + port + "/api/user/getProfile");
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.GET, new HttpEntity<>(headers), String.class);
+        assertEquals(200, responseEntity.getStatusCodeValue());
+    }
+
+    @Test
+    public void getProfile_whenUserIsInvalid_thenReturns401() throws Exception {
+        HttpHeaders headers = generateAuthInvalid();
+        URI uri = new URI(baseUrl + port + "/api/user/getProfile");
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.GET, new HttpEntity<>(headers), String.class);
+        assertEquals(401, responseEntity.getStatusCodeValue());
+    }
+
+    @Test
+    public void getProfile_whenUserIsAdmin_thenReturns200() throws Exception {
+        HttpHeaders headers = generateAuthAdmin();
+        URI uri = new URI(baseUrl + port + "/api/user/getProfile");
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.GET, new HttpEntity<>(headers), String.class);
+        assertEquals(200, responseEntity.getStatusCodeValue());
+    }
+
+    @Test
+    public void getProfile_whenUserIsNotLoggedIn_thenReturns401() throws Exception {
+        HttpHeaders headers = new HttpHeaders();
+        URI uri = new URI(baseUrl + port + "/api/user/getProfile");
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.GET, new HttpEntity<>(headers), String.class);
+        assertEquals(401, responseEntity.getStatusCodeValue());
+    }
+
+    @Test
+    public void getProfile_whenUserIsCorrect_thenReturnsCorrectProfile() throws Exception {
+        HttpHeaders headers = generateAuthNormal();
+        URI uri = new URI(baseUrl + port + "/api/user/getProfile");
+        ResponseEntity<ProfileResponse> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.GET, new HttpEntity<>(headers), ProfileResponse.class);
+        assertEquals(1, responseEntity.getBody().getProfileIndex());
+        assertEquals(0.0, responseEntity.getBody().getHighScore());
+        assertEquals(0, responseEntity.getBody().getGamesPlayed());
+    }
+
+
+
 }
