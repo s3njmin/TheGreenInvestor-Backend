@@ -474,10 +474,9 @@ public class GameStatsIntegrationTest {
         URI uri = new URI(baseUrl + port + "/api/gameStats/" + gameStats.getId());
         ResponseEntity<Void> result = restTemplate.getRestTemplate().exchange(uri, HttpMethod.DELETE, null, Void.class);
         assertEquals(200, result.getStatusCode().value());
-        // Optional<GameStats> emptyValue = Optional.empty();
-        // assertEquals(emptyValue, gameStatsRepo.findById(gameStats.getId()));
+        Optional<GameStats> emptyValue = Optional.empty();
+        assertEquals(emptyValue, gameStatsRepo.findById(gameStats.getId()));
     }
-    
     @Test
     public void deleteGameStates_InvalidId_Failure() throws Exception{
         URI uri = new URI(baseUrl + port + "/api/gameStats/1");

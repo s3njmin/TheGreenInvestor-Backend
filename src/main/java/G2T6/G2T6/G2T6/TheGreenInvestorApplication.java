@@ -12,7 +12,6 @@ import java.util.List;
 
 import org.aspectj.apache.bcel.classfile.ConstantValue;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -48,6 +47,18 @@ public class TheGreenInvestorApplication {
 
 		List<Question> qList = new ArrayList<Question>();
 		List<Option> oList = new ArrayList<Option>();
+
+		// Dont think need this for now
+		// populate questionOrders
+		// QuestionOrderRepository questionOrderRepository =
+		// ctx.getBean(QuestionOrderRepository.class);
+		// OptionOrderRepository optionOrderRepository =
+		// ctx.getBean(OptionOrderRepository.class);
+
+		// for (int i = 0; i < 10; i++) {
+		// questionOrderRepository.save(new QuestionOrder());
+		// optionOrderRepository.save(new OptionOrder());
+		// }
 
 		List<Article> aList = new ArrayList<Article>();
 

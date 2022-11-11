@@ -8,27 +8,21 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import G2T6.G2T6.G2T6.models.GameStats;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import G2T6.G2T6.G2T6.config.CustomAuthorityDeserializer;
 import G2T6.G2T6.G2T6.models.CurrentState;
+import lombok.ToString;
 
-import java.util.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
     @UniqueConstraint(columnNames = "username"),
     @UniqueConstraint(columnNames = "email")
 })
-public class User implements UserDetails {
-  private static final long serialVersionUID = 1L;
+
+public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,31 +59,13 @@ public class User implements UserDetails {
   // number of games played
   private int gamesPlayed = 0;
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonIgnore
   private List<CurrentState> currentState;
 
-  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonIgnore
   private List<GameStats> gameStats;
-
-  public Long getId() {
-    return id;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  @Override
-  public String getPassword() {
-    return password;
-  }
-
-  @Override
-  public String getUsername() {
-    return username;
-  }
 
   public User() {
   }
@@ -130,16 +106,32 @@ public class User implements UserDetails {
     this.role = role;
   }
 
+  public Long getId() {
+    return id;
+  }
+
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public String getUsername() {
+    return username;
   }
 
   public void setUsername(String username) {
     this.username = username;
   }
 
+  public String getEmail() {
+    return email;
+  }
+
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public String getPassword() {
+    return password;
   }
 
   public void setPassword(String password) {
@@ -192,59 +184,6 @@ public class User implements UserDetails {
 
   public void setGamesPlayed(int gamesPlayed) {
     this.gamesPlayed = gamesPlayed;
-  }
-
-  @JsonDeserialize(using = CustomAuthorityDeserializer.class)
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    return Arrays.asList(new SimpleGrantedAuthority(role));
-  }
-
-  @Override
-  public String toString() {
-    return "User{" +
-        "id=" + id +
-        ", username='" + username + '\'' +
-        ", email='" + email + '\'' +
-        ", password='" + password + '\'' +
-        ", role='" + role + '\'' +
-        ", isSubscribedEmail=" + isSubscribedEmail +
-        ", profileImageIndex=" + profileImageIndex +
-        ", highScore=" + highScore +
-        ", gamesPlayed=" + gamesPlayed +
-        ", currentState=" + currentState +
-        ", gameStats=" + gameStats +
-        '}';
-  }
-
-  @Override
-  public boolean isAccountNonExpired() {
-    return true;
-  }
-
-  @Override
-  public boolean isAccountNonLocked() {
-    return true;
-  }
-
-  @Override
-  public boolean isCredentialsNonExpired() {
-    return true;
-  }
-
-  @Override
-  public boolean isEnabled() {
-    return true;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o)
-      return true;
-    if (o == null || getClass() != o.getClass())
-      return false;
-    User user = (User) o;
-    return Objects.equals(id, user.id);
   }
 
 }

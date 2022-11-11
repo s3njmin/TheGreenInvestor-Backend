@@ -4,6 +4,7 @@ import G2T6.G2T6.G2T6.exceptions.StateNotFoundException;
 import G2T6.G2T6.G2T6.exceptions.UserNotFoundException;
 import G2T6.G2T6.G2T6.misc.State;
 import G2T6.G2T6.G2T6.models.*;
+import G2T6.G2T6.G2T6.repository.ArticleRepository;
 import G2T6.G2T6.G2T6.repository.QuestionRepository;
 import G2T6.G2T6.G2T6.repository.StateRepository;
 import G2T6.G2T6.G2T6.models.GameStats;
@@ -19,6 +20,7 @@ import G2T6.G2T6.G2T6.payload.response.GameResponse;
 import G2T6.G2T6.G2T6.payload.response.MessageResponse;
 import G2T6.G2T6.G2T6.security.AuthHelper;
 import G2T6.G2T6.G2T6.services.GameService;
+import io.jsonwebtoken.lang.Arrays;
 
 import javax.validation.Valid;
 
@@ -47,9 +49,11 @@ public class GameController {
      */
     private void setup() {
 
-        currUser = AuthHelper.getUserDetails();
+        currUser = userRepo.findByUsername(AuthHelper.getUserDetails().getUsername())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        currentState = stateRepository.findTop1ByUserOrderByIdDesc(currUser);
+        currentState = stateRepository.findTopByUserOrderByIdDesc(currUser)
+                .orElseThrow(() -> new StateNotFoundException(currUser.getUsername()));
     }
 
     /**

@@ -7,7 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import G2T6.G2T6.G2T6.models.security.User;
+import G2T6.G2T6.G2T6.security.services.UserDetailsImpl;
+
 import io.jsonwebtoken.*;
 
 @Component
@@ -20,7 +21,7 @@ public class JwtUtils {
   @Value("${G2T6.app.jwtExpirationMs}")
   private int jwtExpirationMs;
 
-  public String generateJwtToken(User userPrincipal) {
+  public String generateJwtToken(UserDetailsImpl userPrincipal) {
     return generateTokenFromUsername(userPrincipal.getUsername());
   }
 

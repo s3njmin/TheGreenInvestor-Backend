@@ -34,6 +34,7 @@ import G2T6.G2T6.G2T6.payload.response.TokenRefreshResponse;
 import G2T6.G2T6.G2T6.repository.UserRepository;
 import G2T6.G2T6.G2T6.security.jwt.JwtUtils;
 import G2T6.G2T6.G2T6.security.services.RefreshTokenService;
+import G2T6.G2T6.G2T6.security.services.UserDetailsImpl;
 import G2T6.G2T6.G2T6.services.StateServiceImplementation;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -69,7 +70,7 @@ public class AuthController {
 
       SecurityContextHolder.getContext().setAuthentication(authentication);
 
-      User userDetails = (User) authentication.getPrincipal();
+      UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
       String jwt = jwtUtils.generateJwtToken(userDetails);
 
@@ -89,7 +90,6 @@ public class AuthController {
 
     } catch (Exception e) {
 
-      e.printStackTrace();
       JwtResponse responseBody = new JwtResponse();
       responseBody.setMessage("Some other error at log in");
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
@@ -164,7 +164,7 @@ public class AuthController {
 
   @PostMapping("/signout")
   public ResponseEntity<?> logoutUser() {
-    User userDetails = (User) SecurityContextHolder.getContext().getAuthentication()
+    UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication()
         .getPrincipal();
     Long userId = userDetails.getId();
     refreshTokenService.deleteByUserId(userId);

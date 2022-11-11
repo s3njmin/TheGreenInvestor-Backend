@@ -30,7 +30,7 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjIiLCJpYXQiO
 
 ###
 GET http://localhost:8080/api/user/profileImageIndex
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjMiLCJpYXQiOjE2NjgxNzMzNTcsImV4cCI6MTY2ODE3Njk1N30.Rqw92XUtTD5J_YSOdBPF7wHTup-P4lOx80pR-RoebZPbcM4ZqCOC-cGJwekhkAtpl01dXbK2PEIzSlaNeZm-wA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqb2huVGhlVXNlcjMiLCJpYXQiOjE2Njc2Mzg5MDcsImV4cCI6MTY2NzY0MjUwN30.EIVlJ9q2Dho7p_tphNu3I2BUvQyYdtvu07AyTNW_cUjy7VLD2Oom7yjGGyKikYR_CONUuT4BuASi8yhvw6mELg
 ###
 
 PUT http://localhost:8080/api/user/profileImageIndex/5
