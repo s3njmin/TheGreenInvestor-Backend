@@ -33,4 +33,8 @@ public class GameResponse {
     // total score
     private double totalScore;
 
+    //empty constructor
+    public GameResponse() {
+    }
+
 }
