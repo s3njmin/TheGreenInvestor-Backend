@@ -23,7 +23,7 @@ Our web application can be accessed via https://www.TheGreenInvestor.net, and wi
 
 ## Application Architecture Diagram
 <p align="center">
-    <img src="https://raw.githubusercontent.com/muhdHidir/CS203-T6/main/SoftwareArchitecture.png" width="100%"/>
+    <img src="https://raw.githubusercontent.com/muhdHidir/CS203-T6/main/aws_darkmode_diagram.png" width="100%"/>
 </p>
 
 ## Entity-Relation Diagram
