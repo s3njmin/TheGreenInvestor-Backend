@@ -87,13 +87,6 @@ public class AuthController {
       responseBody.setMessage("Error: Invalid username or password!");
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
 
-    } catch (Exception e) {
-
-      e.printStackTrace();
-      JwtResponse responseBody = new JwtResponse();
-      responseBody.setMessage("Some other error at log in");
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
-
     }
 
   }
@@ -144,7 +137,7 @@ public class AuthController {
     userRepository.save(user);
 
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-    
+
   }
 
   @PostMapping("/refreshtoken")
