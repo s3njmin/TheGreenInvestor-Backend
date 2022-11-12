@@ -3,7 +3,10 @@ package G2T6.G2T6.G2T6.payload.request;
 import java.util.Set;
 
 import javax.validation.constraints.*;
+
+import lombok.AllArgsConstructor;
  
+@AllArgsConstructor
 public class SignupRequest {
     @NotBlank
     @Size(min = 3, max = 20)
@@ -19,6 +22,9 @@ public class SignupRequest {
     @NotBlank
     @Size(min = 6, max = 40)
     private String password;
+
+    public SignupRequest() {
+    }
   
     public String getUsername() {
         return username;

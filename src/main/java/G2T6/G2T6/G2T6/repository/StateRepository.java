@@ -14,6 +14,6 @@ import java.util.Optional;
 public interface StateRepository extends JpaRepository<CurrentState, Long> {
     List<CurrentState> findByUserId(Long userId);
     Optional<CurrentState> findByIdAndUserId(Long id, Long userId);
-    Optional<CurrentState> findTopByUserOrderByIdDesc(User currUser);
+    CurrentState findTop1ByUserOrderByIdDesc(User currUser);
     List<CurrentState> findByGameIdAndUserId(Long gameId, Long userId);
 }
