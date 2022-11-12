@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
 
+import G2T6.G2T6.G2T6.exceptions.TokenRefreshException;
 import G2T6.G2T6.G2T6.models.security.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,8 +20,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
 import java.util.*;
 
@@ -138,4 +137,174 @@ public class AuthenticationIntegrationTest {
         assertEquals("User registered successfully!", responseEntity.getBody().getMessage());
 
     }
+
+    @Test
+    public void register_UsernameAlreadyExists_Failure() throws Exception {
+
+        URI uri = new URI(baseUrl + port + "/api/auth/signup");
+        SignupRequest signUpRequest = new SignupRequest();
+        signUpRequest.setUsername("johnTheAdmin");
+        signUpRequest.setEmail("johnTheAdmin@gmail.com");
+        signUpRequest.setPassword("myStrongPwAgain");
+        signUpRequest.setRole("USER");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<SignupRequest> entity = new HttpEntity<>(signUpRequest, headers);
+
+        ResponseEntity<MessageResponse> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.POST, entity, MessageResponse.class);
+
+        assertEquals(400, responseEntity.getStatusCodeValue());
+        assertEquals("Error: Username is already taken!", responseEntity.getBody().getMessage());
+    }
+
+    @Test
+    public void register_EmailAlreadyExists_Failure() throws Exception {
+
+        URI uri = new URI(baseUrl + port + "/api/auth/signup");
+        SignupRequest signUpRequest = new SignupRequest();
+        signUpRequest.setUsername("johnNotTheAdmin");
+        signUpRequest.setEmail("johnny@gmail.com");
+        signUpRequest.setPassword("myStrongPwAgain");
+        signUpRequest.setRole("USER");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<SignupRequest> entity = new HttpEntity<>(signUpRequest, headers);
+
+        ResponseEntity<MessageResponse> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.POST, entity, MessageResponse.class);
+
+        assertEquals(400, responseEntity.getStatusCodeValue());
+        assertEquals("Error: Email is already in use!", responseEntity.getBody().getMessage());
+    }
+
+    @Test
+    public void register_RoleAsGuest_Success() throws Exception {
+
+        URI uri = new URI(baseUrl + port + "/api/auth/signup");
+        SignupRequest signUpRequest = new SignupRequest();
+        signUpRequest.setUsername("johnTheGuest");
+        signUpRequest.setEmail("johnTheGuest@gmail.com");
+        signUpRequest.setPassword("myStrongPwAgain");
+        signUpRequest.setRole("GUEST");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<SignupRequest> entity = new HttpEntity<>(signUpRequest, headers);
+
+        ResponseEntity<MessageResponse> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.POST, entity, MessageResponse.class);
+
+        assertEquals(200, responseEntity.getStatusCodeValue());
+        assertEquals("User registered successfully!", responseEntity.getBody().getMessage());
+    }
+
+    @Test
+    public void refresh_Success() throws Exception {
+
+        URI uri = new URI(baseUrl + port + "/api/auth/signin");
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("johnTheAdmin");
+        loginRequest.setPassword("myStrongPw");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+
+        HttpEntity<LoginRequest> entity = new HttpEntity<>(loginRequest, headers);
+
+        ResponseEntity<JwtResponse> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.POST, entity, JwtResponse.class);
+
+        String refreshToken = responseEntity.getBody().getRefreshToken();
+
+        URI uri2 = new URI(baseUrl + port + "/api/auth/refreshtoken");
+        TokenRefreshRequest tokenRefreshRequest = new TokenRefreshRequest();
+        tokenRefreshRequest.setRefreshToken(refreshToken);
+
+        HttpHeaders headers2 = new HttpHeaders();
+        headers2.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers2.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<TokenRefreshRequest> entity2 = new HttpEntity<>(tokenRefreshRequest, headers2);
+
+        ResponseEntity<TokenRefreshResponse> responseEntity2 = restTemplate.exchange(
+                uri2,
+                HttpMethod.POST, entity2, TokenRefreshResponse.class);
+
+        assertEquals(200, responseEntity2.getStatusCodeValue());
+        assertNotNull(responseEntity2.getBody().getAccessToken());
+        assertNotNull(responseEntity2.getBody().getRefreshToken());
+    }
+
+    @Test
+    public void refresh_InvalidRefreshToken_Failure() throws Exception {
+
+        URI uri = new URI(baseUrl + port + "/api/auth/refreshtoken");
+        TokenRefreshRequest tokenRefreshRequest = new TokenRefreshRequest();
+        tokenRefreshRequest.setRefreshToken("invalidRefreshToken");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<TokenRefreshRequest> entity = new HttpEntity<>(tokenRefreshRequest, headers);
+
+        ResponseEntity<TokenRefreshException> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.POST, entity, TokenRefreshException.class);
+
+        assertEquals(403, responseEntity.getStatusCodeValue());
+        // assertEquals("Refresh token is not in database!",
+        // responseEntity.getBody().getMessage());
+    }
+
+    @Test
+    public void signout_Success() throws Exception {
+
+        URI uri = new URI(baseUrl + port + "/api/auth/signin");
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("johnTheAdmin");
+        loginRequest.setPassword("myStrongPw");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+
+        HttpEntity<LoginRequest> entity = new HttpEntity<>(loginRequest, headers);
+
+        ResponseEntity<JwtResponse> responseEntity = restTemplate.exchange(
+                uri,
+                HttpMethod.POST, entity, JwtResponse.class);
+
+        String jwtToken = responseEntity.getBody().getAccessToken();
+
+        URI uri2 = new URI(baseUrl + port + "/api/auth/signout");
+
+        HttpHeaders headers2 = new HttpHeaders();
+        headers2.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers2.setContentType(MediaType.APPLICATION_JSON);
+        headers2.setBearerAuth(jwtToken);
+
+        HttpEntity<String> entity2 = new HttpEntity<>(null, headers2);
+
+        ResponseEntity<MessageResponse> responseEntity2 = restTemplate.exchange(
+                uri2,
+                HttpMethod.POST, entity2, MessageResponse.class);
+
+        assertEquals(200, responseEntity2.getStatusCodeValue());
+        // assertEquals("Refresh token deleted successfully!",
+        // responseEntity2.getBody().getMessage());
+    }
+
 }
