@@ -63,6 +63,12 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
+      
+    - name: Setup Java JDK
+      uses: actions/setup-java@v3.6.0
+      with:
+        java-version: '17'
+        distribution: 'temurin'
 
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
