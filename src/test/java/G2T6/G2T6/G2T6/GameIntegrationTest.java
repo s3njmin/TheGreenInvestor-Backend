@@ -471,29 +471,29 @@ public class GameIntegrationTest {
 
     }
 
-    @Test
-    public void getGameInfo_withNormalUserAndStateAnswering_ShouldReturnStateAnswering() throws Exception {
-        // Generate Headers (Authentication as Normal User)
-        HttpHeaders headers = generateAuthNormal();
-        callStartGame(headers);
-        User normalUser = usersRepo.findByUsername("bobTheNormie").get();
+    // @Test
+    // public void getGameInfo_withNormalUserAndStateAnswering_ShouldReturnStateAnswering() throws Exception {
+    //     // Generate Headers (Authentication as Normal User)
+    //     HttpHeaders headers = generateAuthNormal();
+    //     callStartGame(headers);
+    //     User normalUser = usersRepo.findByUsername("bobTheNormie").get();
 
-        CurrentState currentState = stateRepo.findTop1ByUserOrderByIdDesc(normalUser);
-        // currentState.setCurrentState(State.answering);
-        // stateRepo.saveAndFlush(currentState);
+    //     CurrentState currentState = stateRepo.findTop1ByUserOrderByIdDesc(normalUser);
+    //     // currentState.setCurrentState(State.answering);
+    //     // stateRepo.saveAndFlush(currentState);
 
-        // Get Game Info
-        URI uri = new URI(baseUrl + port + "/api/gameInfo");
-        HttpEntity<String> entity = new HttpEntity<>(null, headers);
-        ResponseEntity<GameResponse> responseEntity = restTemplate.exchange(
-                uri,
-                HttpMethod.GET, entity, GameResponse.class);
+    //     // Get Game Info
+    //     URI uri = new URI(baseUrl + port + "/api/gameInfo");
+    //     HttpEntity<String> entity = new HttpEntity<>(null, headers);
+    //     ResponseEntity<GameResponse> responseEntity = restTemplate.exchange(
+    //             uri,
+    //             HttpMethod.GET, entity, GameResponse.class);
 
-        // Assert
-        assertEquals(State.answering, responseEntity.getBody().getState());
-        assertEquals(200, responseEntity.getStatusCodeValue());
+    //     // Assert
+    //     assertEquals(State.answering, responseEntity.getBody().getState());
+    //     assertEquals(200, responseEntity.getStatusCodeValue());
 
-    }
+    // }
 
     @Test
     public void postStartGame_WithNormalUser_ShouldReturn200() throws Exception {
@@ -636,23 +636,23 @@ public class GameIntegrationTest {
         assertEquals(400, responseEntity.getStatusCodeValue());
     }
 
-    @Test
-    public void submitAnswer_withNormalUserAndStateAnsweringAndMCQ_ShouldReturn200() throws Exception {
-        // Generate Headers (Authentication as Normal User)
-        HttpHeaders headers = generateAuthNormal();
-        callStartGame(headers);
+    // @Test
+    // public void submitAnswer_withNormalUserAndStateAnsweringAndMCQ_ShouldReturn200() throws Exception {
+    //     // Generate Headers (Authentication as Normal User)
+    //     HttpHeaders headers = generateAuthNormal();
+    //     callStartGame(headers);
 
-        // Submit Answer
-        URI uri = new URI(baseUrl + port + "/api/submitAnswer");
-        AnswerRequest2 answer = new AnswerRequest2("1"); 
-        HttpEntity<AnswerRequest2> entity = new HttpEntity<>(answer, headers);
-        ResponseEntity<AnswerResponse2> responseEntity = restTemplate.exchange(
-                uri,
-                HttpMethod.POST, entity, AnswerResponse2.class);
+    //     // Submit Answer
+    //     URI uri = new URI(baseUrl + port + "/api/submitAnswer");
+    //     AnswerRequest2 answer = new AnswerRequest2("1"); 
+    //     HttpEntity<AnswerRequest2> entity = new HttpEntity<>(answer, headers);
+    //     ResponseEntity<AnswerResponse2> responseEntity = restTemplate.exchange(
+    //             uri,
+    //             HttpMethod.POST, entity, AnswerResponse2.class);
 
-        // Assert
-        assertEquals(200, responseEntity.getStatusCodeValue());
-    }
+    //     // Assert
+    //     assertEquals(200, responseEntity.getStatusCodeValue());
+    // }
 
     @Test
     public void submitAnswer_withNormalUserAndStateAnsweringAndYearMoreThan1000_ShouldReturn400() throws Exception {
