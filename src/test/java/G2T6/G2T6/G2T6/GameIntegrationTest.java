@@ -449,7 +449,6 @@ public class GameIntegrationTest {
                 uriLogin,
                 HttpMethod.POST, entity, JwtResponse.class);
         headers.add("Authorization", "Bearer " + responseEntity.getBody().getAccessToken());
-        headers.add("user-agent", "Application");
 
         usersRepo.flush();
         return headers;
